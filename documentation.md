@@ -1,6 +1,6 @@
 ```
 POST /new-event
-{
+payload: {
   name: {string} (required)
   description: {string} (required)
   note: {string}
