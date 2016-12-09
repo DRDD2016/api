@@ -4,7 +4,9 @@
   "description": "API for Spark React Native app",
   "main": "server.js",
   "scripts": {
-    "test": "tape -r babel-register 'test/**/*.js' | tap-spec",
+    "test": "nyc tape -r babel-register 'test/**/*.js' | tap-spec",
+    "test:watch": "nodemon -q -x 'npm test'",
+    "lint": "eslint 'server.js' 'register-routes.js' '/test/**/*.js'",
     "load-dev-schema": "psql spark -f ./db/schema.sql"
   },
   "repository": {
@@ -19,7 +21,10 @@
   "homepage": "https://github.com/DRDD2016/api#readme",
   "devDependencies": {
     "eslint": "^3.11.1",
+    "eslint-config-standard": "^6.2.1",
     "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
     "ghooks": "^1.3.2",
     "istanbul": "^0.4.5",
     "nodemon": "^1.11.0",
