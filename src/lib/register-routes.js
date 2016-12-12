@@ -1,5 +1,5 @@
+import { postEvent } from './handlers';
+
 export default function registerRoutes (app) {
-  app.get('/', (reg, res) => {
-    res.send('hi');
-  });
+  app.post('/events', postEvent);
 }

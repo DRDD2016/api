@@ -2,9 +2,15 @@ require('babel-register')({
   presets: ['es2015']
 });
 const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const registerRoutes = require('./src/lib/register-routes').default;
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(cors());
 
 registerRoutes(app);
 
