@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [CIRCLECI=true]; then
+if [ $CIRCLECI -eq true ]; then
   exit
 else
-  psql spark -f ./test/utils/schema.sql-queries
+  psql spark -f ./test/utils/schema.sql
 fi
