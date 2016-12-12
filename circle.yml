@@ -3,4 +3,4 @@ machine:
     version: 6.9.1
 database:
   override:
-    - psql -U ubuntu circle_test < ./test/utils/schema.sql
+    - psql -U ubuntu 'CREATE DATABASE spark'; < ./test/utils/schema.sql
