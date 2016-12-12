@@ -6,7 +6,7 @@ let config = {
 };
 /* istanbul ignore else */
 /* istanbul ignore next */
-if (process.env.CIRCLE_CI) {
+if (process.env.CIRCLECI) {
   config.database = 'circle_test';
 } else if (process.env.TEST) {
   config.database = 'spark';
