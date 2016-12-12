@@ -4,7 +4,6 @@ let config = {
   max: '20',
   idleTimeoutMillis: 3000
 };
-console.log('----------------', process.env);
 /* istanbul ignore else */
 /* istanbul ignore next */
 if (process.env.CIRCLECI) {

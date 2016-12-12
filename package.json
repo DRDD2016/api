@@ -4,7 +4,7 @@
   "description": "API for Spark React Native app",
   "main": "server.js",
   "scripts": {
-    "pretest": "npm run load-dev-schema",
+    "pretest": ". ./pretest.sh",
     "test": "TEST=true tape -r babel-register 'test/**/*.js' | tap-spec",
     "test-coverage": "TEST=true nyc tape -r babel-register 'test/**/*.js' | tap-spec",
     "test-watch": "nodemon -q -x 'npm run test-coverage'",
