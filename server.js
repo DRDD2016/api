@@ -2,7 +2,7 @@ require('babel-register')({
   presets: ['es2015']
 });
 const express = require('express');
-const registerRoutes = require('./register-routes').default;
+const registerRoutes = require('./src/lib/register-routes').default;
 const app = express();
 const port = process.env.PORT || 3000;
 

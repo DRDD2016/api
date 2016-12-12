@@ -4,7 +4,8 @@ let config = {
   max: '20',
   idleTimeoutMillis: 3000
 };
-
+/* istanbul ignore else */
+/* istanbul ignore next */
 if (process.env.CIRCLE_CI) {
   config.database = 'circle_test';
 } else if (process.env.TEST) {

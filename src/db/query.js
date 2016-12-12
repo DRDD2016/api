@@ -8,7 +8,11 @@
 export default function query (client, queryText, queryArray, callback) {
 
   if (arguments.length !== 4) {
-    throw new RangeError('function `query` requires: \n @param {object} - database client\n @param {string} -SQL query text\n @param {array} (optional) - variables for the SQL query text');
+    const error = new RangeError('function `query` requires: \n @param {object} - database client\n @param {string} -SQL query text\n @param {array} (optional) - variables for the SQL query text');
+    if (process.env.TEST) {
+      throw error;
+    }
+    return callback(error);
   }
   client.connect((error, client, done) => {
     if (error) {

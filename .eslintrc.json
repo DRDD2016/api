@@ -1,6 +1,6 @@
 {
   "extends": "standard",
-  "plugins": ["import"],
+  "plugins": ["import", "promise", "standard"],
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"

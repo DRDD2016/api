@@ -16,18 +16,17 @@ CREATE TABLE users (
 
 CREATE TABLE events (
   event_id SERIAL PRIMARY KEY,
+  host_user_id INTEGER NOT NULL REFERENCES users(user_id),
   name TEXT NOT NULL,
   description TEXT NOT NULL,
   note TEXT,
   is_poll BOOLEAN DEFAULT FALSE NOT NULL,
-  host_user_id INTEGER NOT NULL,
   is_edited BOOLEAN DEFAULT FALSE NOT NULL,
-  _invitees TEXT[] NOT NULL,
+  _invitees TEXT[],
   _what TEXT[],
   _where TEXT[],
-  _when TEXT[] NOT NULL
+  _when TEXT[]
 );
-
 
 INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
   VALUES (
