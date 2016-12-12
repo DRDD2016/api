@@ -4,10 +4,12 @@
   "description": "API for Spark React Native app",
   "main": "server.js",
   "scripts": {
-    "test": "nyc tape -r babel-register 'test/**/*.js' | tap-spec",
-    "test:watch": "nodemon -q -x 'npm test'",
+    "test": "tape -r babel-register 'test/**/*.js' | tap-spec",
+    "test-coverage": "TEST=true nyc tape -r babel-register 'test/**/*.js' | tap-spec",
+    "test:watch": "nodemon -q -x 'npm run test-coverage'",
     "lint": "eslint 'server.js' 'register-routes.js' '/test/**/*.js'",
-    "load-dev-schema": "psql spark -f ./db/schema.sql"
+    "load-dev-schema": "psql spark -f ./db/schema.sql",
+    "postgres": "postgres -D /usr/local/var/postgres"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,13 @@
     "url": "https://github.com/DRDD2016/api/issues"
   },
   "homepage": "https://github.com/DRDD2016/api#readme",
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run lint",
+      "pre-push" : "npm test coverage",
+      "post-merge": "npm install"
+    }
+  },
   "devDependencies": {
     "eslint": "^3.11.1",
     "eslint-config-standard": "^6.2.1",
