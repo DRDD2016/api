@@ -1,7 +1,14 @@
 import query from '../../db/query';
 import SQLqueries from '../../db/sql-queries.json';
 
-export default function saveEvent (client, data, callback) {
+/**
+ * Save an event to the database
+ * @returns {Promise.<void, Error>}
+ * @param {object} client - database client
+ * @param {object} data - event data
+ */
+
+export default function saveEvent (client, data) {
 
   const queryText = SQLqueries.saveEvent;
   const queryValues = [
@@ -16,10 +23,12 @@ export default function saveEvent (client, data, callback) {
     data.is_poll
   ];
 
-  query(client, queryText, queryValues, (error, result) => {
-    if (error) {
-      return callback(error);
-    }
-    return callback(null, result);
+  return new Promise((resolve, reject) => {
+    query(client, queryText, queryValues, (error) => {
+      if (error) {
+        reject(error);
+      }
+      resolve();
+    });
   });
 }

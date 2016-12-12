@@ -1,20 +1,13 @@
-import test from 'tape';
+import test from 'blue-tape';
 import client from '../../src/db/client';
 import saveEvent from '../../src/lib/event/save-event';
 import { newEvent } from '../utils/fixtures';
 
 test('`saveEvent` works', (t) => {
-  t.plan(1);
+  return saveEvent(client, newEvent, 'Promise resolves');
 
-  saveEvent(client, newEvent, (error, result) => {
-    t.equal(error, null, 'runs without errors');
-  });
 });
 
 test('`saveEvent` handles errors', (t) => {
-  t.plan(1);
-
-  saveEvent(client, {}, (error, result) => {
-    t.ok(error instanceof Error, 'handles an empty event object');
-  });
+  return t.shouldFail(saveEvent(client, {}, 'Promise rejects'));
 });
