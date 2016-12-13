@@ -22,7 +22,7 @@ export default function deleteEvent (client, event_id) {
       if (err) {
         return reject(err);
       }
-      return result.length === 0 ? resolve(null) : resolve(result[0].event_id);
+      return result.length === 0 ? resolve(null) : resolve(result[0]);
     });
   });
 }

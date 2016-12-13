@@ -3,7 +3,7 @@ import request from 'supertest';
 import server from '../../server';
 import { newEvent } from '../utils/fixtures';
 
-test('POST events works', (t) => {
+test('endpoint POST events works', (t) => {
   t.plan(2);
 
   request(server)
@@ -15,20 +15,34 @@ test('POST events works', (t) => {
     });
 });
 
-test('POST events handles errors', (t) => {
-  return t.shouldFail(request(server)
+test('endpoint POST events handles errors', (t) => {
+  t.plan(1);
+
+  request(server)
     .post('/events')
+    .set('Accept', 'application/json')
     .send({})
-    .end()
-  );
+    .then((res) => {
+      t.ok(res.error instanceof Error);
+    });
 });
 
-test('GET events works', (t) => {
+test('endpoint GET events works', (t) => {
   t.plan(2);
 
   request(server)
     .get('/events/1')
-    .set('Accept', 'application/json')
+    .end((err, res) => {
+      t.notOk(err);
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+});
+
+test('endpoint DELETE events works', (t) => {
+  t.plan(2);
+
+  request(server)
+    .delete('/events/2')
     .end((err, res) => {
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');

@@ -8,12 +8,12 @@ import SQLqueries from '../../db/sql-queries.json';
  * @param {number} event_id - event id
  */
 
-export default function saveEvent (client, event_id) {
+export default function getEvent (client, event_id) {
 
   return new Promise ((resolve, reject) => {
 
     if (!event_id) {
-      return reject(new TypeError('`saveEvent` requires an event_id'));
+      return reject(new TypeError('`getEvent` requires an event_id'));
     }
     const queryText = SQLqueries.getEvent;
     const queryValues = [event_id];

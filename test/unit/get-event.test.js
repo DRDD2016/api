@@ -1,6 +1,6 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
-import getEvent from '../../src/lib/event/get-event';
+import getEvent from '../../src/lib/events/get-event';
 import { event_1 } from '../utils/fixtures';
 
 const event_id = 1;

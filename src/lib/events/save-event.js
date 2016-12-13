@@ -13,7 +13,7 @@ export default function saveEvent (client, data) {
   return new Promise ((resolve, reject) => {
 
     if (!data || Object.keys(data).length === 0) {
-      return reject(new TypeError('Event data is empty or undefined'));
+      return reject(new TypeError('`saveEvent` event data is empty or undefined'));
     }
     const queryText = SQLqueries.saveEvent;
     const queryValues = [

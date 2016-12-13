@@ -77,3 +77,16 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
     '{2}'
   );
+
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees)
+  VALUES (
+    1,
+    'Dinner party',
+    'Celebrating nightlife',
+    '',
+    true,
+    '{"Eating", "Tasting"}',
+    '{"New York", "Los Angeles"}',
+    '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
+    '{2}'
+  );

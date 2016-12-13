@@ -5,7 +5,7 @@ import client from '../../../src/db/client';
 test('`query` handles invalid SQL query', (t) => {
   t.plan(1);
 
-  query(client, 'WRONG * FROM users WHERE user_id = $1;', [1], (error, result) => {
+  query(client, 'WRONG * FROM users WHERE user_id = $1;', [1], (error) => {
     t.ok(error instanceof Error);
   });
 });
