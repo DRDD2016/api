@@ -1,0 +1,23 @@
+{
+  "plugins": ["import"],
+  "extends": [
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "semi": ["error", "always"],
+    "space-before-function-paren": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "padded-blocks": 0,
+    "no-console": ["warn", {"allow": ["error"]}]
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  }
+}
