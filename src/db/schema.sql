@@ -28,6 +28,8 @@ CREATE TABLE events (
   _invitees TEXT[]
 );
 
+/**** insert users ****/
+
 INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
   VALUES (
     'Anita',
@@ -48,6 +50,8 @@ INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
     '+447888888888'
   );
 
+/**** insert events ****/
+
 INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees)
   VALUES (
     1,
@@ -55,8 +59,21 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     'Celebrating life',
     '',
     true,
-    ['Dancing', 'Skydiving'],
-    ['Forest', 'Camping'],
-    ['2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z'],
-    [2]
+    '{"Dancing", "Skydiving"}',
+    '{"Forest", "Camping"}',
+    '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
+    '{2}'
+  );
+
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees)
+  VALUES (
+    1,
+    'Beach party',
+    'Celebrating summer',
+    '',
+    true,
+    '{"Swimming", "Sunbathing"}',
+    '{"Mallorca", "Barbados"}',
+    '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
+    '{2}'
   );
