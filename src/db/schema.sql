@@ -22,10 +22,10 @@ CREATE TABLE events (
   note TEXT,
   is_poll BOOLEAN DEFAULT FALSE NOT NULL,
   is_edited BOOLEAN DEFAULT FALSE NOT NULL,
-  _invitees TEXT[],
   _what TEXT[],
   _where TEXT[],
-  _when TEXT[]
+  _when TEXT[],
+  _invitees TEXT[]
 );
 
 INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
@@ -36,4 +36,27 @@ INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
     'anita@spark.com',
     'http://placehold.it/100x100',
     '+447777777777'
+  );
+
+INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
+  VALUES (
+    'Dave',
+    'Jones',
+    'spark',
+    'dave@spark.com',
+    'http://placehold.it/100x100',
+    '+447888888888'
+  );
+
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees)
+  VALUES (
+    1,
+    'Lounge party',
+    'Celebrating life',
+    '',
+    true,
+    ['Dancing', 'Skydiving'],
+    ['Forest', 'Camping'],
+    ['2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z'],
+    [2]
   );
