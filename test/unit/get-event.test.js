@@ -1,14 +1,14 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
 import getEvent from '../../src/lib/event/get-event';
-import { newEvent } from '../utils/fixtures';
+import { event_1 } from '../utils/fixtures';
 
 const event_id = 1;
 
 test('`getEvent` works', (t) => {
   t.plan(2);
 
-  const expected = Object.assign({}, newEvent, { is_edited: false });
+  const expected = Object.assign({}, event_1, { is_edited: false });
   getEvent(client, event_id)
     .then((result) => {
       t.deepEqual(result, expected, 'correct event retrieved');
