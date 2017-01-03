@@ -23,3 +23,10 @@ export const event_1 = {
   host_user_id: 1,
   event_id: 1
 };
+
+export const newUser = {
+  firstname: 'Homer',
+  surname: 'Simpson',
+  email: 'homer@spark.com',
+  password: 'fake'
+};
