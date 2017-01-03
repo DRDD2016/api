@@ -47,6 +47,7 @@
     "babel-register": "^6.18.0",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
+    "env2": "^2.1.1",
     "express": "^4.14.0",
     "jwt-simple": "^0.5.1",
     "pg": "^6.1.0"

@@ -3,4 +3,4 @@ node_modules/
 coverage/
 *.log
 out/
-src/lib/auth/config.js
+.env

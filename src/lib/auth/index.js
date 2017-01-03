@@ -1,6 +1,6 @@
+require('env2')('.env');
 import jwt from 'jwt-simple';
 import client from '../../db/client';
-import { secret } from './config';
 import saveUser from './save-user';
 import findUserByEmail from './find-user-by-email';
 
@@ -31,5 +31,5 @@ export function signup (req, res, next) {
 
 function createToken (user_id) {
   const timestamp = new Date().getTime(); // date in ms. same as Date.now()
-  return jwt.encode({ sub: user_id, iat: timestamp }, secret);
+  return jwt.encode({ sub: user_id, iat: timestamp }, process.env.SECRET_JWT);
 }
