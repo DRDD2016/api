@@ -13,7 +13,7 @@ export default function findUserByEmail (client, email) {
 
     if (!email) return reject(new TypeError('`findUserByEmail` requires email { string }'));
 
-    const queryText = SQLqueries.findUser;
+    const queryText = SQLqueries.findUserByEmail;
     const queryValues = [
       email
     ];
@@ -28,7 +28,7 @@ export default function findUserByEmail (client, email) {
         return resolve(false);
       }
 
-      resolve(true);
+      resolve(data[0]);
     });
   });
 }

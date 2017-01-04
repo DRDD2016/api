@@ -3,5 +3,5 @@
   "getEvent": "SELECT row_to_json(event) FROM (SELECT * FROM events WHERE host_user_id = $1) event",
   "deleteEvent": "DELETE FROM events WHERE event_id = $1 RETURNING event_id;",
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING user_id;",
-  "findUser": "SELECT * FROM users WHERE email = $1;"
+  "findUserByEmail": "SELECT * FROM users WHERE email = $1;"
 }

@@ -13,7 +13,7 @@ test('`findUserByEmail` works', (t) => {
 
   findUserByEmail(client, 'anita@spark.com')
     .then((userExists) => {
-      t.equal(userExists, true, 'returns true when user is found');
+      t.ok(userExists, 'returns user data');
     });
 });
 

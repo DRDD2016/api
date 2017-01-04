@@ -85,3 +85,20 @@ test('endpoint POST signup rejects missing data', (t) => {
       t.equal(res.statusCode, 422, 'status code is 422');
     });
 });
+
+test('endpoint POST login works', (t) => {
+  t.plan(6);
+
+  request(server)
+    .post('/login')
+    .set('Accept', 'application/json')
+    .send(existingUser)
+    .then((res) => {
+
+      ['token', 'firstname', 'surname', 'email'].forEach((key) => {
+        t.ok(res.body.hasOwnProperty(key), `${key} exists in the response body`);
+      });
+      t.ok(!res.body.hasOwnProperty('password'), '`password` not in response body');
+      t.equal(res.statusCode, 201, 'status code is 201');
+    });
+});

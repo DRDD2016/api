@@ -29,6 +29,12 @@ export function signup (req, res, next) {
     .catch(err => next(err));
 }
 
+export function login (req, res, next) {
+
+  // find user, compare password, send token
+  res.status(201).json(Object.assign(req.user, { token: createToken(req.user.user_id) }));
+}
+
 function createToken (user_id) {
   const timestamp = new Date().getTime(); // date in ms. same as Date.now()
   return jwt.encode({ sub: user_id, iat: timestamp }, process.env.SECRET_JWT);
