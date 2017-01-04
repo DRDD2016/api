@@ -2,12 +2,16 @@ import test from 'blue-tape';
 import request from 'supertest';
 import server from '../../server';
 import { newEvent, existingUser } from '../utils/fixtures';
+import { createToken } from '../../src/lib/auth';
+
+const token = createToken(existingUser.user_id);
 
 test('endpoint POST events works', (t) => {
   t.plan(2);
 
   request(server)
     .post('/events')
+    .set('authorization', token)
     .send(newEvent)
     .end((err, res) => {
       t.notOk(err);
@@ -16,14 +20,23 @@ test('endpoint POST events works', (t) => {
 });
 
 test('endpoint POST events handles errors', (t) => {
-  t.plan(1);
+  t.plan(2);
+
+  request(server)
+    .post('/events')
+    .set('authorization', token)
+    .set('Accept', 'application/json')
+    .send({})
+    .then((res) => {
+      t.ok(res.error instanceof Error);
+    });
 
   request(server)
     .post('/events')
     .set('Accept', 'application/json')
     .send({})
     .then((res) => {
-      t.ok(res.error instanceof Error);
+      t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
     });
 });
 
@@ -32,9 +45,20 @@ test('endpoint GET events works', (t) => {
 
   request(server)
     .get('/events/1')
+    .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');
+    });
+});
+
+test('endpoint GET events handles errors', (t) => {
+  t.plan(1);
+
+  request(server)
+    .get('/events/1')
+    .end((err, res) => {
+      t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
     });
 });
 
@@ -43,9 +67,20 @@ test('endpoint DELETE events works', (t) => {
 
   request(server)
     .delete('/events/2')
+    .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');
+    });
+});
+
+test('endpoint DELETE events handles errors', (t) => {
+  t.plan(1);
+
+  request(server)
+    .delete('/events/2')
+    .end((err, res) => {
+      t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
     });
 });
 

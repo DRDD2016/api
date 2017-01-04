@@ -1,22 +1,22 @@
 import test from 'blue-tape';
 import client from '../../../src/db/client';
-import findUserByEmail from '../../../src/lib/auth/find-user-by-email';
+import getUserByEmail from '../../../src/lib/auth/get-user-by-email';
 import { newUser } from '../../utils/fixtures';
 
-test('`findUserByEmail` works', (t) => {
+test('`getUserByEmail` works', (t) => {
   t.plan(2);
 
-  findUserByEmail(client, newUser.email)
+  getUserByEmail(client, newUser.email)
     .then((userExists) => {
       t.equal(userExists, false, 'returns false when user not found');
     });
 
-  findUserByEmail(client, 'anita@spark.com')
+  getUserByEmail(client, 'anita@spark.com')
     .then((userExists) => {
       t.ok(userExists, 'returns user data');
     });
 });
 
-test('`findUserByEmail` handles errors', (t) => {
-  return t.shouldFail(findUserByEmail(client, ""), 'handles missing email');
+test('`getUserByEmail` handles errors', (t) => {
+  return t.shouldFail(getUserByEmail(client, ""), 'handles missing email');
 });

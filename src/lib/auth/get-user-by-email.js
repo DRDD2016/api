@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import SQLqueries from '../../db/sql-queries.json';
+import { getUserByEmail as queryText } from '../../db/sql-queries.json';
 
 /**
  * Find a user by email address in the database
@@ -8,12 +8,11 @@ import SQLqueries from '../../db/sql-queries.json';
  * @param {string} email - user email
  */
 
-export default function findUserByEmail (client, email) {
+export default function getUserByEmail (client, email) {
   return new Promise ((resolve, reject) => {
 
-    if (!email) return reject(new TypeError('`findUserByEmail` requires email { string }'));
+    if (!email) return reject(new TypeError('`getUserByEmail` requires email { string }'));
 
-    const queryText = SQLqueries.findUserByEmail;
     const queryValues = [
       email
     ];

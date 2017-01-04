@@ -8,7 +8,7 @@
     "test": ". ./config.sh && TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
     "test-coverage": "",
     "test-watch": "nodemon -q -x 'npm run test'",
-    "lint": "eslint src/**/*.js test/**/*.js",
+    "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js' 'test/**/*.js'",
     "load-dev-schema": "psql spark -f ./test/utils/schema.sql",
     "postgres": "postgres -D /usr/local/var/postgres",
     "make-docs": "./node_modules/.bin/jsdoc -c ./conf.json -r"

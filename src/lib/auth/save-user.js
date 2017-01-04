@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import SQLqueries from '../../db/sql-queries.json';
+import { saveUser as queryText } from '../../db/sql-queries.json';
 import hashPassword from './hash-password';
 
 /**
@@ -15,7 +15,6 @@ export default function saveUser (client, data) {
 
     hashPassword(data.password)
       .then((hash) => {
-        const queryText = SQLqueries.saveUser;
         const queryValues = [
           data.firstname,
           data.surname,

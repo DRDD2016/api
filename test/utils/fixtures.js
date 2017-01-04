@@ -38,3 +38,5 @@ export const existingUser = {
   email: 'dave@spark.com',
   password: 'spark'
 };
+
+export const existingUserToken = ''

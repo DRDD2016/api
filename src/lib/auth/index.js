@@ -1,7 +1,7 @@
 import jwt from 'jwt-simple';
 import client from '../../db/client';
 import saveUser from './save-user';
-import findUserByEmail from './find-user-by-email';
+import getUserByEmail from './get-user-by-email';
 
 export function signup (req, res, next) {
 
@@ -15,7 +15,7 @@ export function signup (req, res, next) {
     return res.status(422).send({ error: 'All fields are required!' });
   }
 
-  findUserByEmail(client, email)
+  getUserByEmail(client, email)
     .then((userExists) => {
       if (userExists) {
         return res.status(422).send({ error: 'Email is in use' });
@@ -34,7 +34,7 @@ export function login (req, res) {
   res.status(201).json(Object.assign(req.user, { token: createToken(req.user.user_id) }));
 }
 
-function createToken (user_id) {
+export function createToken (user_id) {
   const timestamp = new Date().getTime(); // date in ms. same as Date.now()
   return jwt.encode({ sub: user_id, iat: timestamp }, process.env.SECRET_JWT);
 }

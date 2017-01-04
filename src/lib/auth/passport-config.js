@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import LocalStrategy from 'passport-local';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import client from '../../db/client';
-import findUserByEmail from './find-user-by-email';
+import getUserByEmail from './get-user-by-email';
 import getUserById from './get-user-by-id';
 
 //LOGIN - local strategy
@@ -20,7 +20,7 @@ const jwtAuth = new Strategy(jwtOptions, jwtStrategy);
 passport.use(jwtAuth);
 
 function localLoginStrategy (email, password, done) {
-  findUserByEmail(client, email)
+  getUserByEmail(client, email)
     .then((user) => {
       if (!user) {
         return done(null, false);
