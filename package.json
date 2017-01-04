@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "pretest": ". ./pretest.sh",
-    "test": ". ./config.sh && TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
+    "test": "TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
     "test-coverage": "",
     "test-watch": "nodemon -q -x 'npm run test'",
     "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js' 'test/**/*.js'",
@@ -48,6 +48,7 @@
     "bcrypt": "^1.0.2",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
+    "env2": "^2.1.1",
     "express": "^4.14.0",
     "jwt-simple": "^0.5.1",
     "passport": "^0.3.2",

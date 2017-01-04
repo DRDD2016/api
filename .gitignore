@@ -4,3 +4,4 @@ coverage/
 *.log
 out/
 config.sh
+.env
