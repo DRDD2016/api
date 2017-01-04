@@ -8,7 +8,7 @@
     "test": "TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
     "test-coverage": "",
     "test-watch": "nodemon -q -x 'npm run test'",
-    "lint": "eslint '/src/**/*.js' '/test/**/*.js'",
+    "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js' 'test/**/*.js'",
     "load-dev-schema": "psql spark -f ./test/utils/schema.sql",
     "postgres": "postgres -D /usr/local/var/postgres",
     "make-docs": "./node_modules/.bin/jsdoc -c ./conf.json -r"
@@ -45,9 +45,15 @@
   "dependencies": {
     "babel-preset-es2015": "^6.18.0",
     "babel-register": "^6.18.0",
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
+    "env2": "^2.1.1",
     "express": "^4.14.0",
+    "jwt-simple": "^0.5.1",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
     "pg": "^6.1.0"
   }
 }

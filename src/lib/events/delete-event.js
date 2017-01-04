@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import SQLqueries from '../../db/sql-queries.json';
+import { deleteEvent as queryText } from '../../db/sql-queries.json';
 
 /**
  * Deletes an event from the database
@@ -15,7 +15,6 @@ export default function deleteEvent (client, event_id) {
     if (!event_id) {
       return reject(new TypeError('`deleteEvent` requires an event_id'));
     }
-    const queryText = SQLqueries.deleteEvent;
     const queryValues = [event_id];
 
     query(client, queryText, queryValues, (err, result) => {

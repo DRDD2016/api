@@ -10,8 +10,7 @@ CREATE TABLE users (
   surname TEXT NOT NULL,
   password TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
-  photo_url TEXT,
-  phone_number TEXT UNIQUE
+  photo_url TEXT
 );
 
 CREATE TABLE events (
@@ -30,24 +29,22 @@ CREATE TABLE events (
 
 /**** insert users ****/
 
-INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
+INSERT INTO users (firstname, surname, password, email, photo_url)
   VALUES (
     'Anita',
     'Jones',
-    'spark',
+    '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'anita@spark.com',
-    'http://placehold.it/100x100',
-    '+447777777777'
+    'http://placehold.it/100x100'
   );
 
-INSERT INTO users (firstname, surname, password, email, photo_url, phone_number)
+INSERT INTO users (firstname, surname, password, email, photo_url)
   VALUES (
     'Dave',
     'Jones',
-    'spark',
+    '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'dave@spark.com',
-    'http://placehold.it/100x100',
-    '+447888888888'
+    'http://placehold.it/100x100'
   );
 
 /**** insert events ****/

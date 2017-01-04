@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import SQLqueries from '../../db/sql-queries.json';
+import { saveEvent as queryText } from '../../db/sql-queries.json';
 
 /**
  * Save an event to the database
@@ -15,7 +15,6 @@ export default function saveEvent (client, data) {
     if (!data || Object.keys(data).length === 0) {
       return reject(new TypeError('`saveEvent` event data is empty or undefined'));
     }
-    const queryText = SQLqueries.saveEvent;
     const queryValues = [
       data.host_user_id,
       data.name,

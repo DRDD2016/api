@@ -1,3 +1,4 @@
+require('env2')('.env');
 require('babel-register')({
   presets: ['es2015']
 });
