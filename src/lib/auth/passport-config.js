@@ -1,10 +1,10 @@
 const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');
-const { secret } = require('./config');
+
 // tell passport where to find the JWT in the request
 const options = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-  secretOrKey: secret
+  secretOrKey: process.env.SECRET_JWT
 };
 
 // create JWT strategy

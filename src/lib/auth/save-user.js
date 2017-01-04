@@ -23,7 +23,7 @@ export default function saveUser (client, data) {
       if (err) {
         reject(err);
       }
-      console.log(data);
+    
       resolve(data[0].user_id);
     });
   });

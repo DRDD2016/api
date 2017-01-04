@@ -12,7 +12,7 @@ export function signup (req, res, next) {
 
 
   if (!email || !password || !firstname || !surname) {
-    return res.status(422).send({ error: 'You must provide email and password' });
+    return res.status(422).send({ error: 'All fields are required!' });
   }
 
   findUserByEmail(client, email)

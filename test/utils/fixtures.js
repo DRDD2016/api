@@ -30,3 +30,10 @@ export const newUser = {
   email: 'homer@spark.com',
   password: 'fake'
 };
+
+export const existingUser = {
+  firstname: 'Dave',
+  surname: 'Jones',
+  email: 'dave@spark.com',
+  password: 'spark'
+};
