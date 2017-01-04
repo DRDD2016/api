@@ -32,6 +32,7 @@ export const newUser = {
 };
 
 export const existingUser = {
+  user_id: '2',
   firstname: 'Dave',
   surname: 'Jones',
   email: 'dave@spark.com',

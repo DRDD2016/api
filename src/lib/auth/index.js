@@ -29,8 +29,7 @@ export function signup (req, res, next) {
     .catch(err => next(err));
 }
 
-export function login (req, res, next) {
-
+export function login (req, res) {
   // find user, compare password, send token
   res.status(201).json(Object.assign(req.user, { token: createToken(req.user.user_id) }));
 }
