@@ -1,4 +1,3 @@
-require('env2')('.env');
 import jwt from 'jwt-simple';
 import client from '../../db/client';
 import saveUser from './save-user';
