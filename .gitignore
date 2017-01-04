@@ -3,4 +3,4 @@ node_modules/
 coverage/
 *.log
 out/
-.env
+config.sh
