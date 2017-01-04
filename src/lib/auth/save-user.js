@@ -19,12 +19,12 @@ export default function saveUser (client, data) {
       data.email,
       data.password
     ];
-
-    query(client, queryText, queryValues, (err) => {
+    query(client, queryText, queryValues, (err, data) => {
       if (err) {
         reject(err);
       }
-      resolve();
+      console.log(data);
+      resolve(data[0].user_id);
     });
   });
 }

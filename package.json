@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "pretest": ". ./pretest.sh",
-    "test": "TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
+    "test": ". ./config.sh && TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
     "test-coverage": "",
     "test-watch": "nodemon -q -x 'npm run test'",
     "lint": "eslint '/src/**/*.js' '/test/**/*.js'",

@@ -8,5 +8,5 @@ test('`saveUser` works', () => {
 });
 
 test('`saveUser` handles errors', (t) => {
-  return t.shouldFail(saveUser(client, {}), 'Promise rejects');
+  return t.shouldFail(saveUser(client, ""), 'Promise rejects');
 });

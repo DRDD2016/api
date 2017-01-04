@@ -22,8 +22,9 @@ export function signup (req, res, next) {
       }
       saveUser(client, req.body)
         .then((user_id) => {
-          return res.json({ token: createToken(user_id) });
-        });
+          return res.status(201).json({ token: createToken(user_id) });
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 }

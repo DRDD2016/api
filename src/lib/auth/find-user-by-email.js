@@ -10,8 +10,9 @@ import SQLqueries from '../../db/sql-queries.json';
 
 export default function findUserByEmail (client, email) {
   return new Promise ((resolve, reject) => {
+
     if (!email) return reject(new TypeError('`findUserByEmail` requires email { string }'));
-    
+
     const queryText = SQLqueries.findUser;
     const queryValues = [
       email
@@ -24,7 +25,7 @@ export default function findUserByEmail (client, email) {
       }
 
       if (data.length === 0) {
-        resolve(false);
+        return resolve(false);
       }
 
       resolve(true);
