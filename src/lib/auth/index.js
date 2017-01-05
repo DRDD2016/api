@@ -7,9 +7,8 @@ export function signup (req, res, next) {
 
   const firstname = req.body.firstname;
   const surname = req.body.surname;
-  const email = req.body.email;
+  const email = req.body.email && req.body.email.toLowerCase();
   const password = req.body.password;
-
 
   if (!email || !password || !firstname || !surname) {
     return res.status(422).send({ error: 'All fields are required!' });
