@@ -5,6 +5,7 @@ require('babel-register')({
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const morgan = require('morgan');
 const registerRoutes = require('./src/lib/register-routes').default;
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cors());
+app.use(morgan('combined'));
 
 registerRoutes(app);
 

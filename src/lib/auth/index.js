@@ -7,9 +7,8 @@ export function signup (req, res, next) {
 
   const firstname = req.body.firstname;
   const surname = req.body.surname;
-  const email = req.body.email;
+  const email = req.body.email && req.body.email.toLowerCase();
   const password = req.body.password;
-
 
   if (!email || !password || !firstname || !surname) {
     return res.status(422).send({ error: 'All fields are required!' });
@@ -21,10 +20,10 @@ export function signup (req, res, next) {
         return res.status(422).send({ error: 'Email is in use' });
       }
       saveUser(client, req.body)
-        .then((user_id) => {
-          return res.status(201).json({ token: createToken(user_id) });
-        })
-        .catch(err => next(err));
+      .then((user_id) => {
+        return res.status(201).json({ token: createToken(user_id) });
+      })
+      .catch(err => next(err));
     })
     .catch(err => next(err));
 }
