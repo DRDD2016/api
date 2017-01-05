@@ -20,10 +20,10 @@ export function signup (req, res, next) {
         return res.status(422).send({ error: 'Email is in use' });
       }
       saveUser(client, req.body)
-      .then((user_id) => {
-        return res.status(201).json({ token: createToken(user_id) });
-      })
-      .catch(err => next(err));
+        .then((user_id) => {
+          return res.status(201).json({ token: createToken(user_id) });
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 }
