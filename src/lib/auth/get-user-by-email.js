@@ -15,7 +15,6 @@ export default function getUserByEmail (client, email) {
     const queryValues = [
       email
     ];
-
     query(client, queryText, queryValues, (err, data) => {
 
       if (err) {

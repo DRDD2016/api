@@ -6,7 +6,7 @@
   "scripts": {
     "pretest": ". ./pretest.sh",
     "test": "TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
-    "test-coverage": "",
+    "dev": "nodemon server.js",
     "test-watch": "nodemon -q -x 'npm run test'",
     "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js' 'test/**/*.js'",
     "load-dev-schema": "psql spark -f ./test/utils/schema.sql",

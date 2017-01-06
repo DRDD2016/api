@@ -2,7 +2,7 @@
   "saveEvent": "INSERT INTO events (host_user_id, name, description, note, _what, _where, _when, _invitees, is_poll) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);",
   "getEvent": "SELECT row_to_json(event) FROM (SELECT * FROM events WHERE host_user_id = $1) event",
   "deleteEvent": "DELETE FROM events WHERE event_id = $1 RETURNING event_id;",
-  "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING user_id;",
+  "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id;",
   "getUserByEmail": "SELECT * FROM users WHERE email = $1;",
   "getUserById": "SELECT firstname, surname, email FROM users WHERE user_id = $1;"
 }
