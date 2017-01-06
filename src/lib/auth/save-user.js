@@ -23,10 +23,9 @@ export default function saveUser (client, data) {
         ];
         query(client, queryText, queryValues, (err, data) => {
           if (err) {
-            reject(err);
+            return reject(err);
           }
-
-          resolve(data[0].user_id);
+          return resolve(data[0]);
         });
       })
       .catch(err => reject(err));

@@ -13,15 +13,21 @@ export function signup (req, res, next) {
   if (!email || !password || !firstname || !surname) {
     return res.status(422).send({ error: 'All fields are required!' });
   }
-
   getUserByEmail(client, email)
     .then((userExists) => {
       if (userExists) {
         return res.status(422).send({ error: 'Email is in use' });
       }
       saveUser(client, req.body)
-        .then((user_id) => {
-          return res.status(201).json({ token: createToken(user_id) });
+        .then((user) => {
+          let obj = {
+            firstname: user.firstname,
+            surname: user.surname,
+            email: user.email
+          };
+          return res.status(201).json(
+            Object.assign(obj, { token: createToken(user.user_id) }
+          ));
         })
         .catch(err => next(err));
     })
