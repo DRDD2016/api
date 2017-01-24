@@ -2,6 +2,8 @@ require('env2')('.env');
 require('babel-register')({
   presets: ['es2015']
 });
+const http = require('http');
+const socketio = require('socket.io');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -17,7 +19,13 @@ app.use(morgan('combined'));
 
 registerRoutes(app);
 
-app.listen(port, () => {
+// socket io stuff
+const server = http.Server(app);
+const websocket = socketio(server);
+
+websocket.on('connection', (socket) => console.log(`CONNECTION! ${socket.id}`));
+
+server.listen(port, () => {
   console.info(`🌍 Server is listening on ${port}`);
 });
 
