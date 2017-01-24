@@ -1,6 +1,6 @@
 module.exports = function socketRouter (io) {
   io.emit('connected');
-
+  console.log("CONNECTION!", io.id);
   io.on('join', (user_id) => {
     console.log(`user ${user_id} joined.`);
     // publish the "notify" event so the feed is delivered to the client

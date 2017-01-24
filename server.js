@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const registerRoutes = require('./src/lib/register-routes').default;
+const socketRouter = require('./socket-router');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -23,7 +24,7 @@ registerRoutes(app);
 const server = http.Server(app);
 const websocket = socketio(server);
 
-websocket.on('connection', (socket) => console.log(`CONNECTION! ${socket.id}`));
+websocket.of('/feed').on('connection', socketRouter);
 
 server.listen(port, () => {
   console.info(`🌍 Server is listening on ${port}`);
