@@ -4,11 +4,14 @@ import deleteEvent from './events/delete-event';
 import client from '../db/client';
 
 export function postEventHandler (req, res, next) {
-  saveEvent(client, req.body)
+  const data = Object.assign(req.body, { user_id: req.user.user_id });
+  saveEvent(client, data)
     .then(() => {
-      res.json();
+      res.json({ code: "pretend code" });
     })
-    .catch(err => next(err));
+    .catch((err) => {
+      return res.status(500).send({ error: err });
+    });
 }
 
 export function getEventHandler (req, res, next) {

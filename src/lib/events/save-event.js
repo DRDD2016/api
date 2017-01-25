@@ -16,14 +16,14 @@ export default function saveEvent (client, data) {
       return reject(new TypeError('`saveEvent` event data is empty or undefined'));
     }
     const queryValues = [
-      data.host_user_id,
+      data.user_id,
       data.name,
       data.description,
       data.note,
-      data._what,
-      data._where,
-      data._when,
-      data._invitees,
+      data.what,
+      data.where,
+      data.when,
+      data.invitees,
       data.is_poll
     ];
     query(client, queryText, queryValues, (err) => {

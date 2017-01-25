@@ -36,7 +36,9 @@ export function signup (req, res, next) {
 
 export function login (req, res) {
   // find user, compare password, send token
-  res.status(201).json(Object.assign(req.user, { token: createToken(req.user.user_id) }));
+  const user = Object.assign({}, req.user);
+  delete user.user_id;
+  res.status(201).json(Object.assign(user, { token: createToken(req.user.user_id) }));
 }
 
 export function createToken (user_id) {
