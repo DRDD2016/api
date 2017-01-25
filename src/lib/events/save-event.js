@@ -9,14 +9,13 @@ import { saveEvent as queryText } from '../../db/sql-queries.json';
  */
 
 export default function saveEvent (client, data) {
-
   return new Promise ((resolve, reject) => {
 
     if (!data || Object.keys(data).length === 0) {
       return reject(new TypeError('`saveEvent` event data is empty or undefined'));
     }
     const queryValues = [
-      data.user_id,
+      data.host_user_id,
       data.name,
       data.description,
       data.note,
@@ -24,7 +23,8 @@ export default function saveEvent (client, data) {
       data.where,
       data.when,
       data.invitees,
-      data.is_poll
+      data.is_poll,
+      data.code
     ];
     query(client, queryText, queryValues, (err) => {
       if (err) {

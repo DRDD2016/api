@@ -2,15 +2,17 @@ import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import deleteEvent from './events/delete-event';
 import client from '../db/client';
+import shortid from 'shortid';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
-  const data = Object.assign(req.body, { user_id: req.user.user_id });
+  const data = Object.assign(req.body, { host_user_id: req.user.user_id });
+  const code = shortid.generate();
+  data.code = code;
   saveEvent(client, data)
     .then(() => {
-      res.json({ code: "pretend code" });
+      res.json({ code });
     })
     .catch((err) => {
-
       return res.status(500).send({ error: err });
     });
 }

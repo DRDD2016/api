@@ -8,7 +8,8 @@ export const newEvent = {
   _invitees: ['2', '3', '4'],
   is_poll: true,
   host_user_id: 1,
-  event_id: 1
+  event_id: 1,
+  code: 'FAKECODE4'
 };
 
 export const event_1 = {
@@ -21,7 +22,8 @@ export const event_1 = {
   _invitees: ['2'],
   is_poll: true,
   host_user_id: 1,
-  event_id: 1
+  event_id: 1,
+  code: 'FAKECODE'
 };
 
 export const newUser = {
