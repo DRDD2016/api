@@ -3,13 +3,14 @@ import getEvent from './events/get-event';
 import deleteEvent from './events/delete-event';
 import client from '../db/client';
 
-export function postEventHandler (req, res, next) {
+export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const data = Object.assign(req.body, { user_id: req.user.user_id });
   saveEvent(client, data)
     .then(() => {
       res.json({ code: "pretend code" });
     })
     .catch((err) => {
+
       return res.status(500).send({ error: err });
     });
 }
