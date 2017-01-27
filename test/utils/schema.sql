@@ -21,7 +21,6 @@ CREATE TABLE events (
   description TEXT NOT NULL,
   note TEXT,
   is_poll BOOLEAN DEFAULT FALSE NOT NULL,
-  is_edited BOOLEAN DEFAULT FALSE NOT NULL,
   _what TEXT[],
   _where TEXT[],
   _when TEXT[],

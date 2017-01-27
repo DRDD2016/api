@@ -1,11 +1,5 @@
 import test from 'blue-tape';
-import client from '../src/db/client';
-import query from '../src/db/query';
 
 test.onFinish(() => {
-  query(client, 'DELETE FROM events;', [], (error) => {
-    if (!error) {
-      process.exit(0);
-    }
-  });
+  process.exit(0);
 });
