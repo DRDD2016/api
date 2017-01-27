@@ -12,7 +12,7 @@ test('`getEventByCode` works', (t) => {
   const expected = event_1;
   getEventByCode(client, code)
     .then((result) => {
-      t.deepEqual(result, expected, 'correct event retrieved');
+      t.equal(result.event_id, expected.event_id, 'correct event retrieved');
     })
     .catch(err => console.error(err));
 

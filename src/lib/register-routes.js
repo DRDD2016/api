@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { postEventHandler, deleteEventHandler, addInvitee } from './handlers';
+import { postEventHandler, deleteEventHandler, addInviteeHandler } from './handlers';
 import { signup, login } from './auth';
 import passportConfig from './auth/passport-config'; // eslint-disable-line
 
@@ -11,5 +11,5 @@ export default function registerRoutes (app) {
   app.delete('/events/:event_id', requireAuth, deleteEventHandler);
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
-  app.patch('/events/invitees', requireAuth, addInvitee);
+  app.patch('/events/invitees', requireAuth, addInviteeHandler);
 }

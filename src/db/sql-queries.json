@@ -4,5 +4,6 @@
   "deleteEvent": "DELETE FROM events WHERE event_id = $1 RETURNING event_id;",
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id;",
   "getUserByEmail": "SELECT * FROM users WHERE email = $1;",
-  "getUserById": "SELECT firstname, surname, email, user_id FROM users WHERE user_id = $1;"
+  "getUserById": "SELECT firstname, surname, email, user_id FROM users WHERE user_id = $1;",
+  "addInvitee": "UPDATE events SET _invitees = array_cat(_invitees, $1) WHERE event_id = $2;"
 }

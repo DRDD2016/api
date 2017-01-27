@@ -138,15 +138,15 @@ test('endpoint POST login works', (t) => {
     });
 });
 
-test('endpoint PATCH event/invitees works', (t) => {
-
+test('endpoint PATCH events/invitees works', (t) => {
+  t.plan(1);
   request(server)
-    .post('/event/invitees')
+    .patch('/events/invitees')
     .set('Accept', 'application/json')
-    .set('authorization', token)
+    .set('authorization', createToken(3))
     .send({ code: event_1.code })
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
-      t.deepEqual(res.body, event_1, 'returns event data');
+      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     });
 });

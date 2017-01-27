@@ -1,6 +1,7 @@
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import deleteEvent from './events/delete-event';
+import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -34,7 +35,7 @@ export function deleteEventHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function addInvitee (req, res, next) {
+export function addInviteeHandler (req, res, next) {
   const code = req.body.code;
   if (!code) {
     return res.status(422).send({ error: 'No code submitted' });
@@ -45,7 +46,11 @@ export function addInvitee (req, res, next) {
         return res.status(422).send({ error: 'No event found' });
       }
       // yes --> add invitee to event, return event info
-      return res.json(JSON.stringify(event));
+      addInvitee(client, req.user.user_id, event.event_id)
+        .then(() => {
+          return res.status(201).json(JSON.stringify(event));
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 }
