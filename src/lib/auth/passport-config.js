@@ -25,9 +25,6 @@ function localLoginStrategy (email, password, done) {
       if (!user) {
         return done(null, false);
       }
-      return user;
-    })
-    .then((user) => {
       bcrypt.compare(password, user.password, (err, isMatch) => {
         if (!isMatch) {
           return done(null, false);

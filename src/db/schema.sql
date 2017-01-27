@@ -15,6 +15,7 @@ CREATE TABLE users (
 
 CREATE TABLE events (
   event_id SERIAL PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE,
   host_user_id INTEGER NOT NULL REFERENCES users(user_id),
   name TEXT NOT NULL,
   description TEXT NOT NULL,
@@ -49,7 +50,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
 
 /**** insert events ****/
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
   VALUES (
     1,
     'Lounge party',
@@ -59,10 +60,11 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Dancing", "Skydiving"}',
     '{"Forest", "Camping"}',
     '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
-    '{2}'
+    '{2}',
+    'FAKECODE'
   );
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
   VALUES (
     1,
     'Beach party',
@@ -72,5 +74,6 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Swimming", "Sunbathing"}',
     '{"Mallorca", "Barbados"}',
     '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
-    '{2}'
+    '{2}',
+    'FAKECODE2'
   );
