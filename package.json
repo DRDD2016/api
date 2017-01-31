@@ -11,7 +11,10 @@
     "lint": "node_modules/eslint/bin/eslint.js 'src/**/*.js' 'test/**/*.js'",
     "load-dev-schema": "psql spark -f ./test/utils/schema.sql",
     "postgres": "postgres -D /usr/local/var/postgres",
-    "make-docs": "./node_modules/.bin/jsdoc -c ./conf.json -r"
+    "make-docs": "./node_modules/.bin/jsdoc -c ./conf.json -r",
+    "precommit": "npm run lint",
+    "prepush": "npm test coverage",
+    "postmerge": "npm install"
   },
   "repository": {
     "type": "git",
@@ -23,18 +26,11 @@
     "url": "https://github.com/DRDD2016/api/issues"
   },
   "homepage": "https://github.com/DRDD2016/api#readme",
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm test coverage",
-      "post-merge": "npm install"
-    }
-  },
   "devDependencies": {
     "blue-tape": "^1.0.0",
     "eslint": "^3.11.1",
     "eslint-plugin-import": "^2.2.0",
-    "ghooks": "^1.3.2",
+    "husky": "^0.13.1",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.3",
     "nodemon": "^1.11.0",

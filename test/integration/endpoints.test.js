@@ -150,3 +150,17 @@ test('endpoint PATCH events/invitees works', (t) => {
       // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     });
 });
+
+test('endpoint PATCH events/invitees works', (t) => {
+  t.plan(2);
+  request(server)
+    .patch('/events/invitees')
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'No code submitted' });
+      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
+    })
+    .catch(err => console.error(err));
+});

@@ -3,6 +3,7 @@ import getEvent from './events/get-event';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
+import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
 
@@ -48,7 +49,7 @@ export function addInviteeHandler (req, res, next) {
       // yes --> add invitee to event, return event info
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
-          return res.status(201).json(JSON.stringify(event));
+          return res.status(201).json(JSON.stringify(normaliseEventKeys(event)));
         })
         .catch(err => next(err));
     })
