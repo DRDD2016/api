@@ -3,6 +3,8 @@ import getEvent from './events/get-event';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
+import saveVote from './events/save-vote';
+import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
 
@@ -45,12 +47,23 @@ export function addInviteeHandler (req, res, next) {
       if (!event) {
         return res.status(422).send({ error: 'No event found' });
       }
-      // yes --> add invitee to event, return event info
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
-          return res.status(201).json(JSON.stringify(event));
+          return res.status(201).json(JSON.stringify(normaliseEventKeys(event)));
         })
         .catch(err => next(err));
+    })
+    .catch(err => next(err));
+}
+
+export function postVoteHandler (req, res, next) {
+  const user_id = req.user.user_id;
+  const { event_id, vote } = req.body;
+  saveVote(client, user_id, event_id, vote)
+    .then((success) => {
+      if (success) {
+        res.status(201).end();
+      }
     })
     .catch(err => next(err));
 }

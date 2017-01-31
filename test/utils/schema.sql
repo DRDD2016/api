@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS votes CASCADE;
 
 DROP SEQUENCE IF EXISTS user_id_seq;
 DROP SEQUENCE IF EXISTS event_id_seq;
@@ -27,6 +28,15 @@ CREATE TABLE events (
   _invitees TEXT[]
 );
 
+CREATE TABLE votes (
+  event_id INTEGER NOT NULL REFERENCES events(event_id),
+  user_id INTEGER NOT NULL REFERENCES users(user_id),
+  _what INTEGER[],
+  _where INTEGER[],
+  _when INTEGER[],
+  PRIMARY KEY (user_id, event_id)
+);
+
 /**** insert users ****/
 
 INSERT INTO users (firstname, surname, password, email, photo_url)
@@ -44,6 +54,15 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'dave@spark.com',
+    'http://placehold.it/100x100'
+  );
+
+INSERT INTO users (firstname, surname, password, email, photo_url)
+  VALUES (
+    'Sohil',
+    'Pandya',
+    '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
+    'sohil@spark.com',
     'http://placehold.it/100x100'
   );
 
@@ -72,7 +91,25 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     true,
     '{"Swimming", "Sunbathing"}',
     '{"Mallorca", "Barbados"}',
-    '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
+    '{"2017-01-03T00:00:00.000Z"}',
     '{2}',
     'FAKECODE2'
   );
+
+/**** insert votes ****/
+
+INSERT INTO votes (event_id, user_id, _what, _where, _when)
+  VALUES (
+    1,
+    2,
+    '{0, 1}',
+    '{1, 0}',
+    '{1, 1}'
+  ),
+  (
+    1,
+    3,
+    '{1, 1}',
+    '{0, 1}',
+    '{1, 0}'
+  )

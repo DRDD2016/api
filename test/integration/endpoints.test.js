@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser, event_1 } from '../utils/fixtures';
+import { newEvent, existingUser, event_1, vote } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const token = createToken(existingUser.user_id);
@@ -149,4 +149,31 @@ test('endpoint PATCH events/invitees works', (t) => {
       t.equal(res.statusCode, 201, 'status code is 201');
       // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     });
+});
+
+test('endpoint PATCH events/invitees works', (t) => {
+  t.plan(2);
+  request(server)
+    .patch('/events/invitees')
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'No code submitted' });
+      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint POST votes works', (t) => {
+  t.plan(1);
+  request(server)
+    .post('/votes')
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send({ vote, event_id: 1 })
+    .then((res) => {
+      t.equal(res.statusCode, 201, 'status code is 201');
+    })
+    .catch(err => console.error(err));
 });

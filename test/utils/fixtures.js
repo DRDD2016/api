@@ -40,3 +40,8 @@ export const existingUser = {
   email: 'dave@spark.com',
   password: 'spark'
 };
+
+export const vote = {
+  what: [0, 1],
+  where: [1, 1]
+};
