@@ -177,3 +177,15 @@ test('endpoint POST votes works', (t) => {
     })
     .catch(err => console.error(err));
 });
+
+test('endpoint POST votes rejects unauthorised requests', (t) => {
+  t.plan(1);
+  request(server)
+    .post('/votes')
+    .set('Accept', 'application/json')
+    .send({ vote, event_id: 1 })
+    .then((res) => {
+      t.equal(res.statusCode, 401, 'status code is 401');
+    })
+    .catch(err => console.error(err));
+});
