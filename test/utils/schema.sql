@@ -91,7 +91,7 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     true,
     '{"Swimming", "Sunbathing"}',
     '{"Mallorca", "Barbados"}',
-    '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
+    '{"2017-01-03T00:00:00.000Z"}',
     '{2}',
     'FAKECODE2'
   );
