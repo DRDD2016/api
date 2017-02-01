@@ -1,11 +1,8 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
 import saveVote, { buildSaveVoteQuery } from '../../src/lib/events/save-vote';
+import { vote } from '../utils/fixtures';
 
-const vote = {
-  what: [0, 1],
-  where: [1, 1]
-};
 const user_id = 3;
 const event_id = 1;
 
@@ -24,7 +21,7 @@ test('`buildSaveVoteQuery` works', (t) => {
 
   const expectedValues = [user_id, event_id, '{0,1}', '{1,1}'];
   const result = buildSaveVoteQuery(user_id, event_id, vote);
-  
+
   t.equal(result.queryText, expectedText, 'Returns valid SQL query');
   t.deepEqual(result.queryValues, expectedValues, 'Returns query values in correct SQL array format');
 });
