@@ -45,3 +45,9 @@ export const vote = {
   what: [0, 1],
   where: [1, 1]
 };
+
+export const hostEventChoices = {
+  what: ['Dodgeball'],
+  where: ['Hoxton'],
+  when: ['2017-04-03T00:00:00.000Z']
+};

@@ -4,6 +4,7 @@ import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
+import finaliseEvent from './events/finalise-event';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -24,7 +25,7 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
 export function getEventHandler (req, res, next) {
   getEvent(client, req.params.event_id)
     .then((event) => {
-      res.json(JSON.stringify(event));
+      res.json(event);
     })
     .catch(err => next(err));
 }
@@ -49,7 +50,7 @@ export function addInviteeHandler (req, res, next) {
       }
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
-          return res.status(201).json(JSON.stringify(normaliseEventKeys(event)));
+          return res.status(201).json(normaliseEventKeys(event));
         })
         .catch(err => next(err));
     })
@@ -58,11 +59,26 @@ export function addInviteeHandler (req, res, next) {
 
 export function postVoteHandler (req, res, next) {
   const user_id = req.user.user_id;
-  const { event_id, vote } = req.body;
+  const vote  = req.body;
+  const event_id = req.params.event_id;
   saveVote(client, user_id, event_id, vote)
     .then((success) => {
       if (success) {
         res.status(201).end();
+      }
+    })
+    .catch(err => next(err));
+}
+
+export function patchEventHandler (req, res, next) {
+  const hostEventChoices = req.body;
+  const event_id = req.params.event_id;
+  finaliseEvent(client, event_id, hostEventChoices)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not finalise event' });
       }
     })
     .catch(err => next(err));

@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser, event_1, vote } from '../utils/fixtures';
+import { newEvent, existingUser, event_1, vote, hostEventChoices } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const token = createToken(existingUser.user_id);
@@ -165,27 +165,61 @@ test('endpoint PATCH events/invitees works', (t) => {
     .catch(err => console.error(err));
 });
 
-test('endpoint POST votes works', (t) => {
+test('endpoint POST votes/:event_id works', (t) => {
   t.plan(1);
+  const event_id = 1;
   request(server)
-    .post('/votes')
+    .post(`/votes/${event_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
-    .send({ vote, event_id: 1 })
+    .send(vote)
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
     })
     .catch(err => console.error(err));
 });
 
-test('endpoint POST votes rejects unauthorised requests', (t) => {
+test('endpoint POST votes/:event_id rejects unauthorised requests', (t) => {
   t.plan(1);
+  const event_id = 1;
   request(server)
-    .post('/votes')
+    .post(`/votes/${event_id}`)
     .set('Accept', 'application/json')
-    .send({ vote, event_id: 1 })
+    .send(vote)
     .then((res) => {
       t.equal(res.statusCode, 401, 'status code is 401');
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint PATCH events/:event_id works', (t) => {
+  t.plan(2);
+  const event_id = 1;
+
+  request(server)
+    .patch(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send(hostEventChoices)
+    .then((res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+      t.deepEqual(res.body, hostEventChoices);
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint PATCH events/:event_id handles internal errors', (t) => {
+  t.plan(2);
+  const event_id = 100;
+
+  request(server)
+    .patch(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send(hostEventChoices)
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'Could not finalise event' });
     })
     .catch(err => console.error(err));
 });
