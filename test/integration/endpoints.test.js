@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser, event_1, vote } from '../utils/fixtures';
+import { newEvent, existingUser, event_1, vote, hostEventChoices } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const token = createToken(existingUser.user_id);
@@ -186,6 +186,38 @@ test('endpoint POST votes rejects unauthorised requests', (t) => {
     .send({ vote, event_id: 1 })
     .then((res) => {
       t.equal(res.statusCode, 401, 'status code is 401');
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint PATCH events/:event_id works', (t) => {
+  t.plan(2);
+  const event_id = 1;
+
+  request(server)
+    .patch(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send(hostEventChoices)
+    .then((res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+      t.deepEqual(res.body, hostEventChoices);
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint PATCH events/:event_id handles internal errors', (t) => {
+  t.plan(2);
+  const event_id = 100;
+
+  request(server)
+    .patch(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send(hostEventChoices)
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'Could not finalise event' });
     })
     .catch(err => console.error(err));
 });

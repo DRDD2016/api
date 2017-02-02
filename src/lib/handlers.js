@@ -4,6 +4,7 @@ import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
+import finaliseEvent from './events/finalise-event';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -63,6 +64,20 @@ export function postVoteHandler (req, res, next) {
     .then((success) => {
       if (success) {
         res.status(201).end();
+      }
+    })
+    .catch(err => next(err));
+}
+
+export function patchEventHandler (req, res, next) {
+  const hostEventChoices = req.body;
+  const event_id = req.params.event_id;
+  finaliseEvent(client, event_id, hostEventChoices)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not finalise event' });
       }
     })
     .catch(err => next(err));
