@@ -51,3 +51,8 @@ export const hostEventChoices = {
   where: ['Hoxton'],
   when: ['2017-04-03T00:00:00.000Z']
 };
+
+export const rsvps = {
+  going: [2],
+  not_going: [3]
+};

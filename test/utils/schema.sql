@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
 DROP TABLE IF EXISTS votes CASCADE;
+DROP TABLE IF EXISTS rsvps CASCADE;
 
 DROP SEQUENCE IF EXISTS user_id_seq;
 DROP SEQUENCE IF EXISTS event_id_seq;
@@ -37,6 +38,13 @@ CREATE TABLE votes (
   PRIMARY KEY (user_id, event_id)
 );
 
+CREATE TABLE rsvps (
+  user_id INTEGER NOT NULL REFERENCES users(user_id),
+  event_id INTEGER NOT NULL REFERENCES events(event_id),
+  status TEXT,
+  PRIMARY KEY (user_id, event_id)
+);
+
 /**** insert users ****/
 
 INSERT INTO users (firstname, surname, password, email, photo_url)
@@ -63,6 +71,15 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
     'Pandya',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'sohil@spark.com',
+    'http://placehold.it/100x100'
+  );
+
+INSERT INTO users (firstname, surname, password, email, photo_url)
+  VALUES (
+    'Mickey',
+    'Mouse',
+    '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
+    'mickey@spark.com',
     'http://placehold.it/100x100'
   );
 
@@ -112,4 +129,21 @@ INSERT INTO votes (event_id, user_id, _what, _where, _when)
     '{1, 1}',
     '{0, 1}',
     '{1, 0}'
-  )
+  );
+
+INSERT INTO rsvps (user_id, event_id, status)
+  VALUES (
+    2,
+    1,
+    'going'
+  ),
+  (
+    3,
+    1,
+    'not_going'
+  ),
+  (
+    4,
+    2,
+    'maybe'
+  );
