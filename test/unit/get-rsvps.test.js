@@ -5,7 +5,7 @@ import { rsvps } from '../utils/fixtures';
 
 const event_id = 1;
 
-test.only('`getRsvps` works', (t) => {
+test('`getRsvps` works', (t) => {
   t.plan(2);
 
   const expected = rsvps;
