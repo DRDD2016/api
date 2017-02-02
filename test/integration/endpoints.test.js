@@ -165,25 +165,27 @@ test('endpoint PATCH events/invitees works', (t) => {
     .catch(err => console.error(err));
 });
 
-test('endpoint POST votes works', (t) => {
+test('endpoint POST votes/:event_id works', (t) => {
   t.plan(1);
+  const event_id = 1;
   request(server)
-    .post('/votes')
+    .post(`/votes/${event_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
-    .send({ vote, event_id: 1 })
+    .send(vote)
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
     })
     .catch(err => console.error(err));
 });
 
-test('endpoint POST votes rejects unauthorised requests', (t) => {
+test('endpoint POST votes/:event_id rejects unauthorised requests', (t) => {
   t.plan(1);
+  const event_id = 1;
   request(server)
-    .post('/votes')
+    .post(`/votes/${event_id}`)
     .set('Accept', 'application/json')
-    .send({ vote, event_id: 1 })
+    .send(vote)
     .then((res) => {
       t.equal(res.statusCode, 401, 'status code is 401');
     })

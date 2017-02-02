@@ -12,6 +12,6 @@ export default function registerRoutes (app) {
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
   app.patch('/events/invitees', requireAuth, addInviteeHandler);
-  app.post('/votes', requireAuth, postVoteHandler);
+  app.post('/votes/:event_id', requireAuth, postVoteHandler);
   app.patch('/events/:event_id', requireAuth, patchEventHandler);
 }
