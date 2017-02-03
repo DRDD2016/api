@@ -30,8 +30,8 @@ CREATE TABLE events (
 );
 
 CREATE TABLE votes (
-  event_id INTEGER NOT NULL REFERENCES events(event_id),
-  user_id INTEGER NOT NULL REFERENCES users(user_id),
+  event_id INTEGER NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
+  user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
   _what INTEGER[],
   _where INTEGER[],
   _when INTEGER[],
@@ -39,8 +39,8 @@ CREATE TABLE votes (
 );
 
 CREATE TABLE rsvps (
-  user_id INTEGER NOT NULL REFERENCES users(user_id),
-  event_id INTEGER NOT NULL REFERENCES events(event_id),
+  user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  event_id INTEGER NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
   status TEXT,
   PRIMARY KEY (user_id, event_id)
 );
