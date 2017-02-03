@@ -53,6 +53,21 @@ export const hostEventChoices = {
 };
 
 export const rsvps = {
-  going: [2],
-  not_going: [3]
+  going: [
+    {
+      firstname: 'Dave',
+      surname: 'Jones',
+      photo_url: 'http://placehold.it/100x100'
+    },
+    {
+      firstname: 'Mickey',
+      surname: 'Mouse',
+      photo_url: 'http://placehold.it/100x100'
+    }
+  ],
+  not_going: [{
+    firstname: 'Sohil',
+    surname: 'Pandya',
+    photo_url: 'http://placehold.it/100x100'
+  }]
 };

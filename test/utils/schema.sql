@@ -144,6 +144,11 @@ INSERT INTO rsvps (user_id, event_id, status)
   ),
   (
     4,
+    1,
+    'going'
+  ),
+  (
+    4,
     2,
     'maybe'
   );
