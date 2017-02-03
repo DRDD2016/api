@@ -2,9 +2,8 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import addInvitee from '../../src/lib/events/add-invitee';
 
-
 const invitee_user_id = 2;
-const event_id = 1;
+const event_id = 2;
 
 test('`addInvitee` works', (t) => {
   t.plan(1);

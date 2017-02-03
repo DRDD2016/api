@@ -5,7 +5,7 @@
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id;",
   "getUserByEmail": "SELECT * FROM users WHERE email = $1;",
   "getUserById": "SELECT firstname, surname, email, user_id FROM users WHERE user_id = $1;",
-  "addInvitee": "UPDATE events SET _invitees = array_cat(_invitees, $1) WHERE event_id = $2;",
+  "addInvitee": "INSERT INTO rsvps (user_id, event_id) VALUES ($1, $2);",
   "finaliseEvent": "UPDATE events SET _what = ARRAY[$2], _where = ARRAY[$3], _when = ARRAY[$4] WHERE event_id = $1 RETURNING _what, _where, _when;",
   "getRsvps": "SELECT status, array_agg(json_build_object('firstname', firstname, 'surname', surname, 'photo_url', photo_url)) AS invitees FROM rsvps JOIN users ON users.user_id = rsvps.user_id WHERE event_id = $1 GROUP BY status;"
 }

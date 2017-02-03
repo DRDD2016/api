@@ -4,7 +4,7 @@ import deleteEvent from '../../src/lib/events/delete-event';
 
 const event_id = 3;
 
-test('`deleteEvent` works', (t) => {
+test.skip('`deleteEvent` works', (t) => {
   t.plan(1);
 
   deleteEvent(client, event_id)

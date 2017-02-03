@@ -25,8 +25,7 @@ CREATE TABLE events (
   is_poll BOOLEAN DEFAULT FALSE NOT NULL,
   _what TEXT[],
   _where TEXT[],
-  _when TEXT[],
-  _invitees TEXT[]
+  _when TEXT[]
 );
 
 CREATE TABLE votes (
@@ -108,6 +107,20 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     true,
     '{"Swimming", "Sunbathing"}',
     '{"Mallorca", "Barbados"}',
+    '{"2017-01-03T00:00:00.000Z"}',
+    '{2}',
+    'FAKECODE2'
+  );
+
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
+  VALUES (
+    3,
+    'Beach party',
+    'Celebrating summer',
+    '',
+    true,
+    '{"Swimming"}',
+    '{"Mallorca"}',
     '{"2017-01-03T00:00:00.000Z"}',
     '{2}',
     'FAKECODE2'

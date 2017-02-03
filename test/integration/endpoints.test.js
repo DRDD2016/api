@@ -66,7 +66,7 @@ test('endpoint DELETE events/:event_id works', (t) => {
   t.plan(2);
 
   request(server)
-    .delete('/events/2')
+    .delete('/events/3')
     .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
