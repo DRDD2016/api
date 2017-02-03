@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser, event_1, vote, hostEventChoices } from '../utils/fixtures';
+import { newEvent, existingUser, event_1, vote, hostEventChoices, rsvps } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const token = createToken(existingUser.user_id);
@@ -62,7 +62,7 @@ test.skip('endpoint GET events handles errors', (t) => {
     });
 });
 
-test('endpoint DELETE events works', (t) => {
+test('endpoint DELETE events/:event_id works', (t) => {
   t.plan(2);
 
   request(server)
@@ -74,7 +74,7 @@ test('endpoint DELETE events works', (t) => {
     });
 });
 
-test('endpoint DELETE events handles errors', (t) => {
+test('endpoint DELETE events/:event_id handles errors', (t) => {
   t.plan(1);
 
   request(server)
@@ -151,7 +151,7 @@ test('endpoint PATCH events/invitees works', (t) => {
     });
 });
 
-test('endpoint PATCH events/invitees works', (t) => {
+test('endpoint PATCH events/invitees handles missing code', (t) => {
   t.plan(2);
   request(server)
     .patch('/events/invitees')
@@ -220,6 +220,36 @@ test('endpoint PATCH events/:event_id handles internal errors', (t) => {
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
       t.deepEqual(res.body, { error: 'Could not finalise event' });
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint GET events/:event_id/invitees works', (t) => {
+  t.plan(2);
+  const event_id = 1;
+
+  request(server)
+    .get(`/events/${event_id}/invitees`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .then((res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+      t.deepEqual(res.body, rsvps, 'correct invitees received');
+    })
+    .catch(err => console.error(err));
+});
+
+test('endpoint GET events/:event_id/invitees handles internal errors', (t) => {
+  t.plan(2);
+  const event_id = 188;
+
+  request(server)
+    .get(`/events/${event_id}/invitees`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'Could not get invitees' });
     })
     .catch(err => console.error(err));
 });

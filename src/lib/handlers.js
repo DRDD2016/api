@@ -5,6 +5,7 @@ import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
+import getRsvps from './events/get-rsvps';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -79,6 +80,19 @@ export function patchEventHandler (req, res, next) {
         return res.json(data);
       } else {
         return res.status(422).send({ error: 'Could not finalise event' });
+      }
+    })
+    .catch(err => next(err));
+}
+
+export function getInviteesHandler (req, res, next) {
+  const event_id = req.params.event_id;
+  getRsvps(client, event_id)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not get invitees' });
       }
     })
     .catch(err => next(err));

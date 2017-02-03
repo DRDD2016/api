@@ -51,3 +51,23 @@ export const hostEventChoices = {
   where: ['Hoxton'],
   when: ['2017-04-03T00:00:00.000Z']
 };
+
+export const rsvps = {
+  going: [
+    {
+      firstname: 'Dave',
+      surname: 'Jones',
+      photo_url: 'http://placehold.it/100x100'
+    },
+    {
+      firstname: 'Mickey',
+      surname: 'Mouse',
+      photo_url: 'http://placehold.it/100x100'
+    }
+  ],
+  not_going: [{
+    firstname: 'Sohil',
+    surname: 'Pandya',
+    photo_url: 'http://placehold.it/100x100'
+  }]
+};
