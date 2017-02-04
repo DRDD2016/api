@@ -84,7 +84,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
 
 /**** insert events ****/
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
   VALUES (
     1,
     'Lounge party',
@@ -94,11 +94,10 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Dancing", "Skydiving"}',
     '{"Forest", "Camping"}',
     '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
-    '{2}',
     'FAKECODE'
   );
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
   VALUES (
     1,
     'Beach party',
@@ -108,7 +107,6 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Swimming", "Sunbathing"}',
     '{"Mallorca", "Barbados"}',
     '{"2017-01-03T00:00:00.000Z"}',
-    '{2}',
     'FAKECODE2'
   );
 

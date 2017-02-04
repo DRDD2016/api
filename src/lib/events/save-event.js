@@ -22,7 +22,6 @@ export default function saveEvent (client, data) {
       data.what,
       data.where,
       data.when,
-      data.invitees,
       data.is_poll,
       data.code
     ];
