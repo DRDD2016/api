@@ -29,8 +29,8 @@ CREATE TABLE events (
 );
 
 CREATE TABLE votes (
-  event_id INTEGER NOT NULL REFERENCES events(event_id),
-  user_id INTEGER NOT NULL REFERENCES users(user_id),
+  event_id INTEGER NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
+  user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
   _what INTEGER[],
   _where INTEGER[],
   _when INTEGER[],
@@ -38,8 +38,8 @@ CREATE TABLE votes (
 );
 
 CREATE TABLE rsvps (
-  user_id INTEGER NOT NULL REFERENCES users(user_id),
-  event_id INTEGER NOT NULL REFERENCES events(event_id),
+  user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  event_id INTEGER NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
   status TEXT,
   PRIMARY KEY (user_id, event_id)
 );
@@ -84,7 +84,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
 
 /**** insert events ****/
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
   VALUES (
     1,
     'Lounge party',
@@ -94,11 +94,10 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Dancing", "Skydiving"}',
     '{"Forest", "Camping"}',
     '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
-    '{2}',
     'FAKECODE'
   );
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
   VALUES (
     1,
     'Beach party',
@@ -108,24 +107,21 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Swimming", "Sunbathing"}',
     '{"Mallorca", "Barbados"}',
     '{"2017-01-03T00:00:00.000Z"}',
-    '{2}',
     'FAKECODE2'
   );
 
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, _invitees, code)
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
   VALUES (
     3,
     'Beach party',
     'Celebrating summer',
     '',
-    true,
+    false,
     '{"Swimming"}',
     '{"Mallorca"}',
     '{"2017-01-03T00:00:00.000Z"}',
-    '{2}',
-    'FAKECODE2'
+    'FAKECODE3'
   );
-
 /**** insert votes ****/
 
 INSERT INTO votes (event_id, user_id, _what, _where, _when)
@@ -147,16 +143,22 @@ INSERT INTO votes (event_id, user_id, _what, _where, _when)
 INSERT INTO rsvps (user_id, event_id, status)
   VALUES (
     2,
-    1,
+    3,
     'going'
   ),
   (
     3,
-    1,
+    3,
     'not_going'
   ),
   (
     4,
-    2,
-    'maybe'
+    3,
+    'going'
+  );
+
+INSERT INTO rsvps (user_id, event_id)
+  VALUES (
+    4,
+    2
   );
