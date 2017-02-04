@@ -12,7 +12,6 @@ import { addInvitee as queryText } from '../../db/sql-queries.json';
 export default function addInvitee (client, user_id, event_id) {
 
   return new Promise ((resolve, reject) => {
-
     if (!user_id || !event_id) {
       return reject(new TypeError('`addInvitee` requires a user_id and event_id'));
     }

@@ -11,7 +11,11 @@ import client from '../db/client';
 import shortid from 'shortid';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
-  const data = Object.assign(req.body, { host_user_id: req.user.user_id });
+  const event = req.body.event;
+  if (!event) {
+    return res.status(422).send({ error: 'Missing event data' });
+  }
+  const data = Object.assign(event, { host_user_id: req.user.user_id });
   const code = shortid.generate();
   data.code = code;
   saveEvent(client, data)
@@ -39,7 +43,7 @@ export function deleteEventHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function addInviteeHandler (req, res, next) {
+export function postRsvpsHandler (req, res, next) {
   const code = req.body.code;
   if (!code) {
     return res.status(422).send({ error: 'No code submitted' });
@@ -58,9 +62,21 @@ export function addInviteeHandler (req, res, next) {
     .catch(err => next(err));
 }
 
+export function patchRsvpsHandler (req, res, next) { // eslint-disable-line
+  const rsvp = req.body.rsvp;
+  if (!rsvp) {
+    return res.status(422).send({ error: 'Missing rsvp data' });
+  }
+  // saveRsvps(client, req.user.user_id, req.params.event_id)
+  //   .then(() => {
+  //     return res.status(201).json(normaliseEventKeys(event));
+  //   })
+  //   .catch(err => next(err));
+}
+
 export function postVoteHandler (req, res, next) {
   const user_id = req.user.user_id;
-  const vote  = req.body;
+  const vote  = req.body.vote;
   const event_id = req.params.event_id;
   saveVote(client, user_id, event_id, vote)
     .then((success) => {
@@ -72,7 +88,7 @@ export function postVoteHandler (req, res, next) {
 }
 
 export function patchEventHandler (req, res, next) {
-  const hostEventChoices = req.body;
+  const hostEventChoices = req.body.hostEventChoices;
   const event_id = req.params.event_id;
   finaliseEvent(client, event_id, hostEventChoices)
     .then((data) => {
