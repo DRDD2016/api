@@ -1,15 +1,20 @@
 import test from 'blue-tape';
+import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
 import { newEvent, existingUser, event_1, vote, hostEventChoices, rsvps } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
+const initDb = require('../utils/init-db')(client);
+
 const token = createToken(existingUser.user_id);
 
 test('endpoint POST events works', (t) => {
   t.plan(2);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .post('/events')
     .set('authorization', token)
     .send(newEvent)
@@ -17,12 +22,15 @@ test('endpoint POST events works', (t) => {
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');
     });
+  });
 });
 
 test('endpoint POST events handles errors', (t) => {
   t.plan(2);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .post('/events')
     .set('authorization', token)
     .set('Accept', 'application/json')
@@ -31,63 +39,79 @@ test('endpoint POST events handles errors', (t) => {
       t.ok(res.error instanceof Error);
     });
 
-  request(server)
+    request(server)
     .post('/events')
     .set('Accept', 'application/json')
     .send({})
     .then((res) => {
       t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
     });
+  });
 });
 
 test.skip('endpoint GET events works', (t) => {
   t.plan(2);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .get('/events/1')
     .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');
     });
+  });
 });
 
 test.skip('endpoint GET events handles errors', (t) => {
   t.plan(1);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .get('/events/1')
     .end((err, res) => {
       t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
     });
+  });
 });
 
 test('endpoint DELETE events/:event_id works', (t) => {
   t.plan(2);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .delete('/events/3')
     .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');
     });
+  });
 });
 
 test('endpoint DELETE events/:event_id handles errors', (t) => {
   t.plan(1);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .delete('/events/2')
     .end((err, res) => {
       t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
     });
+  });
 });
 
 test('endpoint POST signup works', (t) => {
   t.plan(2);
-  const user = { firstname: 'Bob', surname: 'Dylan', email: 'bob@spark.com', password: 'password' };
-  request(server)
+  initDb()
+  .then(() => {
+
+    const user = { firstname: 'Bob', surname: 'Dylan', email: 'bob@spark.com', password: 'password' };
+    request(server)
     .post('/signup')
     .set('Accept', 'application/json')
     .send(user)
@@ -95,36 +119,46 @@ test('endpoint POST signup works', (t) => {
       t.ok(res.body.hasOwnProperty('token'), 'Token exists in the response body');
       t.equal(res.statusCode, 201, 'status code is 201');
     });
+  });
 });
 
 test('endpoint POST signup rejects existing user', (t) => {
   t.plan(1);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .post('/signup')
     .set('Accept', 'application/json')
     .send(existingUser)
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
     });
+  });
 });
 
 test('endpoint POST signup rejects missing data', (t) => {
   t.plan(1);
-  const user = { firstname: '', surname: 'Dove' };
-  request(server)
+  initDb()
+  .then(() => {
+
+    const user = { firstname: '', surname: 'Dove' };
+    request(server)
     .post('/signup')
     .set('Accept', 'application/json')
     .send(user)
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
     });
+  });
 });
 
 test('endpoint POST login works', (t) => {
   t.plan(6);
+  initDb()
+  .then(() => {
 
-  request(server)
+    request(server)
     .post('/login')
     .set('Accept', 'application/json')
     .send(existingUser)
@@ -136,11 +170,15 @@ test('endpoint POST login works', (t) => {
       t.ok(!res.body.hasOwnProperty('password'), '`password` not in response body');
       t.equal(res.statusCode, 201, 'status code is 201');
     });
+  });
 });
 
 test('endpoint PATCH events/invitees works', (t) => {
   t.plan(1);
-  request(server)
+  initDb()
+  .then(() => {
+
+    request(server)
     .patch('/events/invitees')
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -149,11 +187,15 @@ test('endpoint PATCH events/invitees works', (t) => {
       t.equal(res.statusCode, 201, 'status code is 201');
       // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     });
+  });
 });
 
 test('endpoint PATCH events/invitees handles missing code', (t) => {
   t.plan(2);
-  request(server)
+  initDb()
+  .then(() => {
+
+    request(server)
     .patch('/events/invitees')
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -163,12 +205,16 @@ test('endpoint PATCH events/invitees handles missing code', (t) => {
       // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     })
     .catch(err => console.error(err));
+  });
 });
 
 test('endpoint POST votes/:event_id works', (t) => {
   t.plan(1);
-  const event_id = 1;
-  request(server)
+  initDb()
+  .then(() => {
+
+    const event_id = 1;
+    request(server)
     .post(`/votes/${event_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -177,12 +223,16 @@ test('endpoint POST votes/:event_id works', (t) => {
       t.equal(res.statusCode, 201, 'status code is 201');
     })
     .catch(err => console.error(err));
+  });
 });
 
 test('endpoint POST votes/:event_id rejects unauthorised requests', (t) => {
   t.plan(1);
-  const event_id = 1;
-  request(server)
+  initDb()
+  .then(() => {
+
+    const event_id = 1;
+    request(server)
     .post(`/votes/${event_id}`)
     .set('Accept', 'application/json')
     .send(vote)
@@ -190,13 +240,17 @@ test('endpoint POST votes/:event_id rejects unauthorised requests', (t) => {
       t.equal(res.statusCode, 401, 'status code is 401');
     })
     .catch(err => console.error(err));
+  });
 });
 
 test('endpoint PATCH events/:event_id works', (t) => {
   t.plan(2);
-  const event_id = 1;
+  initDb()
+  .then(() => {
 
-  request(server)
+    const event_id = 1;
+
+    request(server)
     .patch(`/events/${event_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -206,13 +260,17 @@ test('endpoint PATCH events/:event_id works', (t) => {
       t.deepEqual(res.body, hostEventChoices);
     })
     .catch(err => console.error(err));
+  });
 });
 
 test('endpoint PATCH events/:event_id handles internal errors', (t) => {
   t.plan(2);
-  const event_id = 100;
+  initDb()
+  .then(() => {
 
-  request(server)
+    const event_id = 100;
+
+    request(server)
     .patch(`/events/${event_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -222,13 +280,17 @@ test('endpoint PATCH events/:event_id handles internal errors', (t) => {
       t.deepEqual(res.body, { error: 'Could not finalise event' });
     })
     .catch(err => console.error(err));
+  });
 });
 
 test('endpoint GET events/:event_id/invitees works', (t) => {
   t.plan(2);
-  const event_id = 1;
+  initDb()
+  .then(() => {
 
-  request(server)
+    const event_id = 3;
+
+    request(server)
     .get(`/events/${event_id}/invitees`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -237,13 +299,17 @@ test('endpoint GET events/:event_id/invitees works', (t) => {
       t.deepEqual(res.body, rsvps, 'correct invitees received');
     })
     .catch(err => console.error(err));
+  });
 });
 
 test('endpoint GET events/:event_id/invitees handles internal errors', (t) => {
   t.plan(2);
-  const event_id = 188;
+  initDb()
+  .then(() => {
 
-  request(server)
+    const event_id = 188;
+
+    request(server)
     .get(`/events/${event_id}/invitees`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
@@ -252,4 +318,5 @@ test('endpoint GET events/:event_id/invitees handles internal errors', (t) => {
       t.deepEqual(res.body, { error: 'Could not get invitees' });
     })
     .catch(err => console.error(err));
+  });
 });
