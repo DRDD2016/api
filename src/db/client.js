@@ -19,6 +19,6 @@ if (process.env.CIRCLECI) {
   config.ssl = true;
 }
 
-const pool = new Pool(config);
+const client = new Pool(config);
 
-export default pool;
+export default client;

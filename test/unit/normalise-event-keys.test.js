@@ -28,7 +28,7 @@ test('`normaliseEventKeys` works', (t) => {
     note: '',
     event_id: ''
   };
-
+  
   const result = normaliseEventKeys(event);
   t.deepEqual(result, expected, 'underscores removed from object keys');
 });
