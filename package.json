@@ -4,7 +4,6 @@
   "description": "API for Spark React Native app",
   "main": "server.js",
   "scripts": {
-    "pretest": ". ./pretest.sh",
     "test": "TEST=true nyc blue-tape -r babel-register 'test/**/*.js' | tap-spec",
     "dev": "nodemon server.js",
     "test-watch": "nodemon -q -x 'npm run test'",

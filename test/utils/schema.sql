@@ -155,8 +155,10 @@ INSERT INTO rsvps (user_id, event_id, status)
     4,
     3,
     'going'
-  ),
-  (
+  );
+
+INSERT INTO rsvps (user_id, event_id)
+  VALUES (
     4,
     2
   );
