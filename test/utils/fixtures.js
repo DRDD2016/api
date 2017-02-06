@@ -69,3 +69,13 @@ export const rsvps = {
     photo_url: 'http://placehold.it/100x100'
   }]
 };
+
+export const updatedEvent = {
+  name: 'Dinner Party',
+  description: 'Celebrating life',
+  note: 'Don\'t forget it is byob',
+  what: ['Dinner'],
+  where: ['Greedy Cow'],
+  when: ['2017-05-03T00:00:00.000Z'],
+  event_id: 3
+};
