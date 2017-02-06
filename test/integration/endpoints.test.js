@@ -48,13 +48,14 @@ test('endpoint POST events handles errors', (t) => {
   });
 });
 
-test.skip('endpoint GET events works', (t) => {
+test('endpoint GET events works', (t) => {
   t.plan(2);
   initDb()
   .then(() => {
 
+    const event_id = 1;
     request(server)
-    .get('/events/1')
+    .get(`/events/${event_id}`)
     .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
@@ -63,15 +64,32 @@ test.skip('endpoint GET events works', (t) => {
   });
 });
 
-test.skip('endpoint GET events handles errors', (t) => {
+test('endpoint GET events handles unauthorised requests', (t) => {
   t.plan(1);
   initDb()
   .then(() => {
 
+    const event_id = 1;
     request(server)
-    .get('/events/1')
+    .get(`/events/${event_id}`)
     .end((err, res) => {
       t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
+    });
+  });
+});
+
+test('endpoint GET events handles unknown event id', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const event_id = 111;
+    request(server)
+    .get(`/events/${event_id}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.equal(res.statusCode, 422, 'Unknown event id returns 422 status code');
+      t.deepEqual(res.body,  { error: 'Could not get event' });
     });
   });
 });

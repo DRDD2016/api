@@ -31,7 +31,11 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
 export function getEventHandler (req, res, next) {
   getEvent(client, req.params.event_id)
     .then((event) => {
-      res.json(event);
+      if (event) {
+        return res.json(event);
+      } else {
+        return res.status(422).send({ error: 'Could not get event' });
+      }
     })
     .catch(err => next(err));
 }

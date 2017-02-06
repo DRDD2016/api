@@ -5,27 +5,34 @@ import { event_1 } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 
 const event_id = 1;
+const expected = Object.assign({}, event_1);
+delete expected.code;
 
-test.skip('`getEvent` works', (t) => {
+test('`getEvent` works', (t) => {
   t.plan(2);
   initDb()
   .then(() => {
 
-    const expected = event_1;
     getEvent(client, event_id)
     .then((result) => {
       t.deepEqual(result, expected, 'correct event retrieved');
+    })
+    .catch((err) => {
+      console.error(err);
     });
 
     getEvent(client, 99)
     .then((result) => {
       t.notOk(result, 'handles non-existent event_id');
+    })
+    .catch((err) => {
+      console.error(err);
     });
   });
 
 });
 
-test.skip('`getEvent` handles errors', (t) => {
+test('`getEvent` handles errors', (t) => {
   return initDb()
   .then(() => t.shouldFail(getEvent(client, ""), 'handles missing event_id'));
 });
