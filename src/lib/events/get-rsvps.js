@@ -2,10 +2,10 @@ import query from '../../db/query';
 import { getRsvps as queryText } from '../../db/sql-queries.json';
 
 /**
- * Retrieve an event from the database
- * @returns {Promise.<object (event), Error>}
+ * Retrieve an event's invitees from the database
  * @param {object} client - database client
  * @param {number} event_id - event id
+ * @returns {Promise.<object (event), Error>}
  */
 
 export default function getRsvps (client, event_id) {
