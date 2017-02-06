@@ -22,7 +22,7 @@ export default function updateEvent (client, event_id, data) {
     }
 
     const queryValues = [
-      data.event_id,
+      event_id,
       data.name,
       data.description,
       data.note,
@@ -30,7 +30,7 @@ export default function updateEvent (client, event_id, data) {
       data.where[0],
       data.when[0]
     ];
-
+    
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
         reject(err);

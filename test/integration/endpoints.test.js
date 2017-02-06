@@ -2,7 +2,7 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, vote, hostEventChoices, rsvps } from '../utils/fixtures';
+import { newEvent, existingUser as user, event_1, vote, hostEventChoices, rsvps, updatedEvent as event } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -352,6 +352,63 @@ test('endpoint GET events/:event_id/invitees handles internal errors', (t) => {
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
       t.deepEqual(res.body, { error: 'Could not get invitees' });
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test('endpoint PUT events/:event_id works', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const event_id = 3;
+
+    request(server)
+    .put(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send({ event })
+    .then((res) => {
+      t.equal(res.statusCode, 201, 'status code is 201');
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test('endpoint PUT events/:event_id handles missing data', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const event_id = 3;
+
+    request(server)
+    .put(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .then((res) => {
+      t.equal(res.statusCode, 500, 'status code is 500');
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test('endpoint PUT events/:event_id handles unknown event id', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const event_id = 33;
+
+    request(server)
+    .put(`/events/${event_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(3))
+    .send({ event })
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'Could not update event' });
     })
     .catch(err => console.error(err));
   });
