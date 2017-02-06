@@ -6,19 +6,28 @@ const initDb = require('../utils/init-db')(client);
 const invitee_user_id = 2;
 const event_id = 2;
 
-test('`addInvitee` works', (t) => {
   initDb()
     .then(() => {
-      t.plan(1);
+      test('`addInvitee` works', (t) => {
+        t.plan(1);
 
-      addInvitee(client, invitee_user_id, event_id)
-      .then((result) => {
-        t.ok(result);
-      })
-      .catch(err => console.error(err));
-    })
-    .catch(err => console.error(err));
-});
+        addInvitee(client, invitee_user_id, event_id)
+        .then((result) => {
+          t.ok(result, 'Successfully saves invitee');
+        })
+        .catch(err => console.error(err));
+      });
+
+      test('`addInvitee` handles duplicate entries', (t) => {
+        t.plan(1);
+
+        addInvitee(client, invitee_user_id, event_id)
+        .then((result) => {
+          t.ok(result, 'Ignores duplicate invitee without error');
+        })
+        .catch(err => console.error(err));
+      });
+    }).catch(err => console.error(err));
 
 test('`addInvitee` handles errors', (t) => {
   return initDb()
