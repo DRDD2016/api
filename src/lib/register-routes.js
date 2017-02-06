@@ -1,6 +1,6 @@
 import passport from 'passport';
 import {
-  postEventHandler, deleteEventHandler,
+  postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, patchEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, putEventHandler
 } from './handlers';
@@ -21,4 +21,5 @@ export default function registerRoutes (app) {
   app.patch('/events/:event_id', requireAuth, patchEventHandler);
   app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
   app.put('/events/:event_id', requireAuth, putEventHandler);
+  app.get('/events/:event_id', requireAuth, getEventHandler);
 }
