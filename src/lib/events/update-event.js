@@ -5,7 +5,6 @@ import normaliseEventKeys from '../normalise-event-keys';
 /**
  * Updates an existing event
  * @param {object} client - database client
- * @param {string} user_id - user id
  * @param {string} event_id - event id
  * @param {object} data - event object
  * @returns {Promise.<void, Error>}
