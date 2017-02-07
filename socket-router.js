@@ -3,6 +3,27 @@ const PubSub = require('pubsub-js');
 const UPDATE_FEED = 'UPDATE_FEED';
 const INIT_FEED = 'INIT_FEED';
 
+const feedItem = [{
+  event_id: 'event:112',
+  timestamp: new Date().toISOString(),
+  firstname: 'Bob',
+  surname: 'Dylan',
+  photo_url: 'http://placehold.it/100x100',
+  what: [
+    'Go to France'
+  ],
+  where: [
+    new Date().toISOString()
+  ],
+  when: [new Date().toISOString()],
+  is_poll: false,
+  host_user_id: '10156727442325251',
+  subject_user_id: '10156727442325251',
+  viewed: true,
+  inviteesNumber: 24,
+  name: 'Day trip'
+}];
+
 
 module.exports = function socketRouter (io) {
 
@@ -11,9 +32,11 @@ module.exports = function socketRouter (io) {
 
   io.on(INIT_FEED, (token) => {
     console.log(`user ${token} joined.`);
-
     // publish the UPDATE_FEED event so the feed is delivered to the client
-    PubSub.publish(UPDATE_FEED, [token]);
+    setInterval(() => {
+
+      PubSub.publish(UPDATE_FEED, [token]);
+    }, 10000);
   });
 
   io.on('disconnect', () => {
@@ -27,12 +50,7 @@ module.exports = function socketRouter (io) {
     data.forEach((token) => {
       // get feed from database
       // on error, io.emit('failure')
-      const feedData = [
-        { data: 'somedata' },
-        { data: 'somedata' },
-        { data: 'somedata' }
-      ];
-      io.emit(`feed: ${token}`, feedData);
+      io.emit(`feed: ${token}`, feedItem);
     });
   });
 };
