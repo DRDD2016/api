@@ -6,7 +6,9 @@ module.exports = function socketRouter (io) {
     // publish the "notify" event so the feed is delivered to the client
     // pub.publish('notify', JSON.stringify([user_id]));
   });
-
+  io.on('disconnect', () => {
+    console.log('DISCONNECTED');
+  });
   /*
   sub.on('message', (channel, message))
     switch (channel) {
