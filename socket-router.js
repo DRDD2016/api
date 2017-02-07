@@ -1,28 +1,38 @@
+/* eslint-disable no-console */
+const PubSub = require('pubsub-js');
+const UPDATE_FEED = 'UPDATE_FEED';
+const INIT_FEED = 'INIT_FEED';
+
+
 module.exports = function socketRouter (io) {
+
   io.emit('connected');
   console.log("CONNECTION!", io.id);
-  io.on('join', (user_id) => {
-    console.log(`user ${user_id} joined.`);
-    // publish the "notify" event so the feed is delivered to the client
-    // pub.publish('notify', JSON.stringify([user_id]));
+
+  io.on(INIT_FEED, (token) => {
+    console.log(`user ${token} joined.`);
+
+    // publish the UPDATE_FEED event so the feed is delivered to the client
+    PubSub.publish(UPDATE_FEED, [token]);
   });
+
   io.on('disconnect', () => {
+    // disconnect from pubsub
     console.log('DISCONNECTED');
   });
-  /*
-  sub.on('message', (channel, message))
-    switch (channel) {
-      case 'failure':
-        io.emit('failure', message);
-        break;
 
-      case 'notify':
-        JSON.parse(message).forEach((user_id) => {
-          // get feed data for each person, then:
-          io.emit('feed', feedData);
-        });
-        break;
-  }
+  PubSub.subscribe(UPDATE_FEED, (msg, data) => {
+    console.log('msg', msg, 'data', data);
 
-   */
+    data.forEach((token) => {
+      // get feed from database
+      // on error, io.emit('failure')
+      const feedData = [
+        { data: 'somedata' },
+        { data: 'somedata' },
+        { data: 'somedata' }
+      ];
+      io.emit(`feed: ${token}`, feedData);
+    });
+  });
 };
