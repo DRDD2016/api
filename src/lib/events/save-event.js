@@ -9,7 +9,6 @@ import { saveEvent as queryText } from '../../db/sql-queries.json';
  */
 
 export default function saveEvent (client, data) {
-
   return new Promise ((resolve, reject) => {
 
     if (!data || Object.keys(data).length === 0) {
@@ -20,11 +19,11 @@ export default function saveEvent (client, data) {
       data.name,
       data.description,
       data.note,
-      data._what,
-      data._where,
-      data._when,
-      data._invitees,
-      data.is_poll
+      data.what,
+      data.where,
+      data.when,
+      data.is_poll,
+      data.code
     ];
     query(client, queryText, queryValues, (err) => {
       if (err) {

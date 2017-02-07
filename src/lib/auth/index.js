@@ -5,10 +5,10 @@ import getUserByEmail from './get-user-by-email';
 
 export function signup (req, res, next) {
 
-  const firstname = req.body.firstname;
-  const surname = req.body.surname;
-  const email = req.body.email && req.body.email.toLowerCase();
-  const password = req.body.password;
+  const firstname = req.body.user.firstname;
+  const surname = req.body.user.surname;
+  const email = req.body.user.email && req.body.user.email.toLowerCase();
+  const password = req.body.user.password;
 
   if (!email || !password || !firstname || !surname) {
     return res.status(422).send({ error: 'All fields are required!' });
@@ -18,7 +18,7 @@ export function signup (req, res, next) {
       if (userExists) {
         return res.status(422).send({ error: 'Email is in use' });
       }
-      saveUser(client, req.body)
+      saveUser(client, req.body.user)
         .then((user) => {
           let obj = {
             firstname: user.firstname,
@@ -36,7 +36,9 @@ export function signup (req, res, next) {
 
 export function login (req, res) {
   // find user, compare password, send token
-  res.status(201).json(Object.assign(req.user, { token: createToken(req.user.user_id) }));
+  const user = Object.assign({}, req.user);
+  delete user.user_id;
+  res.status(201).json(Object.assign(user, { token: createToken(req.user.user_id) }));
 }
 
 export function createToken (user_id) {

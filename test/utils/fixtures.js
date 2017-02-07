@@ -5,23 +5,23 @@ export const newEvent = {
   _what: ['Bowling', 'Drinking', 'Dancing'],
   _where: ['Old Street', 'Shoreditch'],
   _when: ['2016-12-12T11:32:19.349Z', '2017-12-12T00:00:00.000Z'],
-  _invitees: ['2', '3', '4'],
   is_poll: true,
   host_user_id: 1,
-  event_id: 1
+  event_id: 1,
+  code: 'FAKECODE4'
 };
 
 export const event_1 = {
   name: 'Lounge party',
   description: 'Celebrating life',
   note: '',
-  _what: ['Dancing', 'Skydiving'],
-  _where: ['Forest', 'Camping'],
-  _when: ['2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z'],
-  _invitees: ['2'],
+  what: ['Dancing', 'Skydiving'],
+  where: ['Forest', 'Camping'],
+  when: ['2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z'],
   is_poll: true,
   host_user_id: 1,
-  event_id: 1
+  event_id: 1,
+  code: 'FAKECODE'
 };
 
 export const newUser = {
@@ -37,4 +37,45 @@ export const existingUser = {
   surname: 'Jones',
   email: 'dave@spark.com',
   password: 'spark'
+};
+
+export const vote = {
+  what: [0, 1],
+  where: [1, 1]
+};
+
+export const hostEventChoices = {
+  what: ['Dodgeball'],
+  where: ['Hoxton'],
+  when: ['2017-04-03T00:00:00.000Z']
+};
+
+export const rsvps = {
+  going: [
+    {
+      firstname: 'Dave',
+      surname: 'Jones',
+      photo_url: 'http://placehold.it/100x100'
+    },
+    {
+      firstname: 'Mickey',
+      surname: 'Mouse',
+      photo_url: 'http://placehold.it/100x100'
+    }
+  ],
+  not_going: [{
+    firstname: 'Sohil',
+    surname: 'Pandya',
+    photo_url: 'http://placehold.it/100x100'
+  }]
+};
+
+export const updatedEvent = {
+  name: 'Dinner Party',
+  description: 'Celebrating life',
+  note: 'Don\'t forget it is byob',
+  what: ['Dinner'],
+  where: ['Greedy Cow'],
+  when: ['2017-05-03T00:00:00.000Z'],
+  event_id: 3
 };
