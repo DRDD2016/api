@@ -2,7 +2,7 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, vote, hostEventChoices, rsvps, updatedEvent as event } from '../utils/fixtures';
+import { newEvent, existingUser as user, event_1, vote, hostEventChoices, rsvps, editedEvent as event } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -426,7 +426,7 @@ test('endpoint PUT events/:event_id handles unknown event id', (t) => {
     .send({ event })
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
-      t.deepEqual(res.body, { error: 'Could not update event' });
+      t.deepEqual(res.body, { error: 'Could not edit event' });
     })
     .catch(err => console.error(err));
   });

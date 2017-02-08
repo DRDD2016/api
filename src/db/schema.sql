@@ -25,7 +25,8 @@ CREATE TABLE events (
   is_poll BOOLEAN DEFAULT FALSE NOT NULL,
   _what TEXT[],
   _where TEXT[],
-  _when TEXT[]
+  _when TEXT[],
+  edited BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE votes (

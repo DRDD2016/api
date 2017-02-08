@@ -70,12 +70,13 @@ export const rsvps = {
   }]
 };
 
-export const updatedEvent = {
+export const editedEvent = {
   name: 'Dinner Party',
   description: 'Celebrating life',
   note: 'Don\'t forget it is byob',
   what: ['Dinner'],
   where: ['Greedy Cow'],
   when: ['2017-05-03T00:00:00.000Z'],
-  event_id: 3
+  event_id: 3,
+  edited: true
 };

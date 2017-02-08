@@ -6,7 +6,7 @@ import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
-import updateEvent from './events/update-event';
+import editEvent from './events/edit-event';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -122,12 +122,12 @@ export function getInviteesHandler (req, res, next) {
 export function putEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
-  updateEvent(client, event_id, event)
+  editEvent(client, event_id, event)
     .then((data) => {
       if (data) {
         return res.status(201).json(data);
       } else {
-        return res.status(422).send({ error: 'Could not update event' });
+        return res.status(422).send({ error: 'Could not edit event' });
       }
     })
     .catch(err => next(err));
