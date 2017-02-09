@@ -24,6 +24,19 @@ export const event_1 = {
   code: 'FAKECODE'
 };
 
+export const event_3 = {
+  name: 'Beach party',
+  description: 'Celebrating summer',
+  note: '',
+  what: ['Swimming'],
+  where: ['Mallorca'],
+  when: ["2017-01-03T00:00:00.000Z"],
+  is_poll: false,
+  host_user_id: 3,
+  event_id: 3,
+  code: 'FAKECODE3'
+};
+
 export const newUser = {
   firstname: 'Homer',
   surname: 'Simpson',
