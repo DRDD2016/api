@@ -80,3 +80,18 @@ export const editedEvent = {
   event_id: 3,
   edited: true
 };
+
+export const feedItem = {
+  timestamp: '2017-02-09T12:24:49.699Z',
+  event_id: 3,
+  firstname: 'Sohil',
+  surname: 'Pandya',
+  photo_url: 'http://placehold.it/100x100',
+  name: 'Beach party',
+  what: ['Swimming'],
+  where: ['Mallorca'],
+  when: ["2017-01-03T00:00:00.000Z"],
+  is_poll: false,
+  host_user_id: 3,
+  viewed: false
+};
