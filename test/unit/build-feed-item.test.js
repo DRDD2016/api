@@ -22,3 +22,16 @@ test('`buildFeedItem` works', (t) => {
     });
   }).catch(err => console.error(err));
 });
+
+test('`buildFeedItem` handles unknown user id', (t) => {
+  // t.plan(1);
+  initDb()
+  .then(() => {
+
+    buildFeedItem(55, event_3)
+    .then((result) => {
+      console.log("er", result);
+      t.end();
+    });
+  }).catch(err => console.error(err));
+});

@@ -7,6 +7,7 @@ import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
 import editEvent from './events/edit-event';
+import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -122,10 +123,19 @@ export function getInviteesHandler (req, res, next) {
 export function putEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
+  const host_user_id = req.user.user_id;
   editEvent(client, event_id, event)
     .then((data) => {
       if (data) {
-        return res.status(201).json(data);
+        // create feed item
+        buildFeedItem(host_user_id, event)
+        .then((feedItem) => {
+          console.log(feedItem);
+          // get array of invitees
+          // save feed item
+          // push feed items to clients
+          return res.status(201).json(data);
+        });
       } else {
         return res.status(422).send({ error: 'Could not edit event' });
       }

@@ -28,6 +28,8 @@ export default function buildFeedItem (subject_user_id, event) {
         photo_url: user.photo_url,
         viewed: false
       };
+    } else {
+      return new Error('User does not exist');
     }
   })
   .catch(err => err);
