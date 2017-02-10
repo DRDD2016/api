@@ -6,7 +6,7 @@ const initDb = require('../utils/init-db')(client);
 
 const event_id = 3;
 
-test.only('`getInviteesIds` works', (t) => {
+test('`getInviteesIds` works', (t) => {
   t.plan(2);
   initDb()
   .then(() => {

@@ -1,3 +1,5 @@
+import PubSub from 'pubsub-js';
+import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import deleteEvent from './events/delete-event';
@@ -7,6 +9,7 @@ import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
 import getEventInvitees from './events/get-invitees-ids';
+import saveFeedItem from './events/save-feed-item';
 import editEvent from './events/edit-event';
 import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
@@ -131,13 +134,16 @@ export function putEventHandler (req, res, next) {
         // create feed item
         buildFeedItem(host_user_id, event)
         .then((feedItem) => {
-          console.log(feedItem);
           getEventInvitees(client, event_id)
           .then((inviteesIds) => {
-            console.log(inviteesIds);
+            saveFeedItem(client, inviteesIds, event_id, feedItem)
+            .then(() => {
+              // push feed items to clients
+              PubSub.publish(UPDATE_FEED, { ids: inviteesIds, feedItem });
+            })
+            .catch(err => next(err));
           });
-          // save feed item
-          // push feed items to clients
+
           return res.status(201).json(data);
         });
       } else {

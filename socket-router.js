@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-const PubSub = require('pubsub-js');
-const UPDATE_FEED = 'UPDATE_FEED';
+import PubSub from 'pubsub-js';
+export const UPDATE_FEED = 'UPDATE_FEED';
 const INIT_FEED = 'INIT_FEED';
 
 const feedItem = [{
@@ -47,10 +47,10 @@ module.exports = function socketRouter (io) {
   PubSub.subscribe(UPDATE_FEED, (msg, data) => {
     console.log('msg', msg, 'data', data);
 
-    data.forEach((token) => {
+    data.ids.forEach((id) => {
       // get feed from database
       // on error, io.emit('failure')
-      io.emit(`feed: ${token}`, feedItem);
+      io.emit(`feed: ${id}`, [data.feedItem]);
     });
   });
 };
