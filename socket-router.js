@@ -30,13 +30,12 @@ module.exports = function socketRouter (io) {
   io.emit('connected');
   console.log("CONNECTION!", io.id);
 
-  io.on(INIT_FEED, (token) => {
-    console.log(`user ${token} joined.`);
+  // received user_id from client
+  io.on(INIT_FEED, (user_id) => {
+    console.log(`user ${user_id} joined.`);
     // publish the UPDATE_FEED event so the feed is delivered to the client
-
-
-    PubSub.publish(UPDATE_FEED, [token]);
-
+    // PubSub.publish(UPDATE_FEED, { ids: [user_id], feedItem });
+      io.emit(`feed:${user_id}`, feedItem);
   });
 
   io.on('disconnect', () => {
@@ -50,7 +49,7 @@ module.exports = function socketRouter (io) {
     data.ids.forEach((id) => {
       // get feed from database
       // on error, io.emit('failure')
-      io.emit(`feed: ${id}`, [data.feedItem]);
+      io.emit(`feed:${id}`, [data.feedItem]);
     });
   });
 };
