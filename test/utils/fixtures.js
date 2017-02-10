@@ -108,3 +108,5 @@ export const feedItem = {
   host_user_id: 3,
   viewed: false
 };
+
+export const inviteesIds = [ 2, 3, 4];

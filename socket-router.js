@@ -33,10 +33,10 @@ module.exports = function socketRouter (io) {
   io.on(INIT_FEED, (token) => {
     console.log(`user ${token} joined.`);
     // publish the UPDATE_FEED event so the feed is delivered to the client
-    setInterval(() => {
 
-      PubSub.publish(UPDATE_FEED, [token]);
-    }, 10000);
+
+    PubSub.publish(UPDATE_FEED, [token]);
+
   });
 
   io.on('disconnect', () => {

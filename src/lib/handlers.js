@@ -6,6 +6,7 @@ import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
+import getEventInvitees from './events/get-invitees-ids';
 import editEvent from './events/edit-event';
 import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
@@ -131,7 +132,10 @@ export function putEventHandler (req, res, next) {
         buildFeedItem(host_user_id, event)
         .then((feedItem) => {
           console.log(feedItem);
-          // get array of invitees
+          getEventInvitees(client, event_id)
+          .then((inviteesIds) => {
+            console.log(inviteesIds);
+          });
           // save feed item
           // push feed items to clients
           return res.status(201).json(data);
