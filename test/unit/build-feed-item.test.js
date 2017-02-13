@@ -31,7 +31,7 @@ test('`buildFeedItem` handles unknown user id and missing event', (t) => {
     buildFeedItem(55, event_3)
     .then((result) => {
       t.ok(result instanceof Error, 'result is an instance of Error');
-      t.deepEqual(result.message, 'User does not exist', 'returns correct error message');
+      t.equal(result.message, 'User does not exist', 'returns correct error message');
     });
 
     buildFeedItem(invitee_user_id)
