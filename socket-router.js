@@ -4,7 +4,7 @@ export const UPDATE_FEED = 'UPDATE_FEED';
 const INIT_FEED = 'INIT_FEED';
 
 const feedItem = [{
-  event_id: 'event:112',
+  event_id: 3,
   timestamp: new Date().toISOString(),
   firstname: 'Bob',
   surname: 'Dylan',
@@ -21,7 +21,7 @@ const feedItem = [{
   subject_user_id: '10156727442325251',
   viewed: true,
   inviteesNumber: 24,
-  name: 'Day trip'
+  name: 'Day trip to France'
 }];
 
 

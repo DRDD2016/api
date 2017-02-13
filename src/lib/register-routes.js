@@ -1,7 +1,7 @@
 import passport from 'passport';
 import {
   postEventHandler, deleteEventHandler, getEventHandler,
-  postVoteHandler, patchEventHandler, getInviteesHandler,
+  postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, putEventHandler
 } from './handlers';
 import { signup, login } from './auth';
@@ -18,7 +18,7 @@ export default function registerRoutes (app) {
   app.post('/events/rsvps', requireAuth, postRsvpsHandler);
   app.patch('/events/:event_id/rsvps', requireAuth, patchRsvpsHandler);
   app.post('/votes/:event_id', requireAuth, postVoteHandler);
-  app.patch('/events/:event_id', requireAuth, patchEventHandler);
+  app.patch('/events/:event_id', requireAuth, finaliseEventHandler);
   app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
   app.put('/events/:event_id', requireAuth, putEventHandler);
   app.get('/events/:event_id', requireAuth, getEventHandler);
