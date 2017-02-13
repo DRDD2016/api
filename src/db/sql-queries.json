@@ -4,12 +4,13 @@
   "deleteEvent": "DELETE FROM events WHERE event_id = $1 RETURNING event_id;",
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id;",
   "getUserByEmail": "SELECT * FROM users WHERE email = $1;",
-  "getUserById": "SELECT firstname, surname, email, user_id FROM users WHERE user_id = $1;",
+  "getUserById": "SELECT firstname, surname, email, user_id, photo_url FROM users WHERE user_id = $1;",
   "addInvitee": "INSERT INTO rsvps (user_id, event_id) VALUES ($1, $2) ON CONFLICT DO NOTHING;",
   "finaliseEvent": "UPDATE events SET _what = ARRAY[$2], _where = ARRAY[$3], _when = ARRAY[$4] WHERE event_id = $1 RETURNING _what, _where, _when;",
   "getRsvps": "SELECT status, array_agg(json_build_object('firstname', firstname, 'surname', surname, 'photo_url', photo_url)) AS invitees FROM rsvps JOIN users ON users.user_id = rsvps.user_id WHERE event_id = $1 GROUP BY status;",
   "editEvent": "UPDATE events SET edited = true, name = $2, description = $3, note = $4, _what = ARRAY[$5], _where = ARRAY[$6], _when = ARRAY[$7] WHERE event_id = $1 RETURNING edited, name, description, note, _what, _where, _when, event_id;",
   "getEvent": "SELECT row_to_json(event) FROM (SELECT name, description, note, _what, _where, _when, event_id, is_poll, host_user_id FROM events WHERE event_id = $1) event;",
   "saveFeedItem": "INSERT INTO feeds (user_id, event_id, data) VALUES ($1, $2, $3);",
-  "getInviteesIds": "SELECT array_agg(user_id) AS ids FROM rsvps WHERE event_id = $1;"
+  "getInviteesIds": "SELECT array_agg(user_id) AS ids FROM rsvps WHERE event_id = $1;",
+  "updateUser": "UPDATE users SET firstname = $2, surname = $3 WHERE user_id = $1 RETURNING firstname, surname, email, user_id, photo_url;"
 }

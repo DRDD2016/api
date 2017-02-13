@@ -132,3 +132,8 @@ export const feedItem = {
 };
 
 export const inviteesIds = [ 2, 3, 4];
+
+export const userData = {
+  firstname: 'Mona',
+  surname: 'Lisa'
+};

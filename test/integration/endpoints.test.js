@@ -2,7 +2,7 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, event_2, event_3, vote, hostEventChoices, rsvps_3, editedEvent as event } from '../utils/fixtures';
+import { newEvent, existingUser as user, event_1, event_2, event_3, vote, hostEventChoices, rsvps_3, editedEvent as event, userData } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -445,6 +445,93 @@ test('endpoint PUT events/:event_id handles unknown event id', (t) => {
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
       t.deepEqual(res.body, { error: 'Could not edit event' });
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test('endpoint GET users/:user_id works', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+    request(server)
+    .get(`/users/${user_id}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.notOk(err);
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+  });
+});
+
+test('endpoint GET users/:user_id handles unauthorised requests', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+    request(server)
+    .get(`/users/${user_id}`)
+    .end((err, res) => {
+      t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
+    });
+  });
+});
+
+test('endpoint GET users/:user_id handles unknown user id', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 111;
+    request(server)
+    .get(`/users/${user_id}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.equal(res.statusCode, 422, 'Unknown user id returns 422 status code');
+      t.deepEqual(res.body,  { error: 'Could not get user' });
+    });
+  });
+});
+
+test('endpoint PATCH users/:users_id works', (t) => {
+  t.plan(3);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+
+    request(server)
+    .patch(`/users/${user_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(user_id))
+    .send(userData)
+    .then((res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+      t.equal(res.body.firstname, userData.firstname, 'succesfully updates user firstname');
+      t.equal(res.body.surname, userData.surname, 'succesfully updates user firstname');
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test('endpoint PATCH users/:user_id handles internal errors', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 100;
+
+    request(server)
+    .patch(`/users/${user_id}`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(1))
+    .send(userData)
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'Could not update user' });
     })
     .catch(err => console.error(err));
   });
