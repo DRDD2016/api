@@ -24,6 +24,19 @@ export const event_1 = {
   code: 'FAKECODE'
 };
 
+export const event_3 = {
+  name: 'Beach party',
+  description: 'Celebrating summer',
+  note: '',
+  what: ['Swimming'],
+  where: ['Mallorca'],
+  when: ["2017-01-03T00:00:00.000Z"],
+  is_poll: false,
+  host_user_id: 3,
+  event_id: 3,
+  code: 'FAKECODE3'
+};
+
 export const newUser = {
   firstname: 'Homer',
   surname: 'Simpson',
@@ -80,3 +93,20 @@ export const editedEvent = {
   event_id: 3,
   edited: true
 };
+
+export const feedItem = {
+  timestamp: '2017-02-09T12:24:49.699Z',
+  event_id: 3,
+  firstname: 'Sohil',
+  surname: 'Pandya',
+  photo_url: 'http://placehold.it/100x100',
+  name: 'Beach party',
+  what: ['Swimming'],
+  where: ['Mallorca'],
+  when: ["2017-01-03T00:00:00.000Z"],
+  is_poll: false,
+  host_user_id: 3,
+  viewed: false
+};
+
+export const inviteesIds = [ 2, 3, 4];

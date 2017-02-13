@@ -171,7 +171,7 @@ test('endpoint POST signup rejects missing data', (t) => {
 });
 
 test('endpoint POST login works', (t) => {
-  t.plan(6);
+  t.plan(8);
   initDb()
   .then(() => {
 
@@ -181,8 +181,10 @@ test('endpoint POST login works', (t) => {
     .send({ email: user.email, password: user.password })
     .then((res) => {
 
-      ['token', 'firstname', 'surname', 'email'].forEach((key) => {
-        t.ok(res.body.hasOwnProperty(key), `${key} exists in the response body`);
+      const expectedKeys = ['token', 'firstname', 'surname', 'email', 'user_id', 'photo_url'];
+      Object.keys(res.body).forEach((key) => {
+        t.ok(expectedKeys.includes(key), `${key} exists`);
+
       });
       t.ok(!res.body.hasOwnProperty('password'), '`password` not in response body');
       t.equal(res.statusCode, 201, 'status code is 201');
