@@ -34,9 +34,14 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
 }
 
 export function getEventHandler (req, res, next) {
-  getEvent(client, req.params.event_id)
-    .then((event) => {
-      if (event) {
+  Promise.all([
+    getEvent(client, req.params.event_id),
+    getRsvps(client, req.params.event_id)
+  ])
+    .then(([event, rsvps]) => {
+      if (event && rsvps) {
+        console.log(event, rsvps);
+        event.rsvps = rsvps;
         return res.json(event);
       } else {
         return res.status(422).send({ error: 'Could not get event' });
@@ -97,7 +102,7 @@ export function postVoteHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function patchEventHandler (req, res, next) {
+export function finaliseEventHandler (req, res, next) {
   const hostEventChoices = req.body.hostEventChoices;
   const event_id = req.params.event_id;
   finaliseEvent(client, event_id, hostEventChoices)

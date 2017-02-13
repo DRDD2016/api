@@ -50,7 +50,7 @@ CREATE TABLE votes (
 CREATE TABLE rsvps (
   user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
   event_id INTEGER NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
-  status TEXT,
+  status TEXT DEFAULT 'not_responded',
   PRIMARY KEY (user_id, event_id)
 );
 

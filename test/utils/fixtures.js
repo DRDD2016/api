@@ -63,7 +63,17 @@ export const hostEventChoices = {
   when: ['2017-04-03T00:00:00.000Z']
 };
 
-export const rsvps = {
+export const rsvps_2 = {
+  not_responded: [
+    {
+      firstname: 'Mickey',
+      photo_url: 'http://placehold.it/100x100',
+      surname: 'Mouse'
+    }
+  ]
+};
+
+export const rsvps_3 = {
   going: [
     {
       firstname: 'Dave',
