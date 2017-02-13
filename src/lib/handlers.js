@@ -39,9 +39,10 @@ export function getEventHandler (req, res, next) {
     getRsvps(client, req.params.event_id)
   ])
     .then(([event, rsvps]) => {
-      if (event && rsvps) {
-        console.log(event, rsvps);
-        event.rsvps = rsvps;
+      if (event) {
+        if (rsvps) {
+          event.rsvps = rsvps;
+        }
         return res.json(event);
       } else {
         return res.status(422).send({ error: 'Could not get event' });

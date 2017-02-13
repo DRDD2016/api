@@ -168,7 +168,6 @@ INSERT INTO rsvps (user_id, event_id, status)
   );
 
 INSERT INTO rsvps (user_id, event_id)
-  VALUES (
-    4,
-    2
-  );
+  VALUES
+  (2, 1),
+  (3, 1);

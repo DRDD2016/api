@@ -19,7 +19,7 @@ export default function registerRoutes (app) {
   app.patch('/events/:event_id/rsvps', requireAuth, patchRsvpsHandler);
   app.post('/votes/:event_id', requireAuth, postVoteHandler);
   app.patch('/events/:event_id', requireAuth, finaliseEventHandler);
-  // app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
+  app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
   app.put('/events/:event_id', requireAuth, putEventHandler);
   app.get('/events/:event_id', requireAuth, getEventHandler);
 }

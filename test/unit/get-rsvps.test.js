@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
 import getRsvps from '../../src/lib/events/get-rsvps';
-import { rsvps_3, rsvps_2 } from '../utils/fixtures';
+import { rsvps_3, rsvps_1 } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 
 const event_id = 3;
@@ -24,12 +24,24 @@ test('`getRsvps` works', (t) => {
   });
 });
 
+test("`getRsvps` handles event with no invitees", (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+    const event_id = 2;
+    getRsvps(client, event_id)
+    .then((result) => {
+      t.notOk(result, `returns ${result}`);
+    });
+  });
+});
+
 test("`getRsvps` handles invitees who have not rsvp'd", (t) => {
   t.plan(2);
   initDb()
   .then(() => {
-    const event_id = 2;
-    const expected = rsvps_2;
+    const event_id = 1;
+    const expected = rsvps_1;
     getRsvps(client, event_id)
     .then((result) => {
       t.ok(Object.keys(result).includes('not_responded'), "returns array of invitees who have not rsvp'd");
