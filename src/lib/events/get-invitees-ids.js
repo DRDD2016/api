@@ -16,7 +16,7 @@ export default function getInviteesIds (client, event_id) {
     if (arguments.length !== 2) {
       return reject(new TypeError('`getInviteesIds` requires 2 arguments.  See docs for usage'));
     }
-    if (event_id === undefined) {
+    if (!event_id) {
       return reject(new TypeError('`getInviteesIds` requires an event_id'));
     }
     const queryValues = [event_id];

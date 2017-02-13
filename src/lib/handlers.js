@@ -142,7 +142,8 @@ export function putEventHandler (req, res, next) {
               PubSub.publish(UPDATE_FEED, { ids: inviteesIds, feedItem });
             })
             .catch(err => next(err));
-          });
+          })
+          .catch(err => next(err));
 
           return res.status(201).json(data);
         });

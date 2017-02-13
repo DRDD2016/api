@@ -23,15 +23,20 @@ test('`buildFeedItem` works', (t) => {
   }).catch(err => console.error(err));
 });
 
-test('`buildFeedItem` handles unknown user id', (t) => {
-  // t.plan(1);
+test('`buildFeedItem` handles unknown user id and missing event', (t) => {
+  t.plan(3);
   initDb()
   .then(() => {
 
     buildFeedItem(55, event_3)
     .then((result) => {
-      console.log("er", result);
-      t.end();
+      t.ok(result instanceof Error, 'result is an instance of Error');
+      t.deepEqual(result.message, 'User does not exist', 'returns correct error message');
+    });
+
+    buildFeedItem(invitee_user_id)
+    .then((result) => {
+      t.ok(result instanceof Error, 'result is an instance of Error');
     });
   }).catch(err => console.error(err));
 });
