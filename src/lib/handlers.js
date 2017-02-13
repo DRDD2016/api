@@ -2,6 +2,7 @@ import PubSub from 'pubsub-js';
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
+import getUserById from './auth/get-user-by-id';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -154,4 +155,16 @@ export function putEventHandler (req, res, next) {
       }
     })
     .catch(err => next(err));
+}
+
+export function getUserHandler (req, res, next) {
+  getUserById(client, req.params.user_id)
+  .then((user) => {
+    if (user) {
+      return res.json(user);
+    } else {
+      return res.status(422).send({ error: 'Could not get user' });
+    }
+  })
+  .catch(err => next(err));
 }

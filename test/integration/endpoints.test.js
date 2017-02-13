@@ -433,3 +433,49 @@ test('endpoint PUT events/:event_id handles unknown event id', (t) => {
     .catch(err => console.error(err));
   });
 });
+
+test('endpoint GET users/:user_id works', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+    request(server)
+    .get(`/users/${user_id}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.notOk(err);
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+  });
+});
+
+test('endpoint GET users/:user_id handles unauthorised requests', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+    request(server)
+    .get(`/users/${user_id}`)
+    .end((err, res) => {
+      t.equal(res.statusCode, 401, 'missing token returns Unauthorized status code');
+    });
+  });
+});
+
+test('endpoint GET users/:user_id handles unknown user id', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 111;
+    request(server)
+    .get(`/users/${user_id}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.equal(res.statusCode, 422, 'Unknown user id returns 422 status code');
+      t.deepEqual(res.body,  { error: 'Could not get user' });
+    });
+  });
+});
