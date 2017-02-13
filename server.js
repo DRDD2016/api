@@ -1,6 +1,7 @@
 require('env2')('.env');
 require('babel-register')({
-  presets: ['es2015']
+  presets: ['es2015'],
+  plugins: ['transform-object-rest-spread']
 });
 const http = require('http');
 const socketio = require('socket.io');

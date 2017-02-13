@@ -24,6 +24,19 @@ export const event_1 = {
   code: 'FAKECODE'
 };
 
+export const event_2 = {
+  name: 'Beach party',
+  description: 'Celebrating summer',
+  note: '',
+  what: ['Swimming', 'Sunbathing'],
+  where: ['Mallorca', 'Barbados'],
+  when: ['2017-01-03T00:00:00.000Z'],
+  is_poll: true,
+  host_user_id: 1,
+  event_id: 2,
+  code: 'FAKECODE2'
+};
+
 export const event_3 = {
   name: 'Beach party',
   description: 'Celebrating summer',
@@ -63,7 +76,16 @@ export const hostEventChoices = {
   when: ['2017-04-03T00:00:00.000Z']
 };
 
-export const rsvps = {
+export const rsvps_1 = {
+  not_responded: [
+    { firstname: 'Dave', photo_url: 'http://placehold.it/100x100', surname: 'Jones' },
+    { firstname: 'Sohil', photo_url: 'http://placehold.it/100x100', surname: 'Pandya' }
+  ]
+};
+
+// no invitees exist for event 2
+
+export const rsvps_3 = {
   going: [
     {
       firstname: 'Dave',
