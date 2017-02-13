@@ -31,7 +31,6 @@ import { updateUser as queryText } from '../../db/sql-queries.json';
        if (result.length === 0) {
           resolve(null);
        } else {
-          console.log('result', result[0]);
           resolve(result[0]);
        }
      });
