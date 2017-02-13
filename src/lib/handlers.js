@@ -3,6 +3,7 @@ import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
+import updateUser from './auth/update-user';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -167,4 +168,18 @@ export function getUserHandler (req, res, next) {
     }
   })
   .catch(err => next(err));
+}
+
+export function patchUserHandler (req, res, next) {
+  const userData = req.body;
+  const user_id = req.params.user_id;
+  updateUser(client, user_id, userData)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not update user' });
+      }
+    })
+    .catch(err => next(err));
 }
