@@ -146,7 +146,9 @@ export function putEventHandler (req, res, next) {
           .catch(err => next(err));
 
           return res.status(201).json(data);
-        });
+        })
+        .catch(err => next(err));
+
       } else {
         return res.status(422).send({ error: 'Could not edit event' });
       }
