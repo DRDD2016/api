@@ -2,6 +2,8 @@ import PubSub from 'pubsub-js';
 import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
+import gm from 'gm';
+import knoxClient from './knoxClient';
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
@@ -215,6 +217,23 @@ export function postUserPhotoHandler (req, res, next) {
   newForm.on('end', function () {
     fs.rename(tmpFile, newFile, function () {
       // resize the image and upload to S3 bucket
+      // 300 is the width
+      // write method piped new resized file to the same directory
+      gm(newFile).resize(300).write(newFile, function () {
+        //upload to s3
+        fs.readFile(newFile, function (err, buf) {
+          let req = knoxClient.put(fileName, {
+            'Content-Length': buf.length,
+            'Content-type': 'image/jpeg'
+          });
+          req.on('response', function (res) {
+            if (res.statusCode === 200) {
+              // This means that the file is in S3 bucket
+            }
+          });
+          req.end(buf);
+        });
+      });
     });
   });
 
