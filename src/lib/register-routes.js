@@ -3,7 +3,7 @@ import {
   postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, putEventHandler,
-  getUserHandler, patchUserHandler
+  getUserHandler, patchUserHandler, postUserPhotoHandler
 
 } from './handlers';
 import { signup, login } from './auth';
@@ -26,4 +26,5 @@ export default function registerRoutes (app) {
   app.get('/events/:event_id', requireAuth, getEventHandler);
   app.get('/users/:user_id', requireAuth, getUserHandler);
   app.patch('/users/:user_id', requireAuth, patchUserHandler);
+  app.post('/upload', requireAuth, postUserPhotoHandler);
 }

@@ -1,4 +1,7 @@
 import PubSub from 'pubsub-js';
+import fs from 'fs';
+import os from 'os';
+import formidable from 'formidable';
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
@@ -17,6 +20,7 @@ import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
+import generateFileName from './generate-file-name';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -188,4 +192,30 @@ export function patchUserHandler (req, res, next) {
       }
     })
     .catch(err => next(err));
+}
+
+export function postUserPhotoHandler (req, res, next) {
+  // const user_id = req.user.user_id;
+
+  let tmpFile, newFile, fileName;
+
+  const newForm = new formidable.IncomingForm();
+  newForm.keepExtension = true;
+  newForm.parse(req, function (err, fields, files) {
+    if (err) {
+      return next(err);
+    }
+    tmpFile = files.upload.path; //received file path
+    fileName = generateFileName(files.upload.name);
+    newFile = `${os.tmpDir()}/${fileName}`; //access to temporary directory where all the files are stored
+    res.writeHead(200, { 'Content-type': 'text/plain' });
+    res.end();
+  });
+
+  newForm.on('end', function () {
+    fs.rename(tmpFile, newFile, function () {
+      // resize the image and upload to S3 bucket
+    });
+  });
+
 }
