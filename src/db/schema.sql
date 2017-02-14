@@ -62,7 +62,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'anita@spark.com',
-    'http://placehold.it/100x100'
+    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
   );
 
 INSERT INTO users (firstname, surname, password, email, photo_url)
@@ -71,7 +71,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'dave@spark.com',
-    'http://placehold.it/100x100'
+    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
   );
 
 INSERT INTO users (firstname, surname, password, email, photo_url)
@@ -80,7 +80,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
     'Pandya',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'sohil@spark.com',
-    'http://placehold.it/100x100'
+    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
   );
 
 INSERT INTO users (firstname, surname, password, email, photo_url)
@@ -89,7 +89,7 @@ INSERT INTO users (firstname, surname, password, email, photo_url)
     'Mouse',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
     'mickey@spark.com',
-    'http://placehold.it/100x100'
+    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
   );
 
 /**** insert events ****/
