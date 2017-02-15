@@ -1,6 +1,8 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
+import FormData from 'form-data';
+import path from 'path';
 import server from '../../server';
 import { newEvent, existingUser as user, event_1, event_2, event_3, vote, hostEventChoices, rsvps_3, editedEvent as event, userData } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
@@ -147,7 +149,7 @@ test('endpoint POST signup works', (t) => {
     request(server)
     .post('/signup')
     .set('Accept', 'application/json')
-    .send({ user })
+    .send(user)
     .then((res) => {
       t.ok(res.body.hasOwnProperty('token'), 'Token exists in the response body');
       t.equal(res.statusCode, 201, 'status code is 201');
@@ -532,6 +534,30 @@ test('endpoint PATCH users/:user_id handles internal errors', (t) => {
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
       t.deepEqual(res.body, { error: 'Could not update user' });
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test.skip('endpoint POST /upload works', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+    const form = new FormData();
+    form.append('photo', {
+      uri: path.resolve('../utils/test-img.png'),
+      ext: 'png',
+      type: 'image/png'
+    });
+    request(server)
+    .post('/upload')
+    .set('Accept', 'application/json')
+    .set('Content-Type', 'multipart/form-data')
+    .set('authorization', createToken(1))
+    .send(form)
+    .then((res) => {
+      t.equal(res.statusCode, 201, 'status code is 201');
+      // t.deepEqual(res.body, { error: 'Could not update user' });
     })
     .catch(err => console.error(err));
   });

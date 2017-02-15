@@ -5,15 +5,15 @@ const initDb = require('../../utils/init-db')(client);
 
 const user_id = 1;
 
-test.only('`updateUserPhoto` works', (t) => {
-  // t.plan(2);
+test('`updateUserPhoto` works', (t) => {
+  t.plan(1);
   initDb()
   .then(() => {
-    const filename = 'userPicture.jpg';
+    const filename =  'userPicture.jpg';
+    const expected = { photo_url: filename };
     updateUserPhoto(client, user_id, filename)
     .then((result) => {
-      console.log('result test', result);
-      t.end();
+      t.deepEqual(result, expected, 'receives the correct photo_url');
     })
     .catch(err => console.error(err));
   });

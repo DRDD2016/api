@@ -200,7 +200,7 @@ export function patchUserHandler (req, res, next) {
 
 export function postUserPhotoHandler (req, res, next) {
   const user_id = req.user.user_id; //eslint-disable-line
-  let tmpFile, fileName, newFile;
+  let tmpFile, filename, newFile;
   const newForm = new formidable.IncomingForm();
   newForm.keepExtension = true;
   newForm.parse(req, function (err, fields, files) {
@@ -209,13 +209,8 @@ export function postUserPhotoHandler (req, res, next) {
       return next(err);
     }
     tmpFile = files.photo.path; //received file path
-    fileName = generateFileName(files.photo.name);
-    newFile = `${os.tmpdir()}/${fileName}`; //access to temporary directory where all the files are stored
-    res.writeHead(200, { 'Content-type': 'text/plain' });
-    res.end();
-  });
-  //
-  newForm.on('end', function () {
+    filename = generateFileName(files.photo.name);
+    newFile = `${os.tmpdir()}/${filename}`; //access to temporary directory where all the files are stored
     fs.rename(tmpFile, newFile, function () {
       // resize
       gm(newFile).resize(300).write(newFile, function () {
@@ -223,12 +218,25 @@ export function postUserPhotoHandler (req, res, next) {
         fs.readFile(newFile, function (err, buf) {
           s3.putObject({
             Bucket: process.env.S3BUCKET,
-            Key: fileName,
+            Key: filename,
             Body: buf,
             ACL: 'public-read',
             ContentType: 'image/jpeg'
           }, function (err, data) {
-            console.log(data);
+            if (data.ETag) {
+              filename = `https://s3.eu-west-2.amazonaws.com/spark-native/${filename}`;
+              updateUserPhoto(client, user_id, filename)
+              .then((photoObj) => {
+                // delete local file
+                fs.unlinkSync(newFile);
+                if (photoObj) {
+                  return res.status(201).json(photoObj);
+                } else {
+                  return res.status(422).send({ error: 'Could not get user' });
+                }
+              })
+              .catch(err => next(err));
+            }
           });
         });
       });
