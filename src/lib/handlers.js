@@ -1,14 +1,18 @@
+/* eslint-disable no-unused-vars */
 import PubSub from 'pubsub-js';
 import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
+import path from 'path';
 import gm from 'gm';
 import knoxClient from './knoxClient';
+
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
 import updateUser from './auth/update-user';
+import updateUserPhoto from './auth/update-user-photo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -197,44 +201,80 @@ export function patchUserHandler (req, res, next) {
 }
 
 export function postUserPhotoHandler (req, res, next) {
-  // const user_id = req.user.user_id;
-
-  let tmpFile, newFile, fileName;
-
+  const user_id = req.user.user_id;
+  // const tmpFile = req.body.fileName;
+  // const fileName = generateFileName(tmpFile);
+  // console.log('fileName', fileName);
+  // let newFile = `${os.tmpdir()}/${fileName}`; //access to temporary directory where all the files are stored
+  // newFile = `${os.tmpdir()}/${fileName}`;
+  let tmpFile, fileName, newFile;
+  // console.log('tmpDir', newFile);
   const newForm = new formidable.IncomingForm();
   newForm.keepExtension = true;
   newForm.parse(req, function (err, fields, files) {
+
     if (err) {
       return next(err);
     }
-    tmpFile = files.upload.path; //received file path
-    fileName = generateFileName(files.upload.name);
-    newFile = `${os.tmpDir()}/${fileName}`; //access to temporary directory where all the files are stored
+    tmpFile = files.photo.path; //received file path
+    console.log('pathhhh', tmpFile);
+    fileName = generateFileName(files.photo.name);
+    newFile = `${os.tmpdir()}/${fileName}`; //access to temporary directory where all the files are stored
+    console.log('newFile stored in os.tmpdir', newFile);
     res.writeHead(200, { 'Content-type': 'text/plain' });
     res.end();
   });
-
+  //
   newForm.on('end', function () {
     fs.rename(tmpFile, newFile, function () {
       // resize the image and upload to S3 bucket
-      // 300 is the width
+      // 300 is the width, height will be resized accordingly
       // write method piped new resized file to the same directory
       gm(newFile).resize(300).write(newFile, function () {
         //upload to s3
         fs.readFile(newFile, function (err, buf) {
-          let req = knoxClient.put(fileName, {
-            'Content-Length': buf.length,
-            'Content-type': 'image/jpeg'
+          console.log('fileName in knox', newFile);
+          // let req = knoxClient.put(fileName, {
+          //   'Content-Length': buf.length,
+          //   'Content-Type': 'image/jpeg',
+          //   'x-amz-acl': 'public-read'
+          // });
+          knoxClient.putFile(newFile, fileName, { 'x-amz-acl': 'public-read' }, function (err, res) {
+            console.log('errrrrrrrr', err);
+            console.log('ressssssss', res.statusCode);
           });
-          req.on('response', function (res) {
-            if (res.statusCode === 200) {
-              // This means that the file is in S3 bucket
-            }
-          });
-          req.end(buf);
+
+          // req.on('response', function (res) {
+          //   console.log('------------', res.statusMessage, res.statusCode );
+          //   if (res.statusCode === 200) {
+          //     console.log('res', res);
+          //     // This means that the file is in S3 bucket
+          //     // save fileName to the database
+          //     Promise.all([
+          //       updateUserPhoto(client, user_id, fileName),
+          //       getUserById(client, user_id)
+          //     ])
+          //       .then(([data, user]) => {
+          //         // delete local file
+          //         fs.unlinkSync(newFile);
+          //         if (data) {
+          //           if (user) {
+          //             console.log('user', user);
+          //             const photo_url = `https://s3.eu-west-2.amazonaws.com/spark-native/${user.photo_url}`;
+          //             user.photo_url = photo_url;
+          //             console.log('user with new photo_url', user);
+          //             return res.json(user);
+          //           }
+          //         } else {
+          //           return res.status(422).send({ error: 'Could not get user' });
+          //         }
+          //       })
+          //       .catch(err => next(err));
+          //   }
+          // });
+          // req.end(buf);
         });
       });
     });
   });
-
 }
