@@ -2,7 +2,7 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, event_2, event_3, vote, hostEventChoices, rsvps_3, editedEvent as event, userData } from '../utils/fixtures';
+import { newEvent, existingUser as user, event_1, event_2, event_3, event_4, vote, hostEventChoices, rsvps_3, rsvps_4, editedEvent as event, userData } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -48,8 +48,8 @@ test('endpoint POST events handles errors', (t) => {
   });
 });
 
-test('endpoint GET events works', (t) => {
-  t.plan(6);
+test.only('endpoint GET events works', (t) => {
+  t.plan(9);
   initDb()
   .then(() => {
 
@@ -72,6 +72,19 @@ test('endpoint GET events works', (t) => {
     .end((err, res) => {
       const expected = { ...event_3 };
       expected.rsvps = rsvps_3;
+      delete expected.code;
+      t.notOk(err);
+      t.deepEqual(res.body, expected);
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+
+    const eventWithNoResponses = 4;
+    request(server)
+    .get(`/events/${eventWithNoResponses}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      const expected = { ...event_4 };
+      expected.rsvps = rsvps_4;
       delete expected.code;
       t.notOk(err);
       t.deepEqual(res.body, expected);
@@ -220,7 +233,6 @@ test('endpoint POST events/rsvps works', (t) => {
     .send({ code: event_1.code })
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
-      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     });
   });
 });

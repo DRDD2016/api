@@ -132,6 +132,19 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"2017-01-03T00:00:00.000Z"}',
     'FAKECODE3'
   );
+
+INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
+  VALUES (
+    1,
+    'Spring party',
+    'Celebrating spring',
+    '',
+    false,
+    '{"Picnic"}',
+    '{"Victoria Park"}',
+    '{"2017-04-03T00:00:00.000Z"}',
+    'FAKECODE4'
+  );
 /**** insert votes ****/
 
 INSERT INTO votes (event_id, user_id, _what, _where, _when)
@@ -154,12 +167,12 @@ INSERT INTO rsvps (user_id, event_id, status)
   VALUES (
     2,
     3,
-    'going'
+    'not_going'
   ),
   (
     3,
     3,
-    'not_going'
+    'going'
   ),
   (
     4,
@@ -170,4 +183,6 @@ INSERT INTO rsvps (user_id, event_id, status)
 INSERT INTO rsvps (user_id, event_id)
   VALUES
   (2, 1),
-  (3, 1);
+  (3, 1),
+  (3, 4),
+  (2, 4);

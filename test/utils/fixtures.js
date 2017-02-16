@@ -1,3 +1,4 @@
+const avatarUrl = 'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100';
 export const newEvent = {
   name: 'Birthday party',
   description: 'I am getting older!',
@@ -50,6 +51,19 @@ export const event_3 = {
   code: 'FAKECODE3'
 };
 
+export const event_4 = {
+  name: 'Spring party',
+  description: 'Celebrating spring',
+  note: '',
+  what: ['Picnic'],
+  where: ['Victoria Park'],
+  when: ["2017-04-03T00:00:00.000Z"],
+  is_poll: false,
+  host_user_id: 1,
+  event_id: 4,
+  code: 'FAKECODE4'
+};
+
 export const newUser = {
   firstname: 'Homer',
   surname: 'Simpson',
@@ -78,8 +92,8 @@ export const hostEventChoices = {
 
 export const rsvps_1 = {
   not_responded: [
-    { firstname: 'Dave', photo_url: 'http://placehold.it/100x100', surname: 'Jones' },
-    { firstname: 'Sohil', photo_url: 'http://placehold.it/100x100', surname: 'Pandya' }
+    { firstname: 'Dave', photo_url: avatarUrl, surname: 'Jones' },
+    { firstname: 'Sohil', photo_url: avatarUrl, surname: 'Pandya' }
   ]
 };
 
@@ -88,21 +102,36 @@ export const rsvps_1 = {
 export const rsvps_3 = {
   going: [
     {
-      firstname: 'Dave',
-      surname: 'Jones',
-      photo_url: 'http://placehold.it/100x100'
+      firstname: 'Sohil',
+      surname: 'Pandya',
+      photo_url: avatarUrl
     },
     {
       firstname: 'Mickey',
       surname: 'Mouse',
-      photo_url: 'http://placehold.it/100x100'
+      photo_url: avatarUrl
     }
   ],
   not_going: [{
-    firstname: 'Sohil',
-    surname: 'Pandya',
-    photo_url: 'http://placehold.it/100x100'
+    firstname: 'Dave',
+    surname: 'Jones',
+    photo_url: avatarUrl
   }]
+};
+
+export const rsvps_4 = {
+  not_responded: [
+    {
+      firstname: 'Dave',
+      surname: 'Jones',
+      photo_url: avatarUrl
+    },
+    {
+      firstname: 'Sohil',
+      surname: 'Pandya',
+      photo_url: avatarUrl
+    }
+  ]
 };
 
 export const editedEvent = {
@@ -121,7 +150,7 @@ export const feedItem = {
   event_id: 3,
   firstname: 'Sohil',
   surname: 'Pandya',
-  photo_url: 'http://placehold.it/100x100',
+  photo_url: avatarUrl,
   name: 'Beach party',
   what: ['Swimming'],
   where: ['Mallorca'],
