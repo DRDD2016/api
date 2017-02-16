@@ -3,11 +3,11 @@ import { editEvent as queryText } from '../../db/sql-queries.json';
 import normaliseEventKeys from '../normalise-event-keys';
 
 /**
- * Edits an existing event
+ * editEvent edits an existing event
  * @param {object} client - database client
  * @param {string} event_id - event id
  * @param {object} data - event object
- * @returns {Promise.<void, Error>}
+ * @returns {Promise.<object, Error>}
  */
 
 export default function editEvent (client, event_id, data) {

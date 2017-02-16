@@ -424,23 +424,23 @@ test('endpoint PUT events/:event_id works', (t) => {
 
 test('endpoint PUT events/:event_id handles missing data', (t) => {
   t.plan(1);
-  initDb()
-  .then(() => {
+  // this test clashes with the previous one sometimes.  This helps avoid it.
+  setTimeout(() => {
+    initDb()
+    .then(() => {
 
-    // this test clashes with the previous one sometimes.  This helps avoid it.
-    process.nextTick(() => {
-      const event_id = 3;
+        const event_id = 3;
 
-      request(server)
-      .put(`/events/${event_id}`)
-      .set('Accept', 'application/json')
-      .set('authorization', createToken(3))
-      .then((res) => {
-        t.equal(res.statusCode, 500, 'status code is 500');
-      })
-      .catch(err => console.error(err));
-    });
-  });
+        request(server)
+        .put(`/events/${event_id}`)
+        .set('Accept', 'application/json')
+        .set('authorization', createToken(3))
+        .then((res) => {
+          t.equal(res.statusCode, 500, 'status code is 500');
+        })
+        .catch(err => console.error(err));
+      });
+  }, 500);
 });
 
 test('endpoint PUT events/:event_id handles unknown event id', (t) => {
