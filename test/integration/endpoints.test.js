@@ -2,7 +2,15 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, event_2, event_3, event_4, vote, hostEventChoices, rsvps_3, rsvps_4, emptyRsvps, editedEvent as event, userData } from '../utils/fixtures';
+import {
+  newEvent, existingUser as user,
+  event_1, event_2, event_3, event_4,
+   vote, hostEventChoices,
+   rsvps_3, rsvps_4, emptyRsvps,
+   updatedRsvp, updatedRsvp_2,
+   editedEvent as event,
+   userData
+ } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -328,22 +336,33 @@ test('endpoint PATCH events/:event_id handles internal errors', (t) => {
   });
 });
 
-test.skip('endpoint PATCH events/:event_id/rsvps works', (t) => {
-  t.plan(1);
+test('endpoint PATCH events/:event_id/rsvps works', (t) => {
+  t.plan(4);
   initDb()
   .then(() => {
-    // event_id
-    // rsvp data
+    const event_id = 4;
 
     request(server)
-    .patch('/events/:event_id/rsvps')
+    .patch(`/events/${event_id}/rsvps`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
-    .send({ rsvps: rsvps_3 })
+    .send({ status: 'going' })
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
-      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
+      t.deepEqual(res.body.rsvps, updatedRsvp);
     });
+    setTimeout(() => {
+
+      request(server)
+      .patch(`/events/${event_id}/rsvps`)
+      .set('Accept', 'application/json')
+      .set('authorization', createToken(3))
+      .send({ status: 'not_going' })
+      .then((res) => {
+        t.equal(res.statusCode, 201, 'status code is 201');
+        t.deepEqual(res.body.rsvps, updatedRsvp_2);
+      });
+    }, 500);
   });
 });
 

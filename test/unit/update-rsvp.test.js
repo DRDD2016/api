@@ -57,3 +57,8 @@ test('`updateRsvp` handles errors', (t) => {
   return initDb()
   .then(() => t.shouldFail(updateRsvp(client, invitee_user_id, event_id, ""), 'handles missing status'));
 });
+
+test('`updateRsvp` handles errors', (t) => {
+  return initDb()
+  .then(() => t.shouldFail(updateRsvp(client, invitee_user_id, event_id, "fake-status"), 'handles unrecognised status'));
+});

@@ -10,6 +10,8 @@ import { updateRsvp as queryText } from '../../db/sql-queries.json';
  * @param {string} status - user rsvp status
  */
 
+const VALID_STATUSES = ['going', 'maybe', 'not_going'];
+
 export default function updateRsvp (client, user_id, event_id, status) {
 
   return new Promise ((resolve, reject) => {
@@ -17,7 +19,10 @@ export default function updateRsvp (client, user_id, event_id, status) {
       return reject(new TypeError('`updateRsvp` requires 4 arguments.  See docs for usage'));
     }
     if (!user_id || !event_id || !status) {
-      return reject(new TypeError('`updateRsvp` bad arguments. See docs for usage'));
+      return reject(new TypeError('`updateRsvp`: bad arguments. See docs for usage'));
+    }
+    if (!VALID_STATUSES.includes(status)) {
+      return reject(new TypeError('`updateRsvp`: invalid `status` argument'));
     }
     const queryValues = [user_id, event_id, status];
 

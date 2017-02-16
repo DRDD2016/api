@@ -1,4 +1,4 @@
-const avatarUrl = 'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100';
+export const avatarUrl = 'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100';
 export const newEvent = {
   name: 'Birthday party',
   description: 'I am getting older!',
@@ -180,4 +180,18 @@ export const inviteesIds = [ 2, 3, 4];
 export const userData = {
   firstname: 'Mona',
   surname: 'Lisa'
+};
+
+export const updatedRsvp = {
+  going: [{ firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
+  maybe: rsvps_4.maybe,
+  not_going: rsvps_4.not_going,
+  not_responded: [rsvps_4.not_responded[0]]
+};
+
+export const updatedRsvp_2 = {
+  going: rsvps_4.going,
+  maybe: rsvps_4.maybe,
+  not_going: [{ firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
+  not_responded: [rsvps_4.not_responded[0]]
 };
