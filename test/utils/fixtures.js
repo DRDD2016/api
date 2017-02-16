@@ -9,7 +9,7 @@ export const newEvent = {
   is_poll: true,
   host_user_id: 1,
   event_id: 1,
-  code: 'FAKECODE4'
+  code: 'FAKECODE100'
 };
 
 export const event_1 = {
@@ -91,6 +91,9 @@ export const hostEventChoices = {
 };
 
 export const rsvps_1 = {
+  going: [],
+  maybe: [],
+  not_going: [],
   not_responded: [
     { firstname: 'Dave', photo_url: avatarUrl, surname: 'Jones' },
     { firstname: 'Sohil', photo_url: avatarUrl, surname: 'Pandya' }
@@ -98,6 +101,13 @@ export const rsvps_1 = {
 };
 
 // no invitees exist for event 2
+export const emptyRsvps = {
+  going: [],
+  maybe: [],
+  not_going: [],
+  not_responded: []
+};
+
 
 export const rsvps_3 = {
   going: [
@@ -112,14 +122,19 @@ export const rsvps_3 = {
       photo_url: avatarUrl
     }
   ],
+  maybe: [],
   not_going: [{
     firstname: 'Dave',
     surname: 'Jones',
     photo_url: avatarUrl
-  }]
+  }],
+  not_responded: []
 };
 
 export const rsvps_4 = {
+  going: [],
+  maybe: [],
+  not_going: [],
   not_responded: [
     {
       firstname: 'Dave',

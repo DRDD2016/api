@@ -35,30 +35,34 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
     });
 }
 
-export function getEventHandler (req, res, next) {
-  Promise.all([
-    getEvent(client, req.params.event_id),
-    getRsvps(client, req.params.event_id)
-  ])
-    .then(([event, rsvps]) => {
-      if (event) {
-        if (rsvps) {
-          event.rsvps = rsvps;
-        }
-        return res.json(event);
-      } else {
-        return res.status(422).send({ error: 'Could not get event' });
-      }
-    })
-    .catch(err => next(err));
-}
-
 export function deleteEventHandler (req, res, next) {
   deleteEvent(client, req.params.event_id)
-    .then((deleted_event_id) => {
-      res.json(deleted_event_id);
-    })
-    .catch(err => next(err));
+  .then((deleted_event_id) => {
+    res.json(deleted_event_id);
+  })
+  .catch(err => next(err));
+}
+
+export function getEventHandler (req, res, next) {
+  getEvent(client, req.params.event_id)
+  .then((event) => {
+    if (event) {
+      req.event = event;
+      next();
+    } else {
+      return res.status(422).send({ error: 'Could not get event' });
+    }
+  })
+  .catch(err => next(err));
+}
+
+export function addRsvps (req, res, next) {
+  getRsvps(client, req.event.event_id)
+  .then((rsvps) => {
+    req.event.rsvps = rsvps;
+    return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
+  })
+  .catch(err => next(err));
 }
 
 export function postRsvpsHandler (req, res, next) {
@@ -73,7 +77,8 @@ export function postRsvpsHandler (req, res, next) {
       }
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
-          return res.status(201).json(normaliseEventKeys(event));
+          req.event = normaliseEventKeys(event);
+          next();
         })
         .catch(err => next(err));
     })

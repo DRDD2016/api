@@ -2,7 +2,7 @@ import test from 'blue-tape';
 import client from '../../src/db/client';
 import request from 'supertest';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, event_2, event_3, event_4, vote, hostEventChoices, rsvps_3, rsvps_4, editedEvent as event, userData } from '../utils/fixtures';
+import { newEvent, existingUser as user, event_1, event_2, event_3, event_4, vote, hostEventChoices, rsvps_3, rsvps_4, emptyRsvps, editedEvent as event, userData } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -48,7 +48,7 @@ test('endpoint POST events handles errors', (t) => {
   });
 });
 
-test.only('endpoint GET events works', (t) => {
+test('endpoint GET events works', (t) => {
   t.plan(9);
   initDb()
   .then(() => {
@@ -58,7 +58,7 @@ test.only('endpoint GET events works', (t) => {
     .get(`/events/${eventWithNoRsvps}`)
     .set('authorization', token)
     .end((err, res) => {
-      const expected = { ...event_2 };
+      const expected = { ...event_2, rsvps: emptyRsvps };
       delete expected.code;
       t.deepEqual(res.body, expected);
       t.notOk(err);
@@ -70,8 +70,7 @@ test.only('endpoint GET events works', (t) => {
     .get(`/events/${eventWithRsvps}`)
     .set('authorization', token)
     .end((err, res) => {
-      const expected = { ...event_3 };
-      expected.rsvps = rsvps_3;
+      const expected = { ...event_3, rsvps: rsvps_3 };
       delete expected.code;
       t.notOk(err);
       t.deepEqual(res.body, expected);
@@ -83,8 +82,7 @@ test.only('endpoint GET events works', (t) => {
     .get(`/events/${eventWithNoResponses}`)
     .set('authorization', token)
     .end((err, res) => {
-      const expected = { ...event_4 };
-      expected.rsvps = rsvps_4;
+      const expected = { ...event_4, rsvps: rsvps_4 };
       delete expected.code;
       t.notOk(err);
       t.deepEqual(res.body, expected);
@@ -429,16 +427,19 @@ test('endpoint PUT events/:event_id handles missing data', (t) => {
   initDb()
   .then(() => {
 
-    const event_id = 3;
+    // this test clashes with the previous one sometimes.  This helps avoid it.
+    process.nextTick(() => {
+      const event_id = 3;
 
-    request(server)
-    .put(`/events/${event_id}`)
-    .set('Accept', 'application/json')
-    .set('authorization', createToken(3))
-    .then((res) => {
-      t.equal(res.statusCode, 500, 'status code is 500');
-    })
-    .catch(err => console.error(err));
+      request(server)
+      .put(`/events/${event_id}`)
+      .set('Accept', 'application/json')
+      .set('authorization', createToken(3))
+      .then((res) => {
+        t.equal(res.statusCode, 500, 'status code is 500');
+      })
+      .catch(err => console.error(err));
+    });
   });
 });
 

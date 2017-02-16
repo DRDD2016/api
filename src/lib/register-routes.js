@@ -3,7 +3,7 @@ import {
   postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, putEventHandler,
-  getUserHandler, patchUserHandler
+  getUserHandler, patchUserHandler, addRsvps
 
 } from './handlers';
 import { signup, login } from './auth';
@@ -17,13 +17,13 @@ export default function registerRoutes (app) {
   app.delete('/events/:event_id', requireAuth, deleteEventHandler);
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
-  app.post('/events/rsvps', requireAuth, postRsvpsHandler);
+  app.post('/events/rsvps', requireAuth, postRsvpsHandler, addRsvps);
   app.patch('/events/:event_id/rsvps', requireAuth, patchRsvpsHandler);
   app.post('/votes/:event_id', requireAuth, postVoteHandler);
   app.patch('/events/:event_id', requireAuth, finaliseEventHandler);
   app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
   app.put('/events/:event_id', requireAuth, putEventHandler);
-  app.get('/events/:event_id', requireAuth, getEventHandler);
+  app.get('/events/:event_id', requireAuth, getEventHandler, addRsvps);
   app.get('/users/:user_id', requireAuth, getUserHandler);
   app.patch('/users/:user_id', requireAuth, patchUserHandler);
 }
