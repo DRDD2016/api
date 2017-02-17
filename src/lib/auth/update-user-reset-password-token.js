@@ -7,11 +7,10 @@ import { updateUserResetPasswordToken as queryText } from '../../db/sql-queries.
  * @param {string} user_id - user_id
  * @param {string} resetPasswordToken - random uniqu string
  * @param {date} resetPasswordExpires - expire date for the token
- * @returns {Promise.<object, Error>}
+ * @returns {Promise.<void, Error>}
  */
 
  export default function updateUserResetPasswordToken (client, user_id, resetPasswordToken, resetPasswordExpires) {
-    console.log(resetPasswordToken, resetPasswordExpires, user_id);
    return new Promise ((resolve, reject) => {
 
      if (arguments.length !== 4) {
@@ -30,8 +29,6 @@ import { updateUserResetPasswordToken as queryText } from '../../db/sql-queries.
        if (err) {
          reject(err);
        }
-       console.log('result', result);
-
        resolve(result);
      });
    });

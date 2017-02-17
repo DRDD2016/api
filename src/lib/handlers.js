@@ -3,9 +3,8 @@ import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
 import gm from 'gm';
-import s3 from './s3-client';
+import { s3, ses } from './amazon-clients';
 import crypto from 'crypto';
-import ses from './ses-client';
 
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
@@ -31,6 +30,7 @@ import shortid from 'shortid';
 import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
 import updateUserResetPasswordToken from './auth/update-user-reset-password-token';
+import compileTemplate from './compile-template';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -272,6 +272,7 @@ export function sendResetPasswordEmail (req, res, next) {
     }
     const token = buf.toString('hex');
     const tokenExpires = Date.now() + 3600000; // 1 hour
+
     getUserByEmail(client, email)
     .then((userExists) => {
       if (userExists) {
@@ -282,28 +283,28 @@ export function sendResetPasswordEmail (req, res, next) {
           var params = {
            Destination: { /* required */
              ToAddresses: [
-               'mina@foundersandcoders.com'
+               'anita@foundersandcoders.com' //change this email to the official one
              ]
            },
            Message: { /* required */
              Body: { /* required */
                Html: {
-                 Data: '<h1>Hello</h1>', /* required */
+                 Data: compileTemplate('resetPassword', 'html')(userExists), /* required */
                  Charset: 'utf8'
                },
                Text: {
-                 Data: 'Hello', /* required */
+                 Data: compileTemplate('resetPassword', 'txt')(userExists), /* required */
                  Charset: 'utf8'
                }
              },
              Subject: { /* required */
-               Data: 'Custom subject', /* required */
+               Data: 'Please reset the password for your Spark account', /* required */
                Charset: 'utf8'
              }
            },
            Source: 'anita@foundersandcoders.com', /* required */
            ReplyToAddresses: [
-             'anita@foundersandcoders.com'
+             'anita@foundersandcoders.com' //change this email to the official one
            ]
          };
           ses.sendEmail(params, function (err, data) {
