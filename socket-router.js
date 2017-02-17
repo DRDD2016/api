@@ -2,8 +2,8 @@
 import PubSub from 'pubsub-js';
 export const UPDATE_FEED = 'UPDATE_FEED';
 const INIT_FEED = 'INIT_FEED';
-
-const feedItem = [{
+//
+const feedItem = {
   event_id: 3,
   timestamp: new Date().toISOString(),
   firstname: 'Bob',
@@ -22,7 +22,7 @@ const feedItem = [{
   viewed: true,
   inviteesNumber: 24,
   name: 'Day trip to France'
-}];
+};
 
 
 module.exports = function socketRouter (io) {
@@ -34,8 +34,8 @@ module.exports = function socketRouter (io) {
   io.on(INIT_FEED, (user_id) => {
     console.log(`user ${user_id} joined.`);
     // publish the UPDATE_FEED event so the feed is delivered to the client
-    // PubSub.publish(UPDATE_FEED, { ids: [user_id], feedItem });
-      io.emit(`feed:${user_id}`, feedItem);
+    PubSub.publish(UPDATE_FEED, { ids: [user_id], feedItem });
+      // io.emit(`feed:${user_id}`, []);
   });
 
   io.on('disconnect', () => {

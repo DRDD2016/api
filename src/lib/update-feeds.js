@@ -35,13 +35,18 @@ export default function updateFeeds (req, res, next) {
         getIds(client, event_id, informAllInvitees)
       ])
       .then(([feedItem, idArray]) => {
+        if (!idArray.includes(subject_user_id)) {
+          idArray.push(subject_user_id);
+        }
         (
           deletingEvent ?
             saveFeedItemForDeletedEvent(client, idArray, feedItem):
             saveFeedItem(client, idArray, event_id, feedItem)
         )
         .then(() => {
-          PubSub.publish(UPDATE_FEED, { ids: idArray, feedItem });
+          console.log('HERE BEFORE FEED');
+          PubSub.publish('UPDATE_FEED', { ids: idArray, feedItem });
+          console.log('HERE AFTER FEED');
           // DELETE events/:event_id is a special case.
           // event needs to be deleted after the feed stuff
           if (deletingEvent) {
