@@ -4,7 +4,15 @@ import request from 'supertest';
 import FormData from 'form-data';
 import path from 'path';
 import server from '../../server';
-import { newEvent, existingUser as user, event_1, event_2, event_3, vote, hostEventChoices, rsvps_3, editedEvent as event, userData } from '../utils/fixtures';
+import {
+  newEvent, existingUser as user,
+  event_1, event_2, event_3, event_4,
+   vote, hostEventChoices,
+   rsvps_3, rsvps_4, emptyRsvps,
+   updatedRsvp, updatedRsvp_2,
+   editedEvent as event,
+   userData
+ } from '../utils/fixtures';
 import { createToken } from '../../src/lib/auth';
 
 const initDb = require('../utils/init-db')(client);
@@ -51,7 +59,7 @@ test('endpoint POST events handles errors', (t) => {
 });
 
 test('endpoint GET events works', (t) => {
-  t.plan(6);
+  t.plan(9);
   initDb()
   .then(() => {
 
@@ -60,7 +68,7 @@ test('endpoint GET events works', (t) => {
     .get(`/events/${eventWithNoRsvps}`)
     .set('authorization', token)
     .end((err, res) => {
-      const expected = { ...event_2 };
+      const expected = { ...event_2, rsvps: emptyRsvps };
       delete expected.code;
       t.deepEqual(res.body, expected);
       t.notOk(err);
@@ -72,8 +80,19 @@ test('endpoint GET events works', (t) => {
     .get(`/events/${eventWithRsvps}`)
     .set('authorization', token)
     .end((err, res) => {
-      const expected = { ...event_3 };
-      expected.rsvps = rsvps_3;
+      const expected = { ...event_3, rsvps: rsvps_3 };
+      delete expected.code;
+      t.notOk(err);
+      t.deepEqual(res.body, expected);
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+
+    const eventWithNoResponses = 4;
+    request(server)
+    .get(`/events/${eventWithNoResponses}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      const expected = { ...event_4, rsvps: rsvps_4 };
       delete expected.code;
       t.notOk(err);
       t.deepEqual(res.body, expected);
@@ -222,7 +241,6 @@ test('endpoint POST events/rsvps works', (t) => {
     .send({ code: event_1.code })
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
-      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
     });
   });
 });
@@ -320,22 +338,33 @@ test('endpoint PATCH events/:event_id handles internal errors', (t) => {
   });
 });
 
-test.skip('endpoint PATCH events/:event_id/rsvps works', (t) => {
-  t.plan(1);
+test('endpoint PATCH events/:event_id/rsvps works', (t) => {
+  t.plan(4);
   initDb()
   .then(() => {
-    // event_id
-    // rsvp data
+    const event_id = 4;
 
     request(server)
-    .patch('/events/:event_id/rsvps')
+    .patch(`/events/${event_id}/rsvps`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(3))
-    .send({ rsvps: rsvps_3 })
+    .send({ status: 'going' })
     .then((res) => {
       t.equal(res.statusCode, 201, 'status code is 201');
-      // t.deepEqual(JSON.parse(res.body), Object.assign({}, event_1, { _invitees: ['2', '3'] }), 'returns event data');
+      t.deepEqual(res.body.rsvps, updatedRsvp);
     });
+    setTimeout(() => {
+
+      request(server)
+      .patch(`/events/${event_id}/rsvps`)
+      .set('Accept', 'application/json')
+      .set('authorization', createToken(3))
+      .send({ status: 'not_going' })
+      .then((res) => {
+        t.equal(res.statusCode, 201, 'status code is 201');
+        t.deepEqual(res.body.rsvps, updatedRsvp_2);
+      });
+    }, 500);
   });
 });
 
@@ -416,20 +445,23 @@ test('endpoint PUT events/:event_id works', (t) => {
 
 test('endpoint PUT events/:event_id handles missing data', (t) => {
   t.plan(1);
-  initDb()
-  .then(() => {
+  // this test clashes with the previous one sometimes.  This helps avoid it.
+  setTimeout(() => {
+    initDb()
+    .then(() => {
 
-    const event_id = 3;
+        const event_id = 3;
 
-    request(server)
-    .put(`/events/${event_id}`)
-    .set('Accept', 'application/json')
-    .set('authorization', createToken(3))
-    .then((res) => {
-      t.equal(res.statusCode, 500, 'status code is 500');
-    })
-    .catch(err => console.error(err));
-  });
+        request(server)
+        .put(`/events/${event_id}`)
+        .set('Accept', 'application/json')
+        .set('authorization', createToken(3))
+        .then((res) => {
+          t.equal(res.statusCode, 500, 'status code is 500');
+        })
+        .catch(err => console.error(err));
+      });
+  }, 500);
 });
 
 test('endpoint PUT events/:event_id handles unknown event id', (t) => {

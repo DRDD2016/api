@@ -1,11 +1,12 @@
 import query from '../../db/query';
 import { getRsvps as queryText } from '../../db/sql-queries.json';
+import normaliseRsvps from '../normalise-rsvps';
 
 /**
- * Retrieve an event's invitees from the database
+ * getRsvps retrieves an event's invitees from the database
  * @param {object} client - database client
  * @param {number} event_id - event id
- * @returns {Promise.<object (event), Error>}
+ * @returns {Promise.<object (rsvps), Error>}
  */
 
 export default function getRsvps (client, event_id) {
@@ -25,7 +26,7 @@ export default function getRsvps (client, event_id) {
         obj[row.status] = row.invitees;
         return obj;
       }, {});
-      return result.length === 0 ? resolve(null) : resolve(mapped);
+      return resolve(normaliseRsvps(mapped));
     });
   });
 }

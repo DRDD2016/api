@@ -18,6 +18,7 @@ import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
 import getEventInvitees from './events/get-invitees-ids';
+import updateRsvp from './events/update-rsvp';
 import saveFeedItem from './events/save-feed-item';
 import editEvent from './events/edit-event';
 import buildFeedItem from './events/build-feed-item';
@@ -44,30 +45,34 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
     });
 }
 
-export function getEventHandler (req, res, next) {
-  Promise.all([
-    getEvent(client, req.params.event_id),
-    getRsvps(client, req.params.event_id)
-  ])
-    .then(([event, rsvps]) => {
-      if (event) {
-        if (rsvps) {
-          event.rsvps = rsvps;
-        }
-        return res.json(event);
-      } else {
-        return res.status(422).send({ error: 'Could not get event' });
-      }
-    })
-    .catch(err => next(err));
-}
-
 export function deleteEventHandler (req, res, next) {
   deleteEvent(client, req.params.event_id)
-    .then((deleted_event_id) => {
-      res.json(deleted_event_id);
-    })
-    .catch(err => next(err));
+  .then((deleted_event_id) => {
+    res.json(deleted_event_id);
+  })
+  .catch(err => next(err));
+}
+
+export function getEventHandler (req, res, next) {
+  getEvent(client, req.params.event_id)
+  .then((event) => {
+    if (event) {
+      req.event = event;
+      next(); // --> `addRsvps`
+    } else {
+      return res.status(422).send({ error: 'Could not get event' });
+    }
+  })
+  .catch(err => next(err));
+}
+
+export function addRsvps (req, res, next) {
+  getRsvps(client, req.event.event_id)
+  .then((rsvps) => {
+    req.event.rsvps = rsvps;
+    return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
+  })
+  .catch(err => next(err));
 }
 
 export function postRsvpsHandler (req, res, next) {
@@ -82,23 +87,28 @@ export function postRsvpsHandler (req, res, next) {
       }
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
-          return res.status(201).json(normaliseEventKeys(event));
+          req.event = normaliseEventKeys(event);
+          next(); // --> `addRsvps`
         })
         .catch(err => next(err));
     })
     .catch(err => next(err));
 }
 
-export function patchRsvpsHandler (req, res, next) { // eslint-disable-line
-  const rsvp = req.body.rsvp;
-  if (!rsvp) {
+export function patchRsvpsHandler (req, res, next) {
+  const rsvpStatus = req.body.status;
+  if (!rsvpStatus) {
     return res.status(422).send({ error: 'Missing rsvp data' });
   }
-  // saveRsvps(client, req.user.user_id, req.params.event_id)
-  //   .then(() => {
-  //     return res.status(201).json(normaliseEventKeys(event));
-  //   })
-  //   .catch(err => next(err));
+  updateRsvp(client, req.user.user_id, req.params.event_id, rsvpStatus)
+    .then(() => {
+      getRsvps(client, req.params.event_id)
+      .then((rsvps) => {
+        return res.status(201).json({ rsvps });
+      })
+      .catch(err => next(err));
+    })
+    .catch(err => next(err));
 }
 
 export function postVoteHandler (req, res, next) {
