@@ -1,11 +1,10 @@
-import PubSub from 'pubsub-js';
 import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
 import gm from 'gm';
 import s3 from './s3-client';
 
-import { UPDATE_FEED } from '../../socket-router';
+
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
@@ -17,16 +16,14 @@ import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
-import getEventInvitees from './events/get-invitees-ids';
 import updateRsvp from './events/update-rsvp';
-import saveFeedItem from './events/save-feed-item';
 import editEvent from './events/edit-event';
-import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
 import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
+
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -154,28 +151,15 @@ export function getInviteesHandler (req, res, next) {
 export function putEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
-  const host_user_id = req.user.user_id;
+  
   editEvent(client, event_id, event)
     .then((data) => {
       if (data) {
-        // create feed item
-        buildFeedItem(host_user_id, event)
-        .then((feedItem) => {
-          getEventInvitees(client, event_id)
-          .then((inviteesIds) => {
-            saveFeedItem(client, inviteesIds, event_id, feedItem)
-            .then(() => {
-              // push feed items to clients
-              PubSub.publish(UPDATE_FEED, { ids: inviteesIds, feedItem });
-            })
-            .catch(err => next(err));
-          })
-          .catch(err => next(err));
-
-          return res.status(201).json(data);
-        })
-        .catch(err => next(err));
-
+        req.subject_user_id = req.user.user_id;
+        req.event = event;
+        req.responseStatusCode = 201;
+        req.responseData = data;
+        next();
       } else {
         return res.status(422).send({ error: 'Could not edit event' });
       }
