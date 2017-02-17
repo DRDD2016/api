@@ -6,6 +6,5 @@ test('`generateFileName` works', (t) => {
 
   const filename = 'MyPhoto.jpg';
   const result = generateFileName(filename);
-  const preName = 'sparkuser';
-  t.ok(result.includes(preName), 'generates random file name with pre name of sparkuser');
+  t.equal(result.length, 40, 'generates random file name');
 });

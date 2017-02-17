@@ -25,6 +25,7 @@ import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
 import generateFileName from './generate-file-name';
+import extractFileExtension from './extract-file-extension';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -199,8 +200,8 @@ export function patchUserHandler (req, res, next) {
 }
 
 export function postUserPhotoHandler (req, res, next) {
-  const user_id = req.user.user_id; //eslint-disable-line
-  let tmpFile, filename, newFile;
+  const user_id = req.user.user_id;
+  let tmpfile, filename, newfile, ext;
   const newForm = new formidable.IncomingForm();
   newForm.keepExtension = true;
   newForm.parse(req, function (err, fields, files) {
@@ -208,27 +209,28 @@ export function postUserPhotoHandler (req, res, next) {
     if (err) {
       return next(err);
     }
-    tmpFile = files.photo.path; //received file path
+    tmpfile = files.photo.path;
     filename = generateFileName(files.photo.name);
-    newFile = `${os.tmpdir()}/${filename}`; //access to temporary directory where all the files are stored
-    fs.rename(tmpFile, newFile, function () {
+    ext = extractFileExtension(files.photo.name);
+    newfile = `${os.tmpdir()}/${filename}`; //access to temporary directory where all the files are stored
+    fs.rename(tmpfile, newfile, function () {
       // resize
-      gm(newFile).resize(300).write(newFile, function () {
+      gm(newfile).resize(300).write(newfile, function () {
         //upload to s3
-        fs.readFile(newFile, function (err, buf) {
+        fs.readFile(newfile, function (err, buf) {
           s3.putObject({
             Bucket: process.env.S3BUCKET,
             Key: filename,
             Body: buf,
             ACL: 'public-read',
-            ContentType: 'image/jpeg'
+            ContentType: `image/${ext}`
           }, function (err, data) {
             if (data.ETag) {
               filename = `https://s3.eu-west-2.amazonaws.com/spark-native/${filename}`;
               updateUserPhoto(client, user_id, filename)
               .then((photoObj) => {
                 // delete local file
-                fs.unlinkSync(newFile);
+                fs.unlinkSync(newfile);
                 if (photoObj) {
                   return res.status(201).json(photoObj);
                 } else {
