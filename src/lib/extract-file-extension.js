@@ -1,7 +1,7 @@
 /**
- * Extractfile extension
- * @param {string} filename
- * @returns {string} - extension
+ * Extract file extension
+ * @param {string} filename - filename
+ * @returns {string} - file extension
  */
 
 export default function extractFileExtension (filename) {
