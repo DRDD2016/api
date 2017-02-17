@@ -325,3 +325,9 @@ export function sendResetPasswordEmail (req, res, next) {
     .catch(err => next(err));
   });
 }
+
+export function resetPasswordHandler (req, res, next) { //eslint-disable-line
+  const token = req.params.token;
+  console.log('token', token);
+  res.render('reset');
+}

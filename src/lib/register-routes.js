@@ -4,7 +4,7 @@ import {
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, putEventHandler,
   getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
-  sendResetPasswordEmail
+  sendResetPasswordEmail, resetPasswordHandler
 } from './handlers';
 import { signup, login } from './auth';
 import passportConfig from './auth/passport-config'; // eslint-disable-line
@@ -28,4 +28,5 @@ export default function registerRoutes (app) {
   app.patch('/users/:user_id', requireAuth, patchUserHandler);
   app.post('/upload', requireAuth, postUserPhotoHandler);
   app.post('/reset-password', sendResetPasswordEmail);
+  app.get('/reset/:token', resetPasswordHandler);
 }
