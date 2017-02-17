@@ -159,7 +159,7 @@ export function getInviteesHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function putEventHandler (req, res, next) {
+export function editEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
 
@@ -167,7 +167,7 @@ export function putEventHandler (req, res, next) {
     .then((data) => {
       if (data) {
         req.subject_user_id = req.user.user_id;
-        req.event = event;
+        req.event_id = event_id;
         req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
