@@ -25,7 +25,7 @@ import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
 
 
-export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
+export function postEventHandler (req, res, next) {
   const event = req.body.event;
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
@@ -34,11 +34,12 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
   const code = shortid.generate();
   data.code = code;
   saveEvent(client, data)
-    .then(() => {
+    .then((event_id) => {
       req.subject_user_id = req.user.user_id;
-      req.event = event;
+      req.event_id = event_id;
+      req.informAllInvitees = false;
       req.responseStatusCode = 201;
-      req.responseData = code;
+      req.responseData = { code };
       next();
     })
     .catch((err) => {
@@ -50,6 +51,7 @@ export function deleteEventHandler (req, res, next) {
   deleteEvent(client, req.params.event_id)
   .then((deleted_event_id) => {
     res.json(deleted_event_id);
+    // update feed middleware
   })
   .catch(err => next(err));
 }
@@ -105,7 +107,12 @@ export function patchRsvpsHandler (req, res, next) {
     .then(() => {
       getRsvps(client, req.params.event_id)
       .then((rsvps) => {
-        return res.status(201).json({ rsvps });
+        req.subject_user_id = req.user.user_id;
+        req.event_id = req.params.event_id;
+        req.informAllInvitees = false;
+        req.responseStatusCode = 201;
+        req.responseData = { rsvps };
+        next();
       })
       .catch(err => next(err));
     })
@@ -161,6 +168,7 @@ export function putEventHandler (req, res, next) {
       if (data) {
         req.subject_user_id = req.user.user_id;
         req.event = event;
+        req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
         next();
