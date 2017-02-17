@@ -1,9 +1,16 @@
 import PubSub from 'pubsub-js';
+import fs from 'fs';
+import os from 'os';
+import formidable from 'formidable';
+import gm from 'gm';
+import s3 from './s3-client';
+
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
 import updateUser from './auth/update-user';
+import updateUserPhoto from './auth/update-user-photo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -18,6 +25,8 @@ import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
+import generateFileName from './generate-file-name';
+import extractFileExtension from './extract-file-extension';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -49,7 +58,7 @@ export function getEventHandler (req, res, next) {
   .then((event) => {
     if (event) {
       req.event = event;
-      next();
+      next(); // --> `addRsvps`
     } else {
       return res.status(422).send({ error: 'Could not get event' });
     }
@@ -79,7 +88,7 @@ export function postRsvpsHandler (req, res, next) {
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
           req.event = normaliseEventKeys(event);
-          next();
+          next(); // --> `addRsvps`
         })
         .catch(err => next(err));
     })
@@ -198,4 +207,51 @@ export function patchUserHandler (req, res, next) {
       }
     })
     .catch(err => next(err));
+}
+
+export function postUserPhotoHandler (req, res, next) {
+  const user_id = req.user.user_id;
+  let tmpfile, filename, newfile, ext;
+  const newForm = new formidable.IncomingForm();
+  newForm.keepExtension = true;
+  newForm.parse(req, function (err, fields, files) {
+
+    if (err) {
+      return next(err);
+    }
+    tmpfile = files.photo.path;
+    filename = generateFileName(files.photo.name);
+    ext = extractFileExtension(files.photo.name);
+    newfile = `${os.tmpdir()}/${filename}`; //access to temporary directory where all the files are stored
+    fs.rename(tmpfile, newfile, function () {
+      // resize
+      gm(newfile).resize(300).write(newfile, function () {
+        //upload to s3
+        fs.readFile(newfile, function (err, buf) {
+          s3.putObject({
+            Bucket: process.env.S3BUCKET,
+            Key: filename,
+            Body: buf,
+            ACL: 'public-read',
+            ContentType: `image/${ext}`
+          }, function (err, data) {
+            if (data.ETag) {
+              filename = `https://s3.eu-west-2.amazonaws.com/spark-native/${filename}`;
+              updateUserPhoto(client, user_id, filename)
+              .then((photoObj) => {
+                // delete local file
+                fs.unlinkSync(newfile);
+                if (photoObj) {
+                  return res.status(201).json(photoObj);
+                } else {
+                  return res.status(422).send({ error: 'Could not get user' });
+                }
+              })
+              .catch(err => next(err));
+            }
+          });
+        });
+      });
+    });
+  });
 }

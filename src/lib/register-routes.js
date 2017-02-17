@@ -3,8 +3,7 @@ import {
   postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, putEventHandler,
-  getUserHandler, patchUserHandler, addRsvps
-
+  getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps
 } from './handlers';
 import { signup, login } from './auth';
 import passportConfig from './auth/passport-config'; // eslint-disable-line
@@ -26,4 +25,5 @@ export default function registerRoutes (app) {
   app.get('/events/:event_id', requireAuth, getEventHandler, addRsvps);
   app.get('/users/:user_id', requireAuth, getUserHandler);
   app.patch('/users/:user_id', requireAuth, patchUserHandler);
+  app.post('/upload', requireAuth, postUserPhotoHandler);
 }
