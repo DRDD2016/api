@@ -14,5 +14,6 @@
   "getInviteesIds": "SELECT array_agg(user_id) AS ids FROM rsvps WHERE event_id = $1;",
   "updateUser": "UPDATE users SET firstname = $2, surname = $3 WHERE user_id = $1 RETURNING firstname, surname, email, user_id, photo_url;",
   "updateRsvp": "UPDATE rsvps SET status = $3 WHERE user_id = $1 AND event_id = $2;",
-  "updateUserPhoto": "UPDATE users SET photo_url = $2 WHERE user_id = $1 RETURNING photo_url;"
+  "updateUserPhoto": "UPDATE users SET photo_url = $2 WHERE user_id = $1 RETURNING photo_url;",
+  "getHostId": "SELECT host_user_id FROM events WHERE event_id = $1;"
 }
