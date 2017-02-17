@@ -47,11 +47,18 @@ export function postEventHandler (req, res, next) {
     });
 }
 
+export function prepareToDeleteEvent (req, res, next) {
+
+  req.subject_user_id = req.user.user_id;
+  req.event_id = req.params.event_id;
+  req.informAllInvitees = true;
+  next();
+}
+
 export function deleteEventHandler (req, res, next) {
   deleteEvent(client, req.params.event_id)
-  .then((deleted_event_id) => {
-    res.json(deleted_event_id);
-    // update feed middleware
+  .then(() => {
+    return res.status(204).end();
   })
   .catch(err => next(err));
 }

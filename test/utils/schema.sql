@@ -34,7 +34,7 @@ CREATE TABLE events (
 CREATE TABLE feeds (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(user_id),
-  event_id INTEGER NOT NULL REFERENCES events(event_id),
+  event_id INTEGER REFERENCES events(event_id),
   data json NOT NULL
 );
 

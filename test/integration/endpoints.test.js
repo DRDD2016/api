@@ -141,7 +141,7 @@ test('endpoint DELETE events/:event_id works', (t) => {
     .set('authorization', token)
     .end((err, res) => {
       t.notOk(err);
-      t.equal(res.statusCode, 200, 'status code is 200');
+      t.equal(res.statusCode, 204, 'status code is 204 (No Content)');
     });
   });
 });
