@@ -6,7 +6,7 @@ import { updateUserPhoto as queryText } from '../../db/sql-queries.json';
  * @param {object} client - database client
  * @param {string} user_id - user_id
  * @param {string} filename - new photo_url
- * @returns {Promise.<void, Error>}
+ * @returns {Promise.<object, Error>}
  */
 
  export default function updateUserPhoto (client, user_id, filename) {

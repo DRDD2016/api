@@ -10,7 +10,7 @@ import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
 import updateUser from './auth/update-user';
-import updateUserPhoto from './auth/update-user-photo'; //eslint-disable-line no-unused-vars
+import updateUserPhoto from './auth/update-user-photo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';

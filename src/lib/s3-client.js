@@ -1,4 +1,4 @@
-import aws from 'aws-sdk'; //eslint-disable-line
+import aws from 'aws-sdk';
 
 const s3 = new aws.S3({
   accessKeyId: process.env.S3ACCESSKEY,
