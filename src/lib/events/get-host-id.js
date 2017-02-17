@@ -3,7 +3,7 @@ import { getHostId as queryText } from '../../db/sql-queries.json';
 
 /**
  * getHostId retrieves the host user id for specific event from the database
- * @returns {Promise.<object, Error>} - host user id
+ * @returns {Promise.<array, Error>} - host user id
  * @param {object} client - database client
  * @param {number} event_id - event id
  */
@@ -23,7 +23,7 @@ export default function getHostId (client, event_id) {
       if (err) {
         return reject(err);
       }
-      return result.length === 0 ? resolve(null) : resolve(result[0]);
+      return result.length === 0 ? resolve(null) : resolve([result[0].host_user_id]);
     });
   });
 }

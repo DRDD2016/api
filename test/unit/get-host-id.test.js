@@ -10,7 +10,7 @@ test('`getHostId` works', (t) => {
   initDb()
   .then(() => {
 
-    const expected = { host_user_id: 3 };
+    const expected = [3];
     getHostId(client, event_id)
     .then((result) => {
       t.deepEqual(result, expected, 'correct host user id retrieved');
