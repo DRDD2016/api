@@ -30,12 +30,16 @@ export function postEventHandler (req, res, next) { // eslint-disable-line no-un
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
   }
-  const data = Object.assign(event, { host_user_id: req.user.user_id });
+  const data = { ...event, host_user_id: req.user.user_id };
   const code = shortid.generate();
   data.code = code;
   saveEvent(client, data)
     .then(() => {
-      res.json({ code });
+      req.subject_user_id = req.user.user_id;
+      req.event = event;
+      req.responseStatusCode = 201;
+      req.responseData = code;
+      next();
     })
     .catch((err) => {
       return res.status(500).send({ error: err });
@@ -151,7 +155,7 @@ export function getInviteesHandler (req, res, next) {
 export function putEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
-  
+
   editEvent(client, event_id, event)
     .then((data) => {
       if (data) {

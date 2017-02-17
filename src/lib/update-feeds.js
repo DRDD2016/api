@@ -49,6 +49,11 @@ export function updateHostFeed (req, res, next) {
       saveFeedItem(client, [host_user_id], event.event_id, feedItem)
       .then(() => {
         PubSub.publish(UPDATE_FEED, { ids: [host_user_id], feedItem });
+        // end request
+        res.status(req.responseStatusCode);
+        return req.responseData ?
+               res.status(req.responseStatusCode).json(req.responseData) :
+               res.status(req.responseStatusCode).end();
       })
       .catch(err => next(err));
     })

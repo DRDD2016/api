@@ -13,7 +13,7 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 const requireLogin = passport.authenticate('local', { session: false });
 
 export default function registerRoutes (app) {
-  app.post('/events', requireAuth, postEventHandler);
+  app.post('/events', requireAuth, postEventHandler, updateHostFeed);
   app.delete('/events/:event_id', requireAuth, deleteEventHandler);
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
