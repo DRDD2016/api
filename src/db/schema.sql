@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS feeds CASCADE;
 DROP TABLE IF EXISTS votes CASCADE;
 DROP TABLE IF EXISTS rsvps CASCADE;
-DROP TABLE IF EXISTS feeds CASCADE;
 
 DROP SEQUENCE IF EXISTS user_id_seq;
 DROP SEQUENCE IF EXISTS event_id_seq;
@@ -56,40 +56,30 @@ CREATE TABLE rsvps (
 
 /**** insert users ****/
 
-INSERT INTO users (firstname, surname, password, email, photo_url)
+INSERT INTO users (firstname, surname, password, email)
   VALUES (
     'Anita',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'anita@spark.com',
-    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
-  );
-
-INSERT INTO users (firstname, surname, password, email, photo_url)
-  VALUES (
+    'anita@spark.com'
+  ),
+  (
     'Dave',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'dave@spark.com',
-    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
-  );
-
-INSERT INTO users (firstname, surname, password, email, photo_url)
-  VALUES (
+    'dave@spark.com'
+  ),
+  (
     'Sohil',
     'Pandya',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'sohil@spark.com',
-    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
-  );
-
-INSERT INTO users (firstname, surname, password, email, photo_url)
-  VALUES (
+    'sohil@spark.com'
+  ),
+  (
     'Mickey',
     'Mouse',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'mickey@spark.com',
-    'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100'
+    'mickey@spark.com'
   );
 
 /**** insert events ****/
@@ -105,10 +95,8 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Forest", "Camping"}',
     '{"2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"}',
     'FAKECODE'
-  );
-
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
-  VALUES (
+  ),
+  (
     1,
     'Beach party',
     'Celebrating summer',
@@ -118,10 +106,8 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Mallorca", "Barbados"}',
     '{"2017-01-03T00:00:00.000Z"}',
     'FAKECODE2'
-  );
-
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
-  VALUES (
+  ),
+  (
     3,
     'Beach party',
     'Celebrating summer',
@@ -131,10 +117,8 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"Mallorca"}',
     '{"2017-01-03T00:00:00.000Z"}',
     'FAKECODE3'
-  );
-
-INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _where, _when, code)
-  VALUES (
+  ),
+  (
     1,
     'Spring party',
     'Celebrating spring',
@@ -145,6 +129,7 @@ INSERT INTO events (host_user_id, name, description, note, is_poll, _what, _wher
     '{"2017-04-03T00:00:00.000Z"}',
     'FAKECODE4'
   );
+
 /**** insert votes ****/
 
 INSERT INTO votes (event_id, user_id, _what, _where, _when)

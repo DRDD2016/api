@@ -1,4 +1,4 @@
-export const avatarUrl = 'https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100';
+export const avatarUrl = 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png';
 export const newEvent = {
   name: 'Birthday party',
   description: 'I am getting older!',
