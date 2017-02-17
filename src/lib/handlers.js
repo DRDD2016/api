@@ -4,11 +4,14 @@ import os from 'os';
 import formidable from 'formidable';
 import gm from 'gm';
 import s3 from './s3-client';
+import crypto from 'crypto';
+import ses from './ses-client';
 
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
+import getUserByEmail from './auth/get-user-by-email';
 import updateUser from './auth/update-user';
 import updateUserPhoto from './auth/update-user-photo';
 import deleteEvent from './events/delete-event';
@@ -27,6 +30,7 @@ import client from '../db/client';
 import shortid from 'shortid';
 import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
+import updateUserResetPasswordToken from './auth/update-user-reset-password-token';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -253,5 +257,70 @@ export function postUserPhotoHandler (req, res, next) {
         });
       });
     });
+  });
+}
+
+export function sendResetPasswordEmail (req, res, next) {
+  const email = req.body.email;
+  if (!email) {
+    return res.status(422).send({ error: 'Email field is required!' });
+  }
+
+  crypto.randomBytes(20, function (err, buf) {
+    if (err) {
+      return next(err);
+    }
+    const token = buf.toString('hex');
+    const tokenExpires = Date.now() + 3600000; // 1 hour
+    getUserByEmail(client, email)
+    .then((userExists) => {
+      if (userExists) {
+        // update user model with resetPasswordToken = token , resetPasswordExpires
+        updateUserResetPasswordToken(client, userExists.user_id, token, tokenExpires)
+        .then(() => {
+          // send the email to the user
+          var params = {
+           Destination: { /* required */
+             ToAddresses: [
+               'mina@foundersandcoders.com'
+             ]
+           },
+           Message: { /* required */
+             Body: { /* required */
+               Html: {
+                 Data: '<h1>Hello</h1>', /* required */
+                 Charset: 'utf8'
+               },
+               Text: {
+                 Data: 'Hello', /* required */
+                 Charset: 'utf8'
+               }
+             },
+             Subject: { /* required */
+               Data: 'Custom subject', /* required */
+               Charset: 'utf8'
+             }
+           },
+           Source: 'anita@foundersandcoders.com', /* required */
+           ReplyToAddresses: [
+             'anita@foundersandcoders.com'
+           ]
+         };
+          ses.sendEmail(params, function (err, data) {
+            if (err) {
+              return next(err);
+            } else {
+              console.log(data); // successful response
+              // send the response to client
+              return res.status(200).send({ message: `An e-mail has been sent to ${userExists.email} with further instructions.` });
+            }
+          });
+        })
+        .catch(err => next(err));
+      } else {
+        return res.status(422).send({ error: 'No account with that email address exists' });
+      }
+    })
+    .catch(err => next(err));
   });
 }
