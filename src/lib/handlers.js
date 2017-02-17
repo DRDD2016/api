@@ -126,7 +126,11 @@ export function postVoteHandler (req, res, next) {
   saveVote(client, user_id, event_id, vote)
     .then((success) => {
       if (success) {
-        res.status(201).end();
+        req.subject_user_id = req.user.user_id;
+        req.event_id = req.params.event_id;
+        req.informAllInvitees = false;
+        req.responseStatusCode = 201;
+        next();
       }
     })
     .catch(err => next(err));
