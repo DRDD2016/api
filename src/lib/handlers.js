@@ -334,13 +334,17 @@ export function resetPasswordHandler (req, res, next) {
   .then((user) => {
     // get user.resetpasswordexpires and compare with current date/time
     //if token is valid redirect to reset form
-    if ( Date.now() > parseInt(user.resetpasswordexpires, 10)) {
-      // token expired
-      //render page that will notify the user about expiration
-    } else {
-      // still valid , redirect to the reset form
-      res.render('reset');
+    if (user) {
+      if ( Date.now() > parseInt(user.resetpasswordexpires, 10)) {
+        // token expired
+        //render page that will notify the user about expiration
+        res.render('expired', { message: 'Sorry the link already expired!' });
+      } else {
+        // still valid , redirect to the reset form
+        res.render('reset');
+      }
     }
+
   })
   .catch(err => next(err));
 }
