@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import { updateUserResetPasswordToken as queryText } from '../../db/sql-queries.json';
+import { updateResetPasswordToken as queryText } from '../../db/sql-queries.json';
 
 /**
  * updateUserResetPasswordToken updates user with resetPasswordToken and resetPasswordExpires
@@ -29,7 +29,10 @@ import { updateUserResetPasswordToken as queryText } from '../../db/sql-queries.
        if (err) {
          reject(err);
        }
-       resolve(result);
+       if (result.length === 0) {
+         return resolve(false);
+       }
+       return resolve(result[0]);
      });
    });
  }

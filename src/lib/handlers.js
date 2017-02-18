@@ -31,6 +31,7 @@ import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
 import updateUserResetPasswordToken from './auth/update-user-reset-password-token';
 import compileTemplate from './compile-template';
+import getUserByToken from './auth/get-user-by-reset-token';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -278,7 +279,7 @@ export function sendResetPasswordEmail (req, res, next) {
       if (userExists) {
         // update user model with resetPasswordToken = token , resetPasswordExpires
         updateUserResetPasswordToken(client, userExists.user_id, token, tokenExpires)
-        .then(() => {
+        .then((userData) => {
           // send the email to the user
           var params = {
            Destination: { /* required */
@@ -289,11 +290,11 @@ export function sendResetPasswordEmail (req, res, next) {
            Message: { /* required */
              Body: { /* required */
                Html: {
-                 Data: compileTemplate('resetPassword', 'html')(userExists), /* required */
+                 Data: compileTemplate('resetPassword', 'html')(userData), /* required */
                  Charset: 'utf8'
                },
                Text: {
-                 Data: compileTemplate('resetPassword', 'txt')(userExists), /* required */
+                 Data: compileTemplate('resetPassword', 'txt')(userData), /* required */
                  Charset: 'utf8'
                }
              },
@@ -313,7 +314,7 @@ export function sendResetPasswordEmail (req, res, next) {
             } else {
               console.log(data); // successful response
               // send the response to client
-              return res.status(200).send({ message: `An e-mail has been sent to ${userExists.email} with further instructions.` });
+              return res.status(200).send({ message: `An e-mail has been sent to ${userData.email} with further instructions.` });
             }
           });
         })
@@ -326,8 +327,20 @@ export function sendResetPasswordEmail (req, res, next) {
   });
 }
 
-export function resetPasswordHandler (req, res, next) { //eslint-disable-line
+export function resetPasswordHandler (req, res, next) {
   const token = req.params.token;
-  console.log('token', token);
-  res.render('reset');
+  // find user with the correct token and check if token expired
+  getUserByToken(client, token)
+  .then((user) => {
+    // get user.resetpasswordexpires and compare with current date/time
+    //if token is valid redirect to reset form
+    if ( Date.now() > parseInt(user.resetpasswordexpires, 10)) {
+      // token expired
+      //render page that will notify the user about expiration
+    } else {
+      // still valid , redirect to the reset form
+      res.render('reset');
+    }
+  })
+  .catch(err => next(err));
 }
