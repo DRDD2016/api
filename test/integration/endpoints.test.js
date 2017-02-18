@@ -218,7 +218,7 @@ test('endpoint POST login works', (t) => {
     .send({ email: user.email, password: user.password })
     .then((res) => {
 
-      const expectedKeys = ['token', 'firstname', 'surname', 'email', 'user_id', 'photo_url', 'resetpasswordtoken', 'resetpasswordexpires'];
+      const expectedKeys = ['token', 'firstname', 'surname', 'email', 'user_id', 'photo_url', 'reset_password_token', 'reset_password_expires'];
       Object.keys(res.body).forEach((key) => {
         t.ok(expectedKeys.includes(key), `${key} exists`);
 

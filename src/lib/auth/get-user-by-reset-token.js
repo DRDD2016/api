@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import { getUserByResetToken as queryText } from '../../db/sql-queries.json';
+import { getUserByToken as queryText } from '../../db/sql-queries.json';
 
 /**
  * Get a user by reset password token from the database
@@ -8,9 +8,9 @@ import { getUserByResetToken as queryText } from '../../db/sql-queries.json';
  * @param {string} token - reset password token
  */
 
-export default function getUserByToken (client, token) {
+export default function getUserByResetToken (client, token) {
   return new Promise((resolve, reject) => {
-    if (!token) return reject(new TypeError('`getUserByToken` requires token { string }'));
+    if (!token) return reject(new TypeError('`getUserByResetToken` requires token { string }'));
 
     const queryValues = [
       token
@@ -22,12 +22,10 @@ export default function getUserByToken (client, token) {
         reject(err);
       }
 
-      if (data.length === 0) {
-        return resolve(false);
-      }
-      
-      console.log('result', data[0]);
-      resolve(data[0]);
+      // if (data.length === 0) {
+      //   return resolve(false);
+      // }
+      return resolve(data[0]);
     });
   });
 }

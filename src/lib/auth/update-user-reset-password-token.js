@@ -1,5 +1,5 @@
 import query from '../../db/query';
-import { updateResetPasswordToken as queryText } from '../../db/sql-queries.json';
+import { updateResetToken as queryText } from '../../db/sql-queries.json';
 
 /**
  * updateUserResetPasswordToken updates user with resetPasswordToken and resetPasswordExpires

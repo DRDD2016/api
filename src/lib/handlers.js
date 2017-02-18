@@ -31,7 +31,8 @@ import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
 import updateUserResetPasswordToken from './auth/update-user-reset-password-token';
 import compileTemplate from './compile-template';
-import getUserByToken from './auth/get-user-by-reset-token';
+import getUserByResetToken from './auth/get-user-by-reset-token';
+import resetUserPassword from './auth/reset-user-password';
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -327,24 +328,44 @@ export function sendResetPasswordEmail (req, res, next) {
   });
 }
 
-export function resetPasswordHandler (req, res, next) {
+export function renderResetPasswordPageHandler (req, res, next) {
   const token = req.params.token;
   // find user with the correct token and check if token expired
-  getUserByToken(client, token)
+  getUserByResetToken(client, token)
   .then((user) => {
     // get user.resetpasswordexpires and compare with current date/time
     //if token is valid redirect to reset form
     if (user) {
-      if ( Date.now() > parseInt(user.resetpasswordexpires, 10)) {
+      if ( Date.now() > parseInt(user.reset_password_expires, 10)) {
         // token expired
         //render page that will notify the user about expiration
         res.render('expired', { message: 'Sorry the link already expired!' });
       } else {
         // still valid , redirect to the reset form
-        res.render('reset');
+        res.render('reset', { user_id: user.user_id, message: '' });
       }
     }
 
   })
   .catch(err => next(err));
+}
+
+export function resetPassword (req, res, next) {
+  const password = req.body.password;
+  const user_id = req.body.user_id;
+  const confirmPassword = req.body.confirmPassword;
+
+  if (password.trim() !== confirmPassword.trim()) {
+    res.render('reset', { message: 'Passwords must match!', user_id });
+  } else {
+    // update user
+    resetUserPassword(client, user_id, password)
+    .then((data) => {
+      if (data) {
+        res.render('reset', { message: 'Your password has been succesfully changed!', user_id });
+      }
+    })
+    .catch(err => next(err));
+  }
+
 }
