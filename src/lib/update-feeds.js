@@ -6,7 +6,15 @@ import getInviteesIds from './events/get-invitees-ids';
 import saveFeedItem from './events/save-feed-item';
 import saveFeedItemForDeletedEvent from './events/save-feed-item-for-deleted-event';
 import PubSub from 'pubsub-js';
-import { UPDATE_FEED } from '../../socket-router';
+
+const informCurrentUser = (method, url) => {
+  if (method === 'POST' || method === 'PUT') {
+    if ((/\/events\/\d+$/).test(url) || (/\/events$/).test(url)) {
+      return true;
+    }
+  }
+  return false;
+};
 
 export default function updateFeeds (req, res, next) {
 
@@ -35,7 +43,8 @@ export default function updateFeeds (req, res, next) {
         getIds(client, event_id, informAllInvitees)
       ])
       .then(([feedItem, idArray]) => {
-        if (!idArray.includes(subject_user_id)) {
+        // if this user has just created or edited their own event:
+        if (informCurrentUser(req.method, req.url) && !idArray.includes(subject_user_id)) {
           idArray.push(subject_user_id);
         }
         (
@@ -44,9 +53,8 @@ export default function updateFeeds (req, res, next) {
             saveFeedItem(client, idArray, event_id, feedItem)
         )
         .then(() => {
-          console.log('HERE BEFORE FEED');
           PubSub.publish('UPDATE_FEED', { ids: idArray, feedItem });
-          console.log('HERE AFTER FEED');
+
           // DELETE events/:event_id is a special case.
           // event needs to be deleted after the feed stuff
           if (deletingEvent) {
