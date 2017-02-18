@@ -27,11 +27,11 @@ import hashPassword from './hash-password';
            user_id,
            hash
          ];
-         query(client, queryText, queryValues, (err, data) => {
+         query(client, queryText, queryValues, (err, data) => { //eslint-disable-line
            if (err) {
              return reject(err);
            }
-           console.log('data', data);
+
            return resolve(true);
          });
        })

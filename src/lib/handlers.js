@@ -358,7 +358,6 @@ export function resetPassword (req, res, next) {
   if (password.trim() !== confirmPassword.trim()) {
     res.render('reset', { message: 'Passwords must match!', user_id });
   } else {
-    // update user
     resetUserPassword(client, user_id, password)
     .then((data) => {
       if (data) {
@@ -367,5 +366,4 @@ export function resetPassword (req, res, next) {
     })
     .catch(err => next(err));
   }
-
 }
