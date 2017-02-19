@@ -34,6 +34,9 @@ import compileTemplate from './compile-template';
 import getUserByResetToken from './auth/get-user-by-reset-token';
 import resetUserPassword from './auth/reset-user-password';
 
+const domain = process.env.DOMAIN;
+const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
+
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
   if (!event) {
@@ -311,8 +314,6 @@ export function sendResetPasswordEmail (req, res, next) {
         //    ]
         //  };
         //
-          const domain = process.env.DOMAIN;
-          const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
           userData.host = req.headers.host;
           const param = {
             from: 'Anita <me@samples.mailgun.org>',
@@ -373,9 +374,21 @@ export function resetPassword (req, res, next) {
     res.render('reset', { message: 'Passwords must contain at least 4 characters!', user_id });
   } else {
     resetUserPassword(client, user_id, password)
-    .then((data) => {
-      if (data) {
-        res.render('reset', { message: 'Your password has been succesfully changed!', user_id });
+    .then((user) => {
+      if (user) {
+        const param = {
+          from: 'Anita <me@samples.mailgun.org>',
+          to: process.env.TO,
+          subject: 'New Spark Password',
+          html: compileTemplate('newPassword', 'html')(user)
+        };
+        mailgun.messages().send(param, function (err, data) {
+          if (err) {
+            return next(err);
+          }
+          console.log(data);
+          res.render('reset', { message: 'Your password has been succesfully changed!', user_id });
+        });
       }
     })
     .catch(err => next(err));

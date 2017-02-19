@@ -32,7 +32,11 @@ import hashPassword from './hash-password';
              return reject(err);
            }
 
-           return resolve(true);
+           if (data.length === 0) {
+             return resolve(false);
+           }
+           
+           return resolve(data[0]);
          });
        })
        .catch(err => reject(err));
