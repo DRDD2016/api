@@ -58,12 +58,13 @@ CREATE TABLE rsvps (
 
 /**** insert users ****/
 
-INSERT INTO users (firstname, surname, password, email)
+INSERT INTO users (firstname, surname, password, email, reset_password_token)
   VALUES (
     'Anita',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'anita@spark.com'
+    'anita@spark.com',
+    'someuniquestring'
   ),
   (
     'Dave',

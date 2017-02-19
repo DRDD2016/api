@@ -195,3 +195,9 @@ export const updatedRsvp_2 = {
   not_going: [{ firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
   not_responded: [rsvps_4.not_responded[0]]
 };
+
+export const existingUserWithToken = {
+  reset_password_token: 'someuniquestring',
+  firstname: 'Anita',
+  user_id: '1'
+};

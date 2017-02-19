@@ -21,10 +21,9 @@ export default function getUserByResetToken (client, token) {
       if (err) {
         reject(err);
       }
-
-      // if (data.length === 0) {
-      //   return resolve(false);
-      // }
+      if (data.length === 0) {
+        return resolve(false);
+      }
       return resolve(data[0]);
     });
   });
