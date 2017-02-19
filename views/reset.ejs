@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Spark - reset password page</title>
+    </head>
+    <body>
+      <h1>Reset password page</h1>
+      <form method="post" action="/reset">
+        <p>Password (at least 4 characters)</p>
+        <input type="password" name="password">
+        <% if (user_id) { %>
+        <input type="hidden" name="user_id" value="<%= user_id %>" />
+        <% } %>
+         <br>
+         <p>Confirm password</p>
+         <input type="password" name="confirmPassword">
+         <br>
+         <% if (message) { %>
+         <h1><%= message %></h1>
+         <% } %>
+         <input type="submit" value="Submit">
+      </form>
+    </body>
+</html>

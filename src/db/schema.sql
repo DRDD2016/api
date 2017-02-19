@@ -14,7 +14,9 @@ CREATE TABLE users (
   surname TEXT NOT NULL,
   password TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
-  photo_url TEXT NOT NULL DEFAULT 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  photo_url TEXT NOT NULL DEFAULT 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  reset_password_token TEXT,
+  reset_password_expires TEXT
 );
 
 CREATE TABLE events (

@@ -3,7 +3,8 @@ import {
   postEventHandler, prepareToDeleteEvent, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, editEventHandler,
-  getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps
+  getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
+  sendResetPasswordEmail, renderResetPasswordPageHandler, resetPassword
 } from './handlers';
 import updateFeeds from './update-feeds';
 import { signup, login } from './auth';
@@ -27,4 +28,7 @@ export default function registerRoutes (app) {
   app.get('/users/:user_id', requireAuth, getUserHandler);
   app.patch('/users/:user_id', requireAuth, patchUserHandler);
   app.post('/upload', requireAuth, postUserPhotoHandler);
+  app.post('/reset-password', sendResetPasswordEmail);
+  app.get('/reset/:token', renderResetPasswordPageHandler);
+  app.post('/reset', resetPassword);
 }
