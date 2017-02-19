@@ -14,7 +14,9 @@ CREATE TABLE users (
   surname TEXT NOT NULL,
   password TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
-  photo_url TEXT NOT NULL DEFAULT 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  photo_url TEXT NOT NULL DEFAULT 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  reset_password_token TEXT,
+  reset_password_expires TEXT
 );
 
 CREATE TABLE events (
@@ -56,30 +58,34 @@ CREATE TABLE rsvps (
 
 /**** insert users ****/
 
-INSERT INTO users (firstname, surname, password, email)
+INSERT INTO users (firstname, surname, password, email, reset_password_token)
   VALUES (
     'Anita',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'anita@spark.com'
+    'anita@spark.com',
+    'someuniquestring1'
   ),
   (
     'Dave',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'dave@spark.com'
+    'dave@spark.com',
+    'someuniquestring2'
   ),
   (
     'Sohil',
     'Pandya',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'sohil@spark.com'
+    'sohil@spark.com',
+    'someuniquestring3'
   ),
   (
     'Mickey',
     'Mouse',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'mickey@spark.com'
+    'mickey@spark.com',
+    'someuniquestring4'
   );
 
 /**** insert events ****/

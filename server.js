@@ -18,6 +18,8 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cors());
 app.use(morgan('combined'));
+app.use(express.static('public')); // css/js
+app.set('view engine', 'ejs');
 
 registerRoutes(app);
 

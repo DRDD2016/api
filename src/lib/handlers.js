@@ -3,12 +3,14 @@ import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
 import gm from 'gm';
-import s3 from './s3-client';
+import { s3, ses } from './amazon-clients'; //eslint-disable-line
+import crypto from 'crypto';
 
 import { UPDATE_FEED } from '../../socket-router';
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
+import getUserByEmail from './auth/get-user-by-email';
 import updateUser from './auth/update-user';
 import updateUserPhoto from './auth/update-user-photo';
 import deleteEvent from './events/delete-event';
@@ -27,6 +29,13 @@ import client from '../db/client';
 import shortid from 'shortid';
 import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
+import updateResetPasswordToken from './auth/update-reset-password-token';
+import compileTemplate from './compile-template';
+import getUserByResetToken from './auth/get-user-by-reset-token';
+import resetUserPassword from './auth/reset-user-password';
+
+const domain = process.env.DOMAIN;
+const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
 
 export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
   const event = req.body.event;
@@ -254,4 +263,134 @@ export function postUserPhotoHandler (req, res, next) {
       });
     });
   });
+}
+
+export function sendResetPasswordEmail (req, res, next) {
+  const email = req.body.email;
+
+  if (!email) {
+    return res.status(422).send({ error: 'Email field is required!' });
+  }
+
+  crypto.randomBytes(20, function (err, buf) {
+    if (err) {
+      return next(err);
+    }
+    const token = buf.toString('hex');
+    const tokenExpires = Date.now() + 3600000; // 1 hour
+
+    getUserByEmail(client, email)
+    .then((userExists) => {
+      if (userExists) {
+        // update user model with resetPasswordToken = token , resetPasswordExpires
+        updateResetPasswordToken(client, userExists.user_id, token, tokenExpires)
+        .then((userData) => {
+          // send the email to the user via SES Amazon
+        //   var params = {
+        //    Destination: { /* required */
+        //      ToAddresses: [
+        //        'anita@foundersandcoders.com' //change this email to the official one
+        //      ]
+        //    },
+        //    Message: { /* required */
+        //      Body: { /* required */
+        //        Html: {
+        //          Data: compileTemplate('resetPassword', 'html')(userData), /* required */
+        //          Charset: 'utf8'
+        //        },
+        //        Text: {
+        //          Data: compileTemplate('resetPassword', 'txt')(userData), /* required */
+        //          Charset: 'utf8'
+        //        }
+        //      },
+        //      Subject: { /* required */
+        //        Data: 'Please reset the password for your Spark account', /* required */
+        //        Charset: 'utf8'
+        //      }
+        //    },
+        //    Source: 'anita@foundersandcoders.com', /* required */
+        //    ReplyToAddresses: [
+        //      'anita@foundersandcoders.com' //change this email to the official one
+        //    ]
+        //  };
+        //
+          userData.host = req.headers.host;
+          const param = {
+            from: 'Anita <me@samples.mailgun.org>',
+            to: process.env.TO,
+            subject: 'Please reset the password for your Spark account',
+            html: compileTemplate('resetPassword', 'html')(userData)
+          };
+
+          mailgun.messages().send(param, function (err, data) {
+            if (err) {
+              return next(err);
+            } else {
+              console.log(data); // successful response
+              // send the response to client
+              return res.status(200).send({ message: `An e-mail has been sent to ${userData.email} with further instructions.` });
+            }
+          });
+        })
+        .catch(err => next(err));
+      } else {
+        return res.status(422).send({ error: 'No account with that email address exists' });
+      }
+    })
+    .catch(err => next(err));
+  });
+}
+
+export function renderResetPasswordPageHandler (req, res, next) {
+  const token = req.params.token;
+  // find user with the correct token and check if token expired
+  getUserByResetToken(client, token)
+  .then((user) => {
+    // get user.resetpasswordexpires and compare with current date/time
+    //if token is valid redirect to reset form
+    if (user) {
+      if ( Date.now() > parseInt(user.reset_password_expires, 10)) {
+        // token expired
+        //render page that will notify the user about expiration
+        res.render('expired', { message: 'Password reset token is invalid or has expired.' });
+      } else {
+        // still valid , redirect to the reset form
+        res.render('reset', { user_id: user.user_id, message: '' });
+      }
+    }
+
+  })
+  .catch(err => next(err));
+}
+
+export function resetPassword (req, res, next) {
+  const password = req.body.password;
+  const user_id = req.body.user_id;
+  const confirmPassword = req.body.confirmPassword;
+
+  if (password.trim() !== confirmPassword.trim()) {
+    res.render('reset', { message: 'Passwords must match!', user_id });
+  } else if ( password.length < 4) {
+    res.render('reset', { message: 'Passwords must contain at least 4 characters!', user_id });
+  } else {
+    resetUserPassword(client, user_id, password)
+    .then((user) => {
+      if (user) {
+        const param = {
+          from: 'Anita <me@samples.mailgun.org>',
+          to: process.env.TO,
+          subject: 'New Spark Password',
+          html: compileTemplate('newPassword', 'html')(user)
+        };
+        mailgun.messages().send(param, function (err, data) {
+          if (err) {
+            return next(err);
+          }
+          console.log(data);
+          res.render('reset', { message: 'Your password has been succesfully changed!', user_id });
+        });
+      }
+    })
+    .catch(err => next(err));
+  }
 }
