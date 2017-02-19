@@ -1,11 +1,11 @@
 import test from 'blue-tape';
 import client from '../../../src/db/client';
-import updateUserResetPassword from '../../../src/lib/auth/update-user-reset-password-token';
+import updateResetPasswordToken from '../../../src/lib/auth/update-reset-password-token';
 const initDb = require('../../utils/init-db')(client);
 
 const user_id = 1;
 
-test('`updateUserResetPassword` works', (t) => {
+test('`updateResetPasswordToken` works', (t) => {
   t.plan(1);
   initDb()
   .then(() => {
@@ -16,7 +16,7 @@ test('`updateUserResetPassword` works', (t) => {
       email: 'anita@spark.com',
       reset_password_token: 'someuniquestring'
     };
-    updateUserResetPassword(client, user_id, resetPasswordToken, resetPasswordExpires)
+    updateResetPasswordToken(client, user_id, resetPasswordToken, resetPasswordExpires)
     .then((result) => {
       t.deepEqual(result, expected, 'receives the correct token along with the correct user data');
     })
@@ -25,7 +25,7 @@ test('`updateUserResetPassword` works', (t) => {
 
 });
 
-test('`updateUserResetPassword` handles errors', (t) => {
+test('`updateResetPasswordToken` handles errors', (t) => {
   return initDb()
-  .then(() => t.shouldFail(updateUserResetPassword(client, ""), 'handles missing arguments'));
+  .then(() => t.shouldFail(updateResetPasswordToken(client, ""), 'handles missing arguments'));
 });

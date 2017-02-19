@@ -2,25 +2,25 @@ import query from '../../db/query';
 import { updateResetToken as queryText } from '../../db/sql-queries.json';
 
 /**
- * updateUserResetPasswordToken updates user with resetPasswordToken and resetPasswordExpires
+ * updateResetPasswordToken updates user with resetPasswordToken and resetPasswordExpires
  * @param {object} client - database client
  * @param {string} user_id - user_id
  * @param {string} resetPasswordToken - random uniqu string
  * @param {date} resetPasswordExpires - expire date for the token
- * @returns {Promise.<void, Error>}
+ * @returns {Promise.<Object, Error>}
  */
 
- export default function updateUserResetPasswordToken (client, user_id, resetPasswordToken, resetPasswordExpires) {
+ export default function updateResetPasswordToken (client, user_id, resetPasswordToken, resetPasswordExpires) {
    return new Promise ((resolve, reject) => {
 
      if (arguments.length !== 4) {
-       return reject(new TypeError('`updateUserResetPasswordToken` requires 3 arguments.  See docs for usage'));
+       return reject(new TypeError('`updateResetPasswordToken` requires 3 arguments.  See docs for usage'));
      }
      if (!resetPasswordToken) {
-       return reject(new TypeError('`updateUserResetPasswordToken` resetPasswordToken is undefined'));
+       return reject(new TypeError('`updateResetPasswordToken` resetPasswordToken is undefined'));
      }
      if (!resetPasswordExpires) {
-      return reject(new TypeError('`updateUserResetPasswordToken` resetPasswordExpires is undefined'));
+      return reject(new TypeError('`updateResetPasswordToken` resetPasswordExpires is undefined'));
      }
 
     const queryValues = [user_id, resetPasswordToken, resetPasswordExpires];

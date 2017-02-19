@@ -29,7 +29,7 @@ import client from '../db/client';
 import shortid from 'shortid';
 import generateFileName from './generate-file-name';
 import extractFileExtension from './extract-file-extension';
-import updateUserResetPasswordToken from './auth/update-user-reset-password-token';
+import updateResetPasswordToken from './auth/update-reset-password-token';
 import compileTemplate from './compile-template';
 import getUserByResetToken from './auth/get-user-by-reset-token';
 import resetUserPassword from './auth/reset-user-password';
@@ -283,7 +283,7 @@ export function sendResetPasswordEmail (req, res, next) {
     .then((userExists) => {
       if (userExists) {
         // update user model with resetPasswordToken = token , resetPasswordExpires
-        updateUserResetPasswordToken(client, userExists.user_id, token, tokenExpires)
+        updateResetPasswordToken(client, userExists.user_id, token, tokenExpires)
         .then((userData) => {
           // send the email to the user via SES Amazon
         //   var params = {

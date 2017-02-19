@@ -3,7 +3,7 @@ import fs from 'fs';
 import Handlebars from 'handlebars';
 let COMPILED_TEMPLATES = {};
 /**
- * open template file sync (ONCE) and compile it!
+ * open template file in sync matter and compile it with Handlebars!
  * @param {String} templateName - filename of template
  * @param {String} type - the file type
  * @returns {Object} - compiled templates
