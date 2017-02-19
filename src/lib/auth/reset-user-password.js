@@ -7,7 +7,7 @@ import hashPassword from './hash-password';
  * @param {object} client - database client
  * @param {string} user_id - user_id
  * @param {string} password - new password
- * @returns {Promise.<Boolean, Error>}
+ * @returns {Promise.<Object, Error>}
  */
 
  export default function resetUserPassword (client, user_id, password) {
@@ -35,7 +35,7 @@ import hashPassword from './hash-password';
            if (data.length === 0) {
              return resolve(false);
            }
-           
+
            return resolve(data[0]);
          });
        })
