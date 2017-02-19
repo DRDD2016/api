@@ -49,7 +49,7 @@ export function postEventHandler (req, res, next) {
       req.informAllInvitees = false;
       req.responseStatusCode = 201;
       req.responseData = { code };
-      next();
+      next(); // --> updateFeeds
     })
     .catch((err) => {
       return res.status(500).send({ error: err });
@@ -61,10 +61,11 @@ export function prepareToDeleteEvent (req, res, next) {
   req.subject_user_id = req.user.user_id;
   req.event_id = req.params.event_id;
   req.informAllInvitees = true;
-  next();
+  next(); // --> updateFeeds
 }
 
 export function deleteEventHandler (req, res, next) {
+  // updateFeeds happens before this step
   deleteEvent(client, req.params.event_id)
   .then(() => {
     return res.status(204).end();
@@ -77,19 +78,10 @@ export function getEventHandler (req, res, next) {
   .then((event) => {
     if (event) {
       req.event = event;
-      next(); // --> `addRsvps`
+      next(); // --> addRsvps
     } else {
       return res.status(422).send({ error: 'Could not get event' });
     }
-  })
-  .catch(err => next(err));
-}
-
-export function addRsvps (req, res, next) {
-  getRsvps(client, req.event.event_id)
-  .then((rsvps) => {
-    req.event.rsvps = rsvps;
-    return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
   })
   .catch(err => next(err));
 }
@@ -107,11 +99,20 @@ export function postRsvpsHandler (req, res, next) {
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
           req.event = normaliseEventKeys(event);
-          next(); // --> `addRsvps`
+          next(); // --> addRsvps
         })
         .catch(err => next(err));
     })
     .catch(err => next(err));
+}
+
+export function addRsvps (req, res, next) {
+  getRsvps(client, req.event.event_id)
+  .then((rsvps) => {
+    req.event.rsvps = rsvps;
+    return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
+  })
+  .catch(err => next(err));
 }
 
 export function patchRsvpsHandler (req, res, next) {
@@ -128,7 +129,7 @@ export function patchRsvpsHandler (req, res, next) {
         req.informAllInvitees = false;
         req.responseStatusCode = 201;
         req.responseData = { rsvps };
-        next();
+        next(); // --> updateFeeds
       })
       .catch(err => next(err));
     })
@@ -146,7 +147,7 @@ export function postVoteHandler (req, res, next) {
         req.event_id = req.params.event_id;
         req.informAllInvitees = false;
         req.responseStatusCode = 201;
-        next();
+        next(); // --> updateFeeds
       }
     })
     .catch(err => next(err));
@@ -191,7 +192,7 @@ export function editEventHandler (req, res, next) {
         req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
-        next();
+        next(); // --> updateFeeds
       } else {
         return res.status(422).send({ error: 'Could not edit event' });
       }
@@ -365,7 +366,6 @@ export function renderResetPasswordPageHandler (req, res, next) {
         res.render('reset', { user_id: user.user_id, message: '' });
       }
     }
-
   })
   .catch(err => next(err));
 }

@@ -55,11 +55,12 @@ export default function updateFeeds (req, res, next) {
         .then(() => {
           PubSub.publish('UPDATE_FEED', { ids: idArray, feedItem });
 
-          // DELETE events/:event_id is a special case.
-          // event needs to be deleted after the feed stuff
+          /* DELETE events/:event_id is a special case.
+           * event is deleted AFTER updateFeeds
+           */
           if (deletingEvent) {
             req.event_id = event_id;
-            return next();
+            return next(); // --> deleteEventHandler
           } else {
             // end request
             return req.responseData ?
