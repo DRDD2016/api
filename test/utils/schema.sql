@@ -177,3 +177,10 @@ INSERT INTO rsvps (user_id, event_id)
   (3, 1),
   (3, 4),
   (2, 4);
+
+INSERT INTO feeds (user_id, event_id, data)
+  VALUES(
+    3,
+    4,
+    '[{"event_id":3,"timestamp":"2017-02-19T21:20:26.481Z","firstname":"Bob","surname":"Dylan","photo_url":"https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png","what":["Go to France"],"where":["France"],"when":["2017-03-19T12:00:00.000Z"],"is_poll":false,"host_user_id":"2","subject_user_id":"2","viewed":true,"name":"Day trip to France"}]'
+  );

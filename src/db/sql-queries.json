@@ -19,5 +19,6 @@
   "getHostId": "SELECT host_user_id FROM events WHERE event_id = $1;",
   "updateResetToken": "UPDATE users SET reset_password_token = $2, reset_password_expires = $3 WHERE user_id = $1 RETURNING firstname, email, reset_password_token",
   "getUserByToken": "SELECT user_id, reset_password_expires FROM users WHERE reset_password_token = $1;",
-  "resetUserPassword": "UPDATE users SET password = $2 WHERE user_id = $1 RETURNING firstname, email;"
+  "resetUserPassword": "UPDATE users SET password = $2 WHERE user_id = $1 RETURNING firstname, email;",
+  "getFeedItems": "SELECT data FROM feeds WHERE user_id = $1;"
 }
