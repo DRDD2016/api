@@ -345,7 +345,6 @@ export function renderResetPasswordPageHandler (req, res, next) {
   // find user with the correct token and check if token expired
   getUserByResetToken(client, token)
   .then((user) => {
-    console.log(user);
     // get user.resetpasswordexpires and compare with current date/time
     //if token is valid redirect to reset form
     if (user) {

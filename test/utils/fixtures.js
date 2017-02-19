@@ -197,7 +197,6 @@ export const updatedRsvp_2 = {
 };
 
 export const existingUserWithToken = {
-  reset_password_token: 'someuniquestring',
-  firstname: 'Anita',
-  user_id: '1'
+  reset_password_token: 'someuniquestring1',
+  user_id: 1
 };
