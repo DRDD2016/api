@@ -3,7 +3,7 @@ import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
 import gm from 'gm';
-import { s3, ses } from './amazon-clients';
+import { s3, ses } from './amazon-clients'; //eslint-disable-line
 import crypto from 'crypto';
 
 import { UPDATE_FEED } from '../../socket-router';
@@ -264,6 +264,7 @@ export function postUserPhotoHandler (req, res, next) {
 
 export function sendResetPasswordEmail (req, res, next) {
   const email = req.body.email;
+
   if (!email) {
     return res.status(422).send({ error: 'Email field is required!' });
   }
@@ -281,35 +282,46 @@ export function sendResetPasswordEmail (req, res, next) {
         // update user model with resetPasswordToken = token , resetPasswordExpires
         updateUserResetPasswordToken(client, userExists.user_id, token, tokenExpires)
         .then((userData) => {
-          // send the email to the user
-          var params = {
-           Destination: { /* required */
-             ToAddresses: [
-               'anita@foundersandcoders.com' //change this email to the official one
-             ]
-           },
-           Message: { /* required */
-             Body: { /* required */
-               Html: {
-                 Data: compileTemplate('resetPassword', 'html')(userData), /* required */
-                 Charset: 'utf8'
-               },
-               Text: {
-                 Data: compileTemplate('resetPassword', 'txt')(userData), /* required */
-                 Charset: 'utf8'
-               }
-             },
-             Subject: { /* required */
-               Data: 'Please reset the password for your Spark account', /* required */
-               Charset: 'utf8'
-             }
-           },
-           Source: 'anita@foundersandcoders.com', /* required */
-           ReplyToAddresses: [
-             'anita@foundersandcoders.com' //change this email to the official one
-           ]
-         };
-          ses.sendEmail(params, function (err, data) {
+          // send the email to the user via SES Amazon
+        //   var params = {
+        //    Destination: { /* required */
+        //      ToAddresses: [
+        //        'anita@foundersandcoders.com' //change this email to the official one
+        //      ]
+        //    },
+        //    Message: { /* required */
+        //      Body: { /* required */
+        //        Html: {
+        //          Data: compileTemplate('resetPassword', 'html')(userData), /* required */
+        //          Charset: 'utf8'
+        //        },
+        //        Text: {
+        //          Data: compileTemplate('resetPassword', 'txt')(userData), /* required */
+        //          Charset: 'utf8'
+        //        }
+        //      },
+        //      Subject: { /* required */
+        //        Data: 'Please reset the password for your Spark account', /* required */
+        //        Charset: 'utf8'
+        //      }
+        //    },
+        //    Source: 'anita@foundersandcoders.com', /* required */
+        //    ReplyToAddresses: [
+        //      'anita@foundersandcoders.com' //change this email to the official one
+        //    ]
+        //  };
+        //
+          const domain = process.env.DOMAIN;
+          const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
+          userData.host = req.headers.host;
+          const param = {
+            from: 'Anita <me@samples.mailgun.org>',
+            to: process.env.TO,
+            subject: 'Please reset the password for your Spark account',
+            html: compileTemplate('resetPassword', 'html')(userData)
+          };
+
+          mailgun.messages().send(param, function (err, data) {
             if (err) {
               return next(err);
             } else {
@@ -339,7 +351,7 @@ export function renderResetPasswordPageHandler (req, res, next) {
       if ( Date.now() > parseInt(user.reset_password_expires, 10)) {
         // token expired
         //render page that will notify the user about expiration
-        res.render('expired', { message: 'Sorry the link already expired!' });
+        res.render('expired', { message: 'Password reset token is invalid or has expired.' });
       } else {
         // still valid , redirect to the reset form
         res.render('reset', { user_id: user.user_id, message: '' });
@@ -357,6 +369,8 @@ export function resetPassword (req, res, next) {
 
   if (password.trim() !== confirmPassword.trim()) {
     res.render('reset', { message: 'Passwords must match!', user_id });
+  } else if ( password.length < 4) {
+    res.render('reset', { message: 'Passwords must contain at least 4 characters!', user_id });
   } else {
     resetUserPassword(client, user_id, password)
     .then((data) => {

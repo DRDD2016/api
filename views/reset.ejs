@@ -8,7 +8,7 @@
     <body>
       <h1>Reset password page</h1>
       <form method="post" action="/reset">
-        <p>Password</p>
+        <p>Password (at least 4 characters)</p>
         <input type="password" name="password">
         <% if (user_id) { %>
         <input type="hidden" name="user_id" value="<%= user_id %>" />

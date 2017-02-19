@@ -9,20 +9,20 @@ let COMPILED_TEMPLATES = {};
  * @returns {Object} - compiled templates
  */
 function compileTemplate (templateName, type) {
-  const filename = templateName + '.' + type;
+  const filename = `${templateName}.${type}`;
   const filepath = path.resolve('./src/templates', filename);
 
-  const templateCached = COMPILED_TEMPLATES[templateName + '.' + type];
+  const templateCached = COMPILED_TEMPLATES[`${templateName}.${type}`];
 
   const template = fs.readFileSync(filepath, 'utf8');
   let compiled = Handlebars.compile(template);
 
   //check if the template has already been opened
   if (!templateCached) {
-    COMPILED_TEMPLATES[templateName + '.' + type] = compiled;
+    COMPILED_TEMPLATES[`${templateName}.${type}`] = compiled;
   }
 
-  return COMPILED_TEMPLATES[templateName + '.' + type];
+  return COMPILED_TEMPLATES[`${templateName}.${type}`];
 }
 
 export default compileTemplate;
