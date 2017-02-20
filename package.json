@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/DRDD2016/api#readme",
   "devDependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.22.0",
     "blue-tape": "^1.0.0",
     "eslint": "^3.11.1",
     "eslint-plugin-import": "^2.2.0",
@@ -40,6 +39,7 @@
     "tap-spec": "^4.1.1"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
     "aws-sdk": "^2.13.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-register": "^6.18.0",
