@@ -1,6 +1,4 @@
-if (process.env.TEST) {
-  require('env2')('.env');
-}
+require('dotenv').config();
 require('babel-register')({
   presets: ['es2015'],
   plugins: ['transform-object-rest-spread']
