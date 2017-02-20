@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
 import buildFeedItem from '../../src/lib/events/build-feed-item';
-import { event_3, feedItem } from '../utils/fixtures';
+import { event_3, feedItem_1 } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 
 const invitee_user_id = 3;
@@ -15,7 +15,7 @@ test('`buildFeedItem` works', (t) => {
     .then((result) => {
 
       t.ok(
-        Object.keys(feedItem).every((key) => {
+        Object.keys(feedItem_1).every((key) => {
           return result.hasOwnProperty(key);
         })
       );
