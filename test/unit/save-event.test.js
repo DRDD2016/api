@@ -4,9 +4,17 @@ import saveEvent from '../../src/lib/events/save-event';
 import { newEvent } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 
-test('`saveEvent` works', () => {
-  return initDb()
-  .then(() => saveEvent(client, newEvent));
+test('`saveEvent` works', (t) => {
+  t.plan(1);
+
+  initDb()
+  .then(() => {
+
+    saveEvent(client, newEvent)
+    .then((event_id) => {
+      t.equal(event_id, 5);
+    });
+  });
 });
 
 test('`saveEvent` handles errors', (t) => {

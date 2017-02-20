@@ -36,7 +36,7 @@ CREATE TABLE events (
 CREATE TABLE feeds (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(user_id),
-  event_id INTEGER NOT NULL REFERENCES events(event_id),
+  event_id INTEGER REFERENCES events(event_id),
   data json NOT NULL
 );
 
@@ -58,30 +58,34 @@ CREATE TABLE rsvps (
 
 /**** insert users ****/
 
-INSERT INTO users (firstname, surname, password, email)
+INSERT INTO users (firstname, surname, password, email, reset_password_token)
   VALUES (
     'Anita',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'anita@spark.com'
+    'anita@spark.com',
+    'someuniquestring1'
   ),
   (
     'Dave',
     'Jones',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'dave@spark.com'
+    'dave@spark.com',
+    'someuniquestring2'
   ),
   (
     'Sohil',
     'Pandya',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'sohil@spark.com'
+    'sohil@spark.com',
+    'someuniquestring3'
   ),
   (
     'Mickey',
     'Mouse',
     '$2a$11$k2mul7EmRfNPZBsgUBll7es2jlby//mEvfYczYPj83fC7utPvKGcK',
-    'mickey@spark.com'
+    'mickey@spark.com',
+    'someuniquestring4'
   );
 
 /**** insert events ****/
@@ -173,3 +177,10 @@ INSERT INTO rsvps (user_id, event_id)
   (3, 1),
   (3, 4),
   (2, 4);
+
+INSERT INTO feeds (user_id, event_id, data)
+  VALUES(
+    3,
+    4,
+    '[{"event_id":3,"timestamp":"2017-02-19T21:20:26.481Z","firstname":"Bob","surname":"Dylan","photo_url":"https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png","what":["Go to France"],"where":["France"],"when":["2017-03-19T12:00:00.000Z"],"is_poll":false,"host_user_id":"2","subject_user_id":"2","viewed":true,"name":"Day trip to France"}]'
+  );

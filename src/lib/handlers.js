@@ -1,4 +1,3 @@
-import PubSub from 'pubsub-js';
 import fs from 'fs';
 import os from 'os';
 import formidable from 'formidable';
@@ -6,7 +5,7 @@ import gm from 'gm';
 import { s3, ses } from './amazon-clients'; //eslint-disable-line
 import crypto from 'crypto';
 
-import { UPDATE_FEED } from '../../socket-router';
+
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
 import getUserById from './auth/get-user-by-id';
@@ -19,11 +18,8 @@ import getEventByCode from './events/get-event-by-code';
 import saveVote from './events/save-vote';
 import finaliseEvent from './events/finalise-event';
 import getRsvps from './events/get-rsvps';
-import getEventInvitees from './events/get-invitees-ids';
 import updateRsvp from './events/update-rsvp';
-import saveFeedItem from './events/save-feed-item';
 import editEvent from './events/edit-event';
-import buildFeedItem from './events/build-feed-item';
 import normaliseEventKeys from './normalise-event-keys';
 import client from '../db/client';
 import shortid from 'shortid';
@@ -37,27 +33,42 @@ import resetUserPassword from './auth/reset-user-password';
 const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
 
-export function postEventHandler (req, res, next) { // eslint-disable-line no-unused-vars
+
+export function postEventHandler (req, res, next) {
   const event = req.body.event;
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
   }
-  const data = Object.assign(event, { host_user_id: req.user.user_id });
+  const data = { ...event, host_user_id: req.user.user_id };
   const code = shortid.generate();
   data.code = code;
   saveEvent(client, data)
-    .then(() => {
-      res.json({ code });
+    .then((event_id) => {
+      req.subject_user_id = req.user.user_id;
+      req.event_id = event_id;
+      req.informAllInvitees = false;
+      req.responseStatusCode = 201;
+      req.responseData = { code };
+      next(); // --> updateFeeds
     })
     .catch((err) => {
       return res.status(500).send({ error: err });
     });
 }
 
+export function prepareToDeleteEvent (req, res, next) {
+
+  req.subject_user_id = req.user.user_id;
+  req.event_id = req.params.event_id;
+  req.informAllInvitees = true;
+  next(); // --> updateFeeds
+}
+
 export function deleteEventHandler (req, res, next) {
+  // updateFeeds happens before this step
   deleteEvent(client, req.params.event_id)
-  .then((deleted_event_id) => {
-    res.json(deleted_event_id);
+  .then(() => {
+    return res.status(204).end();
   })
   .catch(err => next(err));
 }
@@ -67,19 +78,10 @@ export function getEventHandler (req, res, next) {
   .then((event) => {
     if (event) {
       req.event = event;
-      next(); // --> `addRsvps`
+      next(); // --> addRsvps
     } else {
       return res.status(422).send({ error: 'Could not get event' });
     }
-  })
-  .catch(err => next(err));
-}
-
-export function addRsvps (req, res, next) {
-  getRsvps(client, req.event.event_id)
-  .then((rsvps) => {
-    req.event.rsvps = rsvps;
-    return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
   })
   .catch(err => next(err));
 }
@@ -97,11 +99,20 @@ export function postRsvpsHandler (req, res, next) {
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
           req.event = normaliseEventKeys(event);
-          next(); // --> `addRsvps`
+          next(); // --> addRsvps
         })
         .catch(err => next(err));
     })
     .catch(err => next(err));
+}
+
+export function addRsvps (req, res, next) {
+  getRsvps(client, req.event.event_id)
+  .then((rsvps) => {
+    req.event.rsvps = rsvps;
+    return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
+  })
+  .catch(err => next(err));
 }
 
 export function patchRsvpsHandler (req, res, next) {
@@ -113,7 +124,12 @@ export function patchRsvpsHandler (req, res, next) {
     .then(() => {
       getRsvps(client, req.params.event_id)
       .then((rsvps) => {
-        return res.status(201).json({ rsvps });
+        req.subject_user_id = req.user.user_id;
+        req.event_id = req.params.event_id;
+        req.informAllInvitees = false;
+        req.responseStatusCode = 201;
+        req.responseData = { rsvps };
+        next(); // --> updateFeeds
       })
       .catch(err => next(err));
     })
@@ -127,7 +143,11 @@ export function postVoteHandler (req, res, next) {
   saveVote(client, user_id, event_id, vote)
     .then((success) => {
       if (success) {
-        res.status(201).end();
+        req.subject_user_id = req.user.user_id;
+        req.event_id = req.params.event_id;
+        req.informAllInvitees = false;
+        req.responseStatusCode = 201;
+        next(); // --> updateFeeds
       }
     })
     .catch(err => next(err));
@@ -160,31 +180,19 @@ export function getInviteesHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function putEventHandler (req, res, next) {
+export function editEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
-  const host_user_id = req.user.user_id;
+
   editEvent(client, event_id, event)
     .then((data) => {
       if (data) {
-        // create feed item
-        buildFeedItem(host_user_id, event)
-        .then((feedItem) => {
-          getEventInvitees(client, event_id)
-          .then((inviteesIds) => {
-            saveFeedItem(client, inviteesIds, event_id, feedItem)
-            .then(() => {
-              // push feed items to clients
-              PubSub.publish(UPDATE_FEED, { ids: inviteesIds, feedItem });
-            })
-            .catch(err => next(err));
-          })
-          .catch(err => next(err));
-
-          return res.status(201).json(data);
-        })
-        .catch(err => next(err));
-
+        req.subject_user_id = req.user.user_id;
+        req.event_id = event_id;
+        req.informAllInvitees = true;
+        req.responseStatusCode = 201;
+        req.responseData = data;
+        next(); // --> updateFeeds
       } else {
         return res.status(422).send({ error: 'Could not edit event' });
       }
@@ -358,7 +366,6 @@ export function renderResetPasswordPageHandler (req, res, next) {
         res.render('reset', { user_id: user.user_id, message: '' });
       }
     }
-
   })
   .catch(err => next(err));
 }

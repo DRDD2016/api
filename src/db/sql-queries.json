@@ -1,5 +1,5 @@
 {
-  "saveEvent": "INSERT INTO events (host_user_id, name, description, note, _what, _where, _when, is_poll, code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);",
+  "saveEvent": "INSERT INTO events (host_user_id, name, description, note, _what, _where, _when, is_poll, code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING event_id;",
   "getEventByCode": "SELECT row_to_json(event) FROM (SELECT * FROM events WHERE code = $1) event",
   "deleteEvent": "DELETE FROM events WHERE event_id = $1 RETURNING event_id;",
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id, photo_url;",
@@ -11,11 +11,14 @@
   "editEvent": "UPDATE events SET edited = true, name = $2, description = $3, note = $4, _what = ARRAY[$5], _where = ARRAY[$6], _when = ARRAY[$7] WHERE event_id = $1 RETURNING edited, name, description, note, _what, _where, _when, event_id;",
   "getEvent": "SELECT row_to_json(event) FROM (SELECT name, description, note, _what, _where, _when, event_id, is_poll, host_user_id FROM events WHERE event_id = $1) event;",
   "saveFeedItem": "INSERT INTO feeds (user_id, event_id, data) VALUES ($1, $2, $3);",
+  "saveFeedItemForDeletedEvent": "INSERT INTO feeds (user_id, data) VALUES ($1, $2);",
   "getInviteesIds": "SELECT array_agg(user_id) AS ids FROM rsvps WHERE event_id = $1;",
   "updateUser": "UPDATE users SET firstname = $2, surname = $3 WHERE user_id = $1 RETURNING firstname, surname, email, user_id, photo_url;",
   "updateRsvp": "UPDATE rsvps SET status = $3 WHERE user_id = $1 AND event_id = $2;",
   "updateUserPhoto": "UPDATE users SET photo_url = $2 WHERE user_id = $1 RETURNING photo_url;",
+  "getHostId": "SELECT host_user_id FROM events WHERE event_id = $1;",
   "updateResetToken": "UPDATE users SET reset_password_token = $2, reset_password_expires = $3 WHERE user_id = $1 RETURNING firstname, email, reset_password_token",
   "getUserByToken": "SELECT user_id, reset_password_expires FROM users WHERE reset_password_token = $1;",
-  "resetUserPassword": "UPDATE users SET password = $2 WHERE user_id = $1 RETURNING firstname, email;"
+  "resetUserPassword": "UPDATE users SET password = $2 WHERE user_id = $1 RETURNING firstname, email;",
+  "getFeedItems": "SELECT data FROM feeds WHERE user_id = $1;"
 }

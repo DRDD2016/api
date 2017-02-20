@@ -2,9 +2,8 @@ import query from '../../db/query';
 import { getInviteesIds as queryText } from '../../db/sql-queries.json';
 
 /**
- * Retrieve an array of invitees ids for specific event from the database
- * @returns {Promise.<object (event), Error>}
- *                                    @returns {array} invitees ids
+ * getInviteesIds retrieves an array of invitees ids for specific event from the database
+ * @returns {Promise.<array, Error>} - array of invitee ids
  * @param {object} client - database client
  * @param {number} event_id - event id
  */
