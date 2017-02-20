@@ -3,7 +3,7 @@ import fs from 'fs';
 import Handlebars from 'handlebars';
 let COMPILED_TEMPLATES = {};
 /**
- * open template file in sync matter and compile it with Handlebars!
+ * open template file in sync (open once and cache it in COMPILED_TEMPLATES) and compile it with Handlebars!
  * @param {String} templateName - filename of template
  * @param {String} type - the file type
  * @returns {Object} - compiled templates
@@ -14,12 +14,11 @@ function compileTemplate (templateName, type) {
 
   const templateCached = COMPILED_TEMPLATES[`${templateName}.${type}`];
 
-  const template = fs.readFileSync(filepath, 'utf8');
-  let compiled = Handlebars.compile(template);
+  const template = !templateCached ? fs.readFileSync(filepath, 'utf8') : '';
 
-  //check if the template has already been opened
+  //check if the template has already been opened, if not compile it 
   if (!templateCached) {
-    COMPILED_TEMPLATES[`${templateName}.${type}`] = compiled;
+    COMPILED_TEMPLATES[`${templateName}.${type}`] = Handlebars.compile(template);
   }
 
   return COMPILED_TEMPLATES[`${templateName}.${type}`];
