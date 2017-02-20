@@ -27,7 +27,7 @@ test('endpoint POST events works', (t) => {
     request(server)
     .post('/events')
     .set('authorization', token)
-    .send({ event: newEvent })
+    .send(newEvent)
     .end((err, res) => {
       t.notOk(err);
       t.equal(res.statusCode, 201, 'status code is 201');

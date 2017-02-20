@@ -35,7 +35,7 @@ const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, dom
 
 
 export function postEventHandler (req, res, next) {
-  const event = req.body.event;
+  const event = req.body;
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
   }
