@@ -1,4 +1,6 @@
-require('env2')('.env');
+if (process.env.TEST) {
+  require('env2')('.env');
+}
 require('babel-register')({
   presets: ['es2015'],
   plugins: ['transform-object-rest-spread']

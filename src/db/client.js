@@ -18,7 +18,7 @@ if (process.env.CIRCLECI) {
   config.database = process.env.PGDATABASE;
   config.ssl = true;
 }
-
+console.log(config);
 const client = new Pool(config);
 
 export default client;
