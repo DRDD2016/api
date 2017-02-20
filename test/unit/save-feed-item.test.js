@@ -28,22 +28,19 @@ test('`saveFeedItem` works', (t) => {
 });
 
 test('`saveFeedItem` adds new feed items to pre-existing ones', (t) => {
-  t.plan(3);
+  t.plan(1);
   initDb()
   .then(() => {
 
     const user_id = 3;
     const event_id = 4;
-    const newFeedItem = JSON.stringify([feedItem_1]);
+    const newFeedItem = JSON.stringify(feedItem_1);
     saveFeedItem(client, [user_id], event_id, newFeedItem)
     .then(() => {
-      const queryText = 'SELECT * FROM feeds WHERE user_id = $1;';
+      const queryText = 'SELECT array_agg(data) FROM feeds WHERE user_id = $1;';
       const queryArray = [3];
       query(client, queryText, queryArray, (err, result) => {
-        console.log(result);
-        t.equal(result[0].user_id, user_id, 'user ids match');
-        t.equal(result[0].event_id, event_id, 'event ids match');
-        t.deepEqual(result[0].data, [feedItem_1].concat(feedItems), 'feed items match');
+        t.deepEqual(result[0].array_agg, [...feedItems].concat([feedItem_1]), 'feed items match');
       });
     });
   });
