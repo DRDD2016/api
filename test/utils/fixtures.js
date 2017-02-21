@@ -203,33 +203,39 @@ export const existingUserWithToken = {
 
 export const feedItems =  [
   {
-    event_id: 3,
-    firstname: 'Bob',
-    host_user_id: '2',
-    is_poll: false,
-    name: 'Day trip to France',
-    photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
-    subject_user_id: '2',
-    surname: 'Dylan',
-    timestamp: '2017-02-19T21:20:26.481Z',
-    viewed: true,
-    what: [ 'Go to France' ],
-    when: [ '2017-03-19T12:00:00.000Z' ],
-    where: [ 'France' ]
+    id: 1,
+    feed_item: {
+      event_id: 3,
+      firstname: 'Bob',
+      host_user_id: '2',
+      is_poll: false,
+      name: 'Day trip to France',
+      photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+      subject_user_id: '2',
+      surname: 'Dylan',
+      timestamp: '2017-02-19T21:20:26.481Z',
+      viewed: true,
+      what: [ 'Go to France' ],
+      when: [ '2017-03-19T12:00:00.000Z' ],
+      where: [ 'France' ],
+    }
   },
   {
-    event_id: 1,
-    firstname: 'Anita',
-    host_user_id: '1',
-    is_poll: true,
-    name: 'Lounge party',
-    photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
-    subject_user_id: '3',
-    surname: 'Jones',
-    timestamp: '2017-02-16T21:20:26.481Z',
-    viewed: false,
-    what: [ 'Dancing', 'Skydiving' ],
-    when: [ '2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z' ],
-    where: [ 'Forest', 'Camping' ]
+    id: 2,
+    feed_item: {
+      event_id: 1,
+      firstname: 'Anita',
+      host_user_id: '1',
+      is_poll: true,
+      name: 'Lounge party',
+      photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+      subject_user_id: '3',
+      surname: 'Jones',
+      timestamp: '2017-02-16T21:20:26.481Z',
+      viewed: false,
+      what: [ 'Dancing', 'Skydiving' ],
+      when: [ '2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z' ],
+      where: [ 'Forest', 'Camping' ],
+    }
   }
 ];

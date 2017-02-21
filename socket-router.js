@@ -15,6 +15,7 @@ module.exports = function socketRouter (io) {
     console.log(`user ${user_id} joined.`);
     getFeedItems(client, user_id)
     .then((feedItems) => {
+      console.log('feeditems', feedItems);
       if (feedItems) {
 
         PubSub.publish(UPDATE_FEED, { ids: [user_id], feedItems });
@@ -30,7 +31,7 @@ module.exports = function socketRouter (io) {
   });
 
   PubSub.subscribe(UPDATE_FEED, (msg, data) => {
-    console.log('msg', msg, 'data', data);
+    // console.log('msg', msg, 'data', data);
 
     data.ids.forEach((id) => {
       // get feed from database
