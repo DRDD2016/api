@@ -7,7 +7,8 @@
 # Installing this project
 1. Clone this repository
 2. `cd api` and `npm install`
-3. Create a `.env` file in the root of the project:
+3. Create a `.env` file in the root of the project (see below)
+4. Start the server with `npm start` (or in watch mode with `npm run dev`)
 ```env
 SECRET_JWT=[ jwt secret (for module 'jwt-simple') ]
 S3ACCESSKEY=[ AWS S3 access key ]
@@ -23,4 +24,3 @@ PG_HOST=[ remote db host ]
 PG_PORT=[ remote db port ]
 PG_DATABASE=[ remote db name ]
 ```
-4. Start the server with `npm start` (or in watch mode with `npm run dev`)
