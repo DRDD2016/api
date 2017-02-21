@@ -37,10 +37,10 @@ test('`saveFeedItem` adds new feed items to pre-existing ones', (t) => {
     const newFeedItem = JSON.stringify(feedItem_1);
     saveFeedItem(client, [user_id], event_id, newFeedItem)
     .then(() => {
-      const queryText = 'SELECT array_agg(data) FROM feeds WHERE user_id = $1;';
+      const queryText = 'SELECT id, data AS feed_item FROM feeds WHERE user_id = $1;';
       const queryArray = [3];
       query(client, queryText, queryArray, (err, result) => {
-        t.deepEqual(result[0].array_agg, [...feedItems].concat([feedItem_1]), 'feed items match');
+        t.deepEqual(result, [...feedItems].concat([{ id: 3, feed_item: feedItem_1 }]), 'feed items match');
       });
     });
   });
