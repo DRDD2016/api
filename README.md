@@ -4,7 +4,7 @@
 
 **This project runs on Node v6.9.x**
 
-# Installing this project
+### Installing this project
 1. Clone this repository
 2. `cd api` and `npm install`
 3. Create a `.env` file in the root of the project (see below)
