@@ -24,8 +24,8 @@ export default function getFeedItems (client, user_id) {
         return reject(err);
       }
       return result.length === 0 ?
-      resolve(null) :
-      resolve(result[0].data);
+        resolve(null) :
+        resolve(result[0].feed_items);
     });
   });
 }

@@ -140,6 +140,12 @@ export function postVoteHandler (req, res, next) {
   const user_id = req.user.user_id;
   const vote  = req.body.vote;
   const event_id = req.params.event_id;
+  if (!vote) {
+    return res.status(422).send({ error: 'Missing vote data' });
+  }
+  if (!event_id) {
+    return res.status(422).send({ error: 'Missing event id' });
+  }
   saveVote(client, user_id, event_id, vote)
     .then((success) => {
       if (success) {
@@ -156,6 +162,9 @@ export function postVoteHandler (req, res, next) {
 export function finaliseEventHandler (req, res, next) {
   const hostEventChoices = req.body.hostEventChoices;
   const event_id = req.params.event_id;
+  if (!hostEventChoices) {
+    return res.status(422).send({ error: 'Missing host event choices' });
+  }
   finaliseEvent(client, event_id, hostEventChoices)
     .then((data) => {
       if (data) {
@@ -183,6 +192,10 @@ export function getInviteesHandler (req, res, next) {
 export function editEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
+
+  if (!event) {
+    return res.status(422).send({ error: 'Missing event data' });
+  }
 
   editEvent(client, event_id, event)
     .then((data) => {
@@ -213,8 +226,11 @@ export function getUserHandler (req, res, next) {
 }
 
 export function patchUserHandler (req, res, next) {
-  const userData = req.body;
+  const userData = req.body.user;
   const user_id = req.params.user_id;
+  if (!userData) {
+    return res.status(422).send({ error: 'Missing user data' });
+  }
   updateUser(client, user_id, userData)
     .then((data) => {
       if (data) {

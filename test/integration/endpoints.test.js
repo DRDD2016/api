@@ -457,7 +457,7 @@ test('endpoint PUT events/:event_id handles missing data', (t) => {
         .set('Accept', 'application/json')
         .set('authorization', createToken(3))
         .then((res) => {
-          t.equal(res.statusCode, 500, 'status code is 500');
+          t.equal(res.statusCode, 422, 'status code is 422');
         })
         .catch(err => console.error(err));
       });
@@ -541,7 +541,7 @@ test('endpoint PATCH users/:users_id works', (t) => {
     .patch(`/users/${user_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(user_id))
-    .send(userData)
+    .send({ user: userData })
     .then((res) => {
       t.equal(res.statusCode, 200, 'status code is 200');
       t.equal(res.body.firstname, userData.firstname, 'succesfully updates user firstname');
@@ -562,7 +562,7 @@ test('endpoint PATCH users/:user_id handles internal errors', (t) => {
     .patch(`/users/${user_id}`)
     .set('Accept', 'application/json')
     .set('authorization', createToken(1))
-    .send(userData)
+    .send({ user: userData })
     .then((res) => {
       t.equal(res.statusCode, 422, 'status code is 422');
       t.deepEqual(res.body, { error: 'Could not update user' });
