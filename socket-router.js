@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import PubSub from 'pubsub-js';
 import client from './src/db/client';
-import getFeedItems from './src/lib/events/get-feed-items';
+import getFeedItems from './src/lib/feed/get-feed-items';
 export const UPDATE_FEED = 'UPDATE_FEED';
 const INIT_FEED = 'INIT_FEED';
 

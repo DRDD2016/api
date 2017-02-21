@@ -1,7 +1,7 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
 import query from '../../src/db/query';
-import saveFeedItem from '../../src/lib/events/save-feed-item';
+import saveFeedItem from '../../src/lib/feed/save-feed-item';
 import { feedItem_1, feedItems } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 

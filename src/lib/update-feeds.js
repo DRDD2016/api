@@ -1,10 +1,10 @@
 import client from '../db/client';
 import getEvent from './events/get-event';
-import buildFeedItem from './events/build-feed-item';
+import buildFeedItem from './feed/build-feed-item';
 import getHostId from './events/get-host-id';
 import getInviteesIds from './events/get-invitees-ids';
-import saveFeedItem from './events/save-feed-item';
-import saveFeedItemForDeletedEvent from './events/save-feed-item-for-deleted-event';
+import saveFeedItem from './feed/save-feed-item';
+import saveFeedItemForDeletedEvent from './feed/save-feed-item-for-deleted-event';
 import PubSub from 'pubsub-js';
 
 const informCurrentUser = (method, url) => {
