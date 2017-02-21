@@ -15,6 +15,9 @@
     "prepush": "npm test coverage",
     "postmerge": "npm install"
   },
+  "engines": {
+    "node": "6.9.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DRDD2016/api.git"
