@@ -29,6 +29,7 @@ import updateResetPasswordToken from './auth/update-reset-password-token';
 import compileTemplate from './compile-template';
 import getUserByResetToken from './auth/get-user-by-reset-token';
 import resetUserPassword from './auth/reset-user-password';
+// import markFeedItemAsViewed from './feed/mark-feed-item-as-viewed';
 
 const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
@@ -416,4 +417,15 @@ export function resetPassword (req, res, next) {
     })
     .catch(err => next(err));
   }
+}
+
+export function editFeedHandler (req, res, next) {
+  const feedItemId = req.body.id;
+  if (!feedItemId) {
+    return res.status(422).send({ error: 'Missing feed item id' });
+  }
+  // find feed item, flip viewed to true
+  // markFeedItemAsViewed(client, feedItemId)
+  //   .then(() => res.status(204).end())
+  //   .catch(err => next(err));
 }

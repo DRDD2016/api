@@ -4,7 +4,7 @@ import {
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, editEventHandler,
   getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
-  sendResetPasswordEmail, renderResetPasswordPageHandler, resetPassword
+  sendResetPasswordEmail, renderResetPasswordPageHandler, resetPassword, editFeedHandler
 } from './handlers';
 import updateFeeds from './update-feeds';
 import { signup, login } from './auth';
@@ -31,4 +31,5 @@ export default function registerRoutes (app) {
   app.post('/reset-password', sendResetPasswordEmail);
   app.get('/reset/:token', renderResetPasswordPageHandler);
   app.post('/reset', resetPassword);
+  app.patch('/users/:user_id/feed', requireAuth, editFeedHandler);
 }

@@ -1,6 +1,6 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
-import buildFeedItem from '../../src/lib/events/build-feed-item';
+import buildFeedItem from '../../src/lib/feed/build-feed-item';
 import { event_3, feedItem_1 } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import PubSub from 'pubsub-js';
 import client from './src/db/client';
-import getFeedItems from './src/lib/events/get-feed-items';
+import getFeedItems from './src/lib/feed/get-feed-items';
 export const UPDATE_FEED = 'UPDATE_FEED';
 const INIT_FEED = 'INIT_FEED';
 
@@ -15,7 +15,6 @@ module.exports = function socketRouter (io) {
     console.log(`user ${user_id} joined.`);
     getFeedItems(client, user_id)
     .then((feedItems) => {
-      console.log('feeditems', feedItems);
       if (feedItems) {
 
         PubSub.publish(UPDATE_FEED, { ids: [user_id], feedItems });
@@ -31,7 +30,7 @@ module.exports = function socketRouter (io) {
   });
 
   PubSub.subscribe(UPDATE_FEED, (msg, data) => {
-    // console.log('msg', msg, 'data', data);
+    console.log(msg, 'data', data);
 
     data.ids.forEach((id) => {
       // get feed from database

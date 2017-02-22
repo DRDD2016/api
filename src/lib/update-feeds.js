@@ -1,10 +1,10 @@
 import client from '../db/client';
 import getEvent from './events/get-event';
-import buildFeedItem from './events/build-feed-item';
+import buildFeedItem from './feed/build-feed-item';
 import getHostId from './events/get-host-id';
 import getInviteesIds from './events/get-invitees-ids';
-import saveFeedItem from './events/save-feed-item';
-import saveFeedItemForDeletedEvent from './events/save-feed-item-for-deleted-event';
+import saveFeedItem from './feed/save-feed-item';
+import saveFeedItemForDeletedEvent from './feed/save-feed-item-for-deleted-event';
 import PubSub from 'pubsub-js';
 
 const informCurrentUser = (method, url) => {
@@ -52,8 +52,8 @@ export default function updateFeeds (req, res, next) {
             saveFeedItemForDeletedEvent(client, idArray, feedItem):
             saveFeedItem(client, idArray, event_id, feedItem)
         )
-        .then(() => {
-          PubSub.publish('UPDATE_FEED', { ids: idArray, feedItem });
+        .then((returnedFeedItem) => {
+          PubSub.publish('UPDATE_FEED', { ids: idArray, feedItems: [returnedFeedItem] });
 
           /* DELETE events/:event_id is a special case.
            * event is deleted AFTER updateFeeds
