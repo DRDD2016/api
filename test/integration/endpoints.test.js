@@ -594,3 +594,41 @@ test.skip('endpoint POST /upload works', (t) => {
     .catch(err => console.error(err));
   });
 });
+
+
+test('endpoint PATCH users/:users_id/feed works', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+    const feed_item_id = 2;
+    request(server)
+    .patch(`/users/${user_id}/feed`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(user_id))
+    .send({ id: feed_item_id })
+    .then((res) => {
+      t.equal(res.statusCode, 204, 'status code is 204');
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+test('endpoint PATCH users/:user_id/feed handles internal errors', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 100;
+    request(server)
+    .patch(`/users/${user_id}/feed`)
+    .set('Accept', 'application/json')
+    .set('authorization', createToken(1))
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'status code is 422');
+      t.deepEqual(res.body, { error: 'Missing feed item id' });
+    })
+    .catch(err => console.error(err));
+  });
+});

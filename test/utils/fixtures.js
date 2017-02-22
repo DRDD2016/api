@@ -161,6 +161,22 @@ export const editedEvent = {
 };
 
 export const feedItem_1 = {
+  timestamp: '2017-02-19T21:20:26.481Z',
+  event_id: 3,
+  firstname: 'Bob',
+  surname: 'Dylan',
+  photo_url: avatarUrl,
+  name: 'Day trip to France',
+  what: ['Go to France'],
+  where: ['France'],
+  when: ["2017-03-19T12:00:00.000Z"],
+  is_poll: false,
+  host_user_id: '2',
+  subject_user_id: '2',
+  viewed: false
+};
+
+export const feedItem_3 = {
   timestamp: '2017-02-09T12:24:49.699Z',
   event_id: 3,
   firstname: 'Sohil',
