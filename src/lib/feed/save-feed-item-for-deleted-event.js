@@ -3,7 +3,7 @@ import { saveFeedItemForDeletedEvent as queryText } from '../../db/sql-queries.j
 
 /**
  * Saves feed items to the database for a deleted event
- * @returns {Promise.<void, Error>}
+ * @returns {Promise.<object, Error>}
  * @param {object} client - database client
  * @param {array} user_id_array - array of user ids
  * @param {object} data - feed item object
@@ -19,18 +19,18 @@ export default function saveFeedItemForDeletedEvent (client, user_id_array, data
       return reject(new TypeError('`saveFeedItemForDeletedEvent` event data is empty or undefined'));
     }
 
-    (function saveForUserID (array, data) {
+    (function saveForUserID (array, data, result) {
       if (array.length === 0) {
-        return resolve();
+        return resolve(result[0]);
       }
       const queryValues = [array[0], data];
 
-      query(client, queryText, queryValues, (err) => {
+      query(client, queryText, queryValues, (err, result) => {
         if (err) {
           return reject(err);
         }
-        saveForUserID(array.slice(1), data);
+        saveForUserID(array.slice(1), data, result);
       });
-    })(user_id_array, data);
+    })(user_id_array, data, null);
   });
 }

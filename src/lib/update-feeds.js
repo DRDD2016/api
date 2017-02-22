@@ -52,8 +52,8 @@ export default function updateFeeds (req, res, next) {
             saveFeedItemForDeletedEvent(client, idArray, feedItem):
             saveFeedItem(client, idArray, event_id, feedItem)
         )
-        .then(() => {
-          PubSub.publish('UPDATE_FEED', { ids: idArray, feedItem });
+        .then((returnedFeedItem) => {
+          PubSub.publish('UPDATE_FEED', { ids: idArray, feedItems: [returnedFeedItem] });
 
           /* DELETE events/:event_id is a special case.
            * event is deleted AFTER updateFeeds
