@@ -10,10 +10,9 @@ test('`markFeedItemAsViewed` works', (t) => {
   initDb()
   .then(() => {
 
-    const user_id = 3;
     const feed_item_id = 1;
     const expected = { ...feedItem_1, viewed: true };
-    markFeedItemAsViewed(client, user_id, feed_item_id)
+    markFeedItemAsViewed(client, feed_item_id)
     .then(() => {
       const queryText = 'SELECT data FROM feeds WHERE id = $1;';
       const queryArray = [1];

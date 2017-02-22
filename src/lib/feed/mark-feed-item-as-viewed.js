@@ -11,8 +11,8 @@ import { markFeedItemAsViewed as queryText } from '../../db/sql-queries.json';
 export default function markFeedItemAsViewed (client, feed_item_id) {
   return new Promise ((resolve, reject) => {
 
-    if (arguments.length !== 3) {
-      return reject(new TypeError('`markFeedItemAsViewed` requires 3 arguments.  See docs for usage'));
+    if (arguments.length !== 2) {
+      return reject(new TypeError('`markFeedItemAsViewed` requires 2 arguments.  See docs for usage'));
     }
 
     const queryValues = [feed_item_id];
