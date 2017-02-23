@@ -9,7 +9,7 @@ import query from '../../db/query';
  */
 
 export default function getVotes (client, event_id, categoryOptions) {
-
+  console.log('get votes options', categoryOptions);
   return new Promise ((resolve, reject) => {
 
     if (arguments.length !== 3) {
@@ -24,11 +24,12 @@ export default function getVotes (client, event_id, categoryOptions) {
 
     const queryText = buildGetVotesQuery(event_id, categoryOptions);
     const queryValues = [event_id];
-
+    console.log(queryText);
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
         reject(err);
       }
+      console.log('VOTES??', result);
       resolve(result[0].votes);
     });
   });
@@ -52,7 +53,7 @@ export function buildGetVotesQuery (event_id, categoryOptions) {
       sumText = `COALESCE(SUM(${category}[${categoryOptions[category] - 1}]), 0), COALESCE(SUM(${category}[${categoryOptions[category]}]), 0)`;
     }
     if (categoryOptions[category] === 3) {
-      sumText = `COALESCE(SUM(${category}[${categoryOptions[category] - 2}], 0), COALESCE(SUM(${category}[${categoryOptions[category] - 1}]), 0), SUM(${category}[${categoryOptions[category]}])`;
+      sumText = `COALESCE(SUM(${category}[${categoryOptions[category] - 2}], 0), COALESCE(SUM(${category}[${categoryOptions[category] - 1}]), 0), COALESCE(SUM(${category}[${categoryOptions[category]}]), 0)`;
     }
     acc[category] = sumText;
     return acc;

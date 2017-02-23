@@ -28,12 +28,14 @@ export default function getCategoryOptions (client, event_id) {
       if (result.length === 0) {
         return resolve(null);
       }
+      // console.log('cat opts result', result);
       const categoryOptions = Object.keys(result[0]).reduce((acc, category) => {
         if (result[0][category] >= 2) {
           acc[category] = result[0][category];
         }
         return acc;
       }, {});
+      // console.log('cat opts final', categoryOptions);
       return resolve(categoryOptions);
     });
   });

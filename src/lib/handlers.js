@@ -433,6 +433,7 @@ export function getVotesHandler (req, res, next) {
 
   getCategoryOptions(client, event_id)
   .then((categoryOptions) => {
+    // console.log('handlers cat opts', categoryOptions);
     if (categoryOptions) {
       getVotes(client, event_id, categoryOptions)
       .then((votes) => {

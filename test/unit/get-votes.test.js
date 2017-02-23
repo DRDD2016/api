@@ -28,7 +28,7 @@ test('`getVotes` works', (t) => {
   });
 });
 
-test('`getVotes` handles events with no votes', (t) => {
+test.only('`getVotes` handles events with no votes', (t) => {
   initDb()
   .then(() => {
     t.plan(1);
