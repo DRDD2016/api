@@ -6,14 +6,6 @@ import getInviteesIds from './events/get-invitees-ids';
 import saveFeedItem from './feed/save-feed-item';
 import PubSub from 'pubsub-js';
 
-const informCurrentUser = (method, url) => {
-  if (method === 'POST' || method === 'PUT') {
-    if ((/\/events\/\d+$/).test(url) || (/\/events$/).test(url)) {
-      return true;
-    }
-  }
-  return false;
-};
 
 export default function updateFeeds (req, res, next) {
 
@@ -41,10 +33,6 @@ export default function updateFeeds (req, res, next) {
       .then(([feedItem, idArray]) => {
         if (!idArray) {
           idArray = [];
-        }
-        // if this user has just created or edited their own event:
-        if (informCurrentUser(req.method, req.url) && !idArray.includes(subject_user_id)) {
-          idArray.push(subject_user_id);
         }
 
         saveFeedItem(client, idArray, event_id, feedItem)

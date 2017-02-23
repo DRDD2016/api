@@ -45,12 +45,16 @@ export function postEventHandler (req, res, next) {
   data.code = code;
   saveEvent(client, data)
     .then((event_id) => {
-      req.subject_user_id = req.user.user_id;
-      req.event_id = event_id;
-      req.informAllInvitees = false;
-      req.responseStatusCode = 201;
-      req.responseData = { code };
-      next(); // --> updateFeeds
+      addInvitee(client, req.user.user_id, event_id)
+        .then(() => {
+          req.subject_user_id = req.user.user_id;
+          req.event_id = event_id;
+          req.informAllInvitees = false;
+          req.responseStatusCode = 201;
+          req.responseData = { code };
+          next(); // --> updateFeeds
+        })
+        .catch(err => next(err));
     })
     .catch((err) => {
       return res.status(500).send({ error: err });
