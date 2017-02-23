@@ -126,7 +126,7 @@ test('endpoint GET events handles unknown event id', (t) => {
     .set('authorization', token)
     .end((err, res) => {
       t.equal(res.statusCode, 422, 'Unknown event id returns 422 status code');
-      t.deepEqual(res.body,  { error: 'Could not get event' });
+      t.deepEqual(res.body,  { error: 'Event has been deleted' });
     });
   });
 });

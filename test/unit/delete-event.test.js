@@ -5,16 +5,9 @@ const initDb = require('../utils/init-db')(client);
 
 const event_id = 3;
 
-test('`deleteEvent` works', (t) => {
-  t.plan(1);
-  initDb()
-  .then(() => {
-
-    deleteEvent(client, event_id)
-    .then((result) => {
-      t.deepEqual(result, { event_id }, `event ${event_id} successfully deleted`);
-    });
-  });
+test('`deleteEvent` works', () => {
+  return initDb()
+  .then(() => deleteEvent(client, event_id));
 });
 
 test('`deleteEvent` handles non existent event', (t) => {
