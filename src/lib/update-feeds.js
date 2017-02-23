@@ -42,17 +42,14 @@ export default function updateFeeds (req, res, next) {
         if (!idArray) {
           idArray = [];
         }
-        console.log('first step');
         // if this user has just created or edited their own event:
         if (informCurrentUser(req.method, req.url) && !idArray.includes(subject_user_id)) {
-          console.log('second step');
           idArray.push(subject_user_id);
         }
 
         saveFeedItem(client, idArray, event_id, feedItem)
         .then((returnedFeedItem) => {
           if (returnedFeedItem) {
-            console.log('third step');
             PubSub.publish('UPDATE_FEED', { ids: idArray, feedItems: [returnedFeedItem] });
           }
           res.status(req.responseStatusCode).send(req.responseData);
