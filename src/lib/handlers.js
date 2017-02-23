@@ -30,6 +30,8 @@ import compileTemplate from './compile-template';
 import getUserByResetToken from './auth/get-user-by-reset-token';
 import resetUserPassword from './auth/reset-user-password';
 import markFeedItemAsViewed from './feed/mark-feed-item-as-viewed';
+import getCategoryOptions from './events/get-category-options';
+import getVotes from './events/get-votes';
 
 const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
@@ -424,4 +426,22 @@ export function editFeedHandler (req, res, next) {
   markFeedItemAsViewed(client, feedItemId)
     .then(() => res.status(204).end())
     .catch(err => next(err));
+}
+
+export function getVotesHandler (req, res, next) {
+  const event_id = req.params.event_id;
+
+  getCategoryOptions(client, event_id)
+  .then((categoryOptions) => {
+    if (categoryOptions) {
+      getVotes(client, event_id, categoryOptions)
+      .then((votes) => {
+        res.send(votes);
+      })
+      .catch(err => next(err));
+    } else {
+      return res.status(422).send({ error: 'Unknown event; no votes found' });
+    }
+  })
+  .catch(err => next(err));
 }

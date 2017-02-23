@@ -29,7 +29,6 @@ export default function getVotes (client, event_id, categoryOptions) {
       if (err) {
         reject(err);
       }
-      console.log(result[0].votes);
       resolve(result[0].votes);
     });
   });
@@ -50,10 +49,10 @@ export function buildGetVotesQuery (event_id, categoryOptions) {
     let sumText;
 
     if (categoryOptions[category] === 2) {
-      sumText = `SUM(${category}[${categoryOptions[category] - 1}]), SUM(${category}[${categoryOptions[category]}])`;
+      sumText = `COALESCE(SUM(${category}[${categoryOptions[category] - 1}]), 0), COALESCE(SUM(${category}[${categoryOptions[category]}]), 0)`;
     }
     if (categoryOptions[category] === 3) {
-      sumText = `SUM(${category}[${categoryOptions[category] - 2}]), SUM(${category}[${categoryOptions[category] - 1}], SUM(${category}[${categoryOptions[category]}])`;
+      sumText = `COALESCE(SUM(${category}[${categoryOptions[category] - 2}], 0), COALESCE(SUM(${category}[${categoryOptions[category] - 1}]), 0), SUM(${category}[${categoryOptions[category]}])`;
     }
     acc[category] = sumText;
     return acc;
