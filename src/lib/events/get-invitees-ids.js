@@ -9,7 +9,6 @@ import { getInviteesIds as queryText } from '../../db/sql-queries.json';
  */
 
 export default function getInviteesIds (client, event_id) {
-
   return new Promise ((resolve, reject) => {
 
     if (arguments.length !== 2) {

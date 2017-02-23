@@ -1,6 +1,6 @@
 import passport from 'passport';
 import {
-  postEventHandler, prepareToDeleteEvent, deleteEventHandler, getEventHandler,
+  postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, editEventHandler,
   getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
@@ -15,7 +15,7 @@ const requireLogin = passport.authenticate('local', { session: false });
 
 export default function registerRoutes (app) {
   app.post('/events', requireAuth, postEventHandler, updateFeeds);
-  app.delete('/events/:event_id', requireAuth, prepareToDeleteEvent, updateFeeds, deleteEventHandler);
+  app.delete('/events/:event_id', requireAuth, deleteEventHandler);
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
   app.post('/events/rsvps', requireAuth, postRsvpsHandler, addRsvps); // someone has entered code

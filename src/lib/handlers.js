@@ -57,14 +57,6 @@ export function postEventHandler (req, res, next) {
     });
 }
 
-export function prepareToDeleteEvent (req, res, next) {
-
-  req.subject_user_id = req.user.user_id;
-  req.event_id = req.params.event_id;
-  req.informAllInvitees = true;
-  next(); // --> updateFeeds
-}
-
 export function deleteEventHandler (req, res, next) {
   // updateFeeds happens before this step
   deleteEvent(client, req.params.event_id)
@@ -81,7 +73,7 @@ export function getEventHandler (req, res, next) {
       req.event = event;
       next(); // --> addRsvps
     } else {
-      return res.status(422).send({ error: 'Could not get event' });
+      return res.status(422).send({ error: 'Event has been deleted' });
     }
   })
   .catch(err => next(err));
