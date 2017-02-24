@@ -669,28 +669,27 @@ test('endpoint GET users/:user_id/calendar works', (t) => {
   initDb()
   .then(() => {
 
-    const user_id = 1;
+    const user_id = 3;
     request(server)
-    .get(`/users/${user_id}/calendar`)
-    .set('authorization', token)
+    .get(`/calendar`)
+    .set('authorization', createToken(user_id))
     .end((err, res) => {
       t.equal(res.statusCode, 200, 'status code is 200');
     });
   });
 });
 
-test('endpoint GET users/:user_id/calendar handles unknown user id', (t) => {
-  t.plan(2);
+test('endpoint GET /calendar handles unauthorised requests', (t) => {
+  t.plan(1);
   initDb()
   .then(() => {
 
     const user_id = 111;
     request(server)
-    .get(`/users/${user_id}/calendar`)
-    .set('authorization', token)
+    .get(`/calendar`)
+    .set('authorization', createToken(user_id))
     .then((res) => {
-      t.equal(res.statusCode, 422, 'Unknown user id returns 422 status code');
-      t.deepEqual(res.body,  { error: 'Unknown user; no calendar found' });
+      t.equal(res.statusCode, 401, 'Unauthorized status code');
     });
   });
 });

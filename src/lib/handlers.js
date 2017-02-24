@@ -32,6 +32,7 @@ import resetUserPassword from './auth/reset-user-password';
 import markFeedItemAsViewed from './feed/mark-feed-item-as-viewed';
 import getCategoryOptions from './events/get-category-options';
 import getVotes from './events/get-votes';
+import getCalendar from './events/get-calendar';
 
 const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
@@ -442,6 +443,16 @@ export function getVotesHandler (req, res, next) {
       .catch(err => next(err));
     } else {
       return res.status(422).send({ error: 'Unknown event; no votes found' });
+    }
+  })
+  .catch(err => next(err));
+}
+
+export function getCalendarHandler (req, res, next) {
+  getCalendar(client, req.user.user_id)
+  .then((calendar) => {
+    if (calendar) {
+      return res.send(calendar);
     }
   })
   .catch(err => next(err));
