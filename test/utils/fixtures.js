@@ -255,3 +255,30 @@ export const feedItems =  [
     }
   }
 ];
+
+export const calendar_user_3 = [
+  {
+    name: 'Lounge party',
+    where: ['Forest', 'Camping'],
+    when: ['2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z'],
+    status: 'not_responded',
+    event_id: 1,
+    host_user_id: 1
+  },
+  {
+    name: 'Beach party',
+    where: ['Mallorca'],
+    when: ['2017-01-03T00:00:00.000Z'],
+    status: 'going',
+    event_id: 3,
+    host_user_id: 3
+  },
+  {
+    name: 'Spring party',
+    where: ['Victoria Park'],
+    when: ['2017-04-03T00:00:00.000Z'],
+    status: 'not_responded',
+    event_id: 4,
+    host_user_id: 1
+  }
+];

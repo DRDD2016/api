@@ -58,7 +58,7 @@ test('endpoint POST events handles errors', (t) => {
   });
 });
 
-test('endpoint GET events works', (t) => {
+test('endpoint GET events/:event_id works', (t) => {
   t.plan(9);
   initDb()
   .then(() => {
@@ -101,7 +101,7 @@ test('endpoint GET events works', (t) => {
   });
 });
 
-test('endpoint GET events handles unauthorised requests', (t) => {
+test('endpoint GET events/:event_id handles unauthorised requests', (t) => {
   t.plan(1);
   initDb()
   .then(() => {
@@ -630,5 +630,66 @@ test('endpoint PATCH users/:user_id/feed handles internal errors', (t) => {
       t.deepEqual(res.body, { error: 'Missing feed item id' });
     })
     .catch(err => console.error(err));
+  });
+});
+
+test('endpoint GET votes/:event_id works', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const event_id = 1;
+    request(server)
+    .get(`/votes/${event_id}`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+  });
+});
+
+test('endpoint GET votes/:event_id handles unknown event id', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const event_id = 111;
+    request(server)
+    .get(`/votes/${event_id}`)
+    .set('authorization', token)
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'Unknown event id returns 422 status code');
+      t.deepEqual(res.body,  { error: 'Unknown event; no votes found' });
+    });
+  });
+});
+
+test('endpoint GET users/:user_id/calendar works', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const user_id = 3;
+    request(server)
+    .get(`/calendar`)
+    .set('authorization', createToken(user_id))
+    .end((err, res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+  });
+});
+
+test('endpoint GET /calendar handles unauthorised requests', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const user_id = 111;
+    request(server)
+    .get(`/calendar`)
+    .set('authorization', createToken(user_id))
+    .then((res) => {
+      t.equal(res.statusCode, 401, 'Unauthorized status code');
+    });
   });
 });
