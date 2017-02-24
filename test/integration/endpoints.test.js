@@ -663,3 +663,34 @@ test('endpoint GET votes/:event_id handles unknown event id', (t) => {
     });
   });
 });
+
+test('endpoint GET users/:user_id/calendar works', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const user_id = 1;
+    request(server)
+    .get(`/users/${user_id}/calendar`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+  });
+});
+
+test('endpoint GET users/:user_id/calendar handles unknown user id', (t) => {
+  t.plan(2);
+  initDb()
+  .then(() => {
+
+    const user_id = 111;
+    request(server)
+    .get(`/users/${user_id}/calendar`)
+    .set('authorization', token)
+    .then((res) => {
+      t.equal(res.statusCode, 422, 'Unknown user id returns 422 status code');
+      t.deepEqual(res.body,  { error: 'Unknown user; no calendar found' });
+    });
+  });
+});
