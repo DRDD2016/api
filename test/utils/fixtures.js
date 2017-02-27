@@ -258,14 +258,6 @@ export const feedItems =  [
 
 export const calendar_user_3 = [
   {
-    name: 'Lounge party',
-    where: ['Forest', 'Camping'],
-    when: ['2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z'],
-    status: 'not_responded',
-    event_id: 1,
-    host_user_id: 1
-  },
-  {
     name: 'Beach party',
     where: ['Mallorca'],
     when: ['2017-01-03T00:00:00.000Z'],
