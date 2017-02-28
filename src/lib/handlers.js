@@ -309,46 +309,19 @@ export function sendResetPasswordEmail (req, res, next) {
         // update user model with resetPasswordToken = token , resetPasswordExpires
         updateResetPasswordToken(client, userExists.user_id, token, tokenExpires)
         .then((userData) => {
-          // send the email to the user via SES Amazon
-        //   var params = {
-        //    Destination: { /* required */
-        //      ToAddresses: [
-        //        'anita@foundersandcoders.com' //change this email to the official one
-        //      ]
-        //    },
-        //    Message: { /* required */
-        //      Body: { /* required */
-        //        Html: {
-        //          Data: compileTemplate('resetPassword', 'html')(userData), /* required */
-        //          Charset: 'utf8'
-        //        },
-        //        Text: {
-        //          Data: compileTemplate('resetPassword', 'txt')(userData), /* required */
-        //          Charset: 'utf8'
-        //        }
-        //      },
-        //      Subject: { /* required */
-        //        Data: 'Please reset the password for your Spark account', /* required */
-        //        Charset: 'utf8'
-        //      }
-        //    },
-        //    Source: 'anita@foundersandcoders.com', /* required */
-        //    ReplyToAddresses: [
-        //      'anita@foundersandcoders.com' //change this email to the official one
-        //    ]
-        //  };
-        //
           userData.host = req.headers.host;
           const param = {
-            from: 'Anita <me@samples.mailgun.org>',
-            to: process.env.TO,
+            from: 'Spark <postmaster@mg.spark-app.net>',
+            to: email,
             subject: 'Please reset the password for your Spark account',
             html: compileTemplate('resetPassword', 'html')(userData)
           };
 
           mailgun.messages().send(param, function (err, data) {
             if (err) {
-              return next(err);
+              console.error(err.message);
+              // next(err);
+              return res.status(500).send({ error: 'Something went wrong' });
             } else {
               console.log(data); // successful response
               // send the response to client
@@ -400,8 +373,8 @@ export function resetPassword (req, res, next) {
     .then((user) => {
       if (user) {
         const param = {
-          from: 'Anita <me@samples.mailgun.org>',
-          to: process.env.TO,
+          from: 'Spark <postmaster@mg.spark-app.net>',
+          to: user.email,
           subject: 'New Spark Password',
           html: compileTemplate('newPassword', 'html')(user)
         };
