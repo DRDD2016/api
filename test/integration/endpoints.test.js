@@ -69,7 +69,6 @@ test('endpoint GET events/:event_id works', (t) => {
     .set('authorization', token)
     .end((err, res) => {
       const expected = { ...event_2, rsvps: emptyRsvps };
-      delete expected.code;
       t.deepEqual(res.body, expected);
       t.notOk(err);
       t.equal(res.statusCode, 200, 'status code is 200');
@@ -81,7 +80,6 @@ test('endpoint GET events/:event_id works', (t) => {
     .set('authorization', token)
     .end((err, res) => {
       const expected = { ...event_3, rsvps: rsvps_3 };
-      delete expected.code;
       t.notOk(err);
       t.deepEqual(res.body, expected);
       t.equal(res.statusCode, 200, 'status code is 200');
@@ -93,7 +91,6 @@ test('endpoint GET events/:event_id works', (t) => {
     .set('authorization', token)
     .end((err, res) => {
       const expected = { ...event_4, rsvps: rsvps_4 };
-      delete expected.code;
       t.notOk(err);
       t.deepEqual(res.body, expected);
       t.equal(res.statusCode, 200, 'status code is 200');

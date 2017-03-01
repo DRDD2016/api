@@ -6,7 +6,6 @@ const initDb = require('../utils/init-db')(client);
 
 const event_id = 1;
 const expected = Object.assign({}, event_1);
-delete expected.code;
 
 test('`getEvent` works', (t) => {
   t.plan(2);
