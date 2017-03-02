@@ -64,8 +64,9 @@ test('`buildGetVotesQuery` works', (t) => {
       _where: 2,
       _when: 2
     };
-    const result = buildGetVotesQuery(event_id, queryStructure);
+    buildGetVotesQuery(event_id, queryStructure, (err, result) => {
 
-    t.equal(result, expectedQueryText, 'Returns valid SQL query');
+      t.equal(result, expectedQueryText, 'Returns valid SQL query');
+    });
   });
 });

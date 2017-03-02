@@ -22,15 +22,19 @@ export default function getVotes (client, event_id, categoryOptions) {
       return reject(new TypeError('`getVotes` categoryOptions is empty or undefined'));
     }
 
-    const queryText = buildGetVotesQuery(event_id, categoryOptions);
-    const queryValues = [event_id];
-    console.log(queryText);
-    query(client, queryText, queryValues, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      console.log('VOTES??', result);
-      resolve(result[0].votes);
+    buildGetVotesQuery(event_id, categoryOptions, (err, queryText) => {
+
+      const queryValues = [event_id];
+      console.log(queryText);
+      query(client, queryText, queryValues, (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        console.log('VOTES??', result);
+        return result ?
+        resolve(result[0].votes) :
+        reject(null);
+      });
     });
   });
 }
@@ -39,11 +43,12 @@ export default function getVotes (client, event_id, categoryOptions) {
  * buildGetVotesQuery creates a valid SQL query for `getVotes`
  * @param {string} event_id - event_id
  * @param {object} categoryOptions - key: categories with votable options, value: number of votable options. Categories with no options are omitted. e.g. { _what: 2, _when: 3 }
+ * @param {function} callback
  * @returns {string} - query
  */
 
 
-export function buildGetVotesQuery (event_id, categoryOptions) {
+export function buildGetVotesQuery (event_id, categoryOptions, callback) {
   const categories = Object.keys(categoryOptions);
 
   const arrayStringObj = categories.reduce((acc, category) => {
@@ -68,5 +73,5 @@ export function buildGetVotesQuery (event_id, categoryOptions) {
   }, '');
 
   const queryText = `SELECT row_to_json(votes) AS votes FROM (SELECT ${text} FROM votes WHERE event_id = $1) AS votes;`;
-  return queryText;
+  return callback(null, queryText);
 }
