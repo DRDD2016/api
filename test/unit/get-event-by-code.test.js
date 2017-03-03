@@ -7,14 +7,16 @@ const initDb = require('../utils/init-db')(client);
 const code = 'FAKECODE';
 
 test('`getEventByCode` works', (t) => {
-  t.plan(2);
+  t.plan(3);
   initDb()
   .then(() => {
-    
+
     const expected = event_1;
     getEventByCode(client, code)
     .then((result) => {
+      console.log(result);
       t.equal(result.event_id, expected.event_id, 'correct event retrieved');
+      t.ok(result.host_photo_url, 'Event includes host photo url');
     })
     .catch(err => console.error(err));
 
