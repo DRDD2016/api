@@ -22,7 +22,8 @@ export const event_1 = {
   is_poll: true,
   host_user_id: 1,
   event_id: 1,
-  code: 'FAKECODE'
+  code: 'FAKECODE',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const event_2 = {
@@ -35,7 +36,8 @@ export const event_2 = {
   is_poll: true,
   host_user_id: 1,
   event_id: 2,
-  code: 'FAKECODE2'
+  code: 'FAKECODE2',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const event_3 = {
@@ -48,7 +50,8 @@ export const event_3 = {
   is_poll: false,
   host_user_id: 3,
   event_id: 3,
-  code: 'FAKECODE3'
+  code: 'FAKECODE3',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const event_4 = {
@@ -61,7 +64,8 @@ export const event_4 = {
   is_poll: false,
   host_user_id: 1,
   event_id: 4,
-  code: 'FAKECODE4'
+  code: 'FAKECODE4',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const newUser = {
@@ -95,8 +99,8 @@ export const rsvps_1 = {
   maybe: [],
   not_going: [],
   not_responded: [
-    { firstname: 'Dave', photo_url: avatarUrl, surname: 'Jones' },
-    { firstname: 'Sohil', photo_url: avatarUrl, surname: 'Pandya' }
+    { user_id: 2, firstname: 'Dave', photo_url: avatarUrl, surname: 'Jones' },
+    { user_id: 3, firstname: 'Sohil', photo_url: avatarUrl, surname: 'Pandya' }
   ]
 };
 
@@ -112,11 +116,13 @@ export const emptyRsvps = {
 export const rsvps_3 = {
   going: [
     {
+      user_id: 3,
       firstname: 'Sohil',
       surname: 'Pandya',
       photo_url: avatarUrl
     },
     {
+      user_id: 4,
       firstname: 'Mickey',
       surname: 'Mouse',
       photo_url: avatarUrl
@@ -124,6 +130,7 @@ export const rsvps_3 = {
   ],
   maybe: [],
   not_going: [{
+    user_id: 2,
     firstname: 'Dave',
     surname: 'Jones',
     photo_url: avatarUrl
@@ -137,11 +144,13 @@ export const rsvps_4 = {
   not_going: [],
   not_responded: [
     {
+      user_id: 2,
       firstname: 'Dave',
       surname: 'Jones',
       photo_url: avatarUrl
     },
     {
+      user_id: 3,
       firstname: 'Sohil',
       surname: 'Pandya',
       photo_url: avatarUrl
@@ -199,7 +208,7 @@ export const userData = {
 };
 
 export const updatedRsvp = {
-  going: [{ firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
+  going: [{ user_id: 3, firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
   maybe: rsvps_4.maybe,
   not_going: rsvps_4.not_going,
   not_responded: [rsvps_4.not_responded[0]]
@@ -208,7 +217,7 @@ export const updatedRsvp = {
 export const updatedRsvp_2 = {
   going: rsvps_4.going,
   maybe: rsvps_4.maybe,
-  not_going: [{ firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
+  not_going: [{ user_id: 3, firstname: 'Sohil', surname: 'Pandya', photo_url: avatarUrl }],
   not_responded: [rsvps_4.not_responded[0]]
 };
 
