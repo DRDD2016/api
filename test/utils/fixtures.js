@@ -22,7 +22,8 @@ export const event_1 = {
   is_poll: true,
   host_user_id: 1,
   event_id: 1,
-  code: 'FAKECODE'
+  code: 'FAKECODE',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const event_2 = {
@@ -35,7 +36,8 @@ export const event_2 = {
   is_poll: true,
   host_user_id: 1,
   event_id: 2,
-  code: 'FAKECODE2'
+  code: 'FAKECODE2',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const event_3 = {
@@ -48,7 +50,8 @@ export const event_3 = {
   is_poll: false,
   host_user_id: 3,
   event_id: 3,
-  code: 'FAKECODE3'
+  code: 'FAKECODE3',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const event_4 = {
@@ -61,7 +64,8 @@ export const event_4 = {
   is_poll: false,
   host_user_id: 1,
   event_id: 4,
-  code: 'FAKECODE4'
+  code: 'FAKECODE4',
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
 };
 
 export const newUser = {

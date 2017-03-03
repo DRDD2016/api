@@ -5,16 +5,17 @@ import { event_1 } from '../utils/fixtures';
 const initDb = require('../utils/init-db')(client);
 
 const event_id = 1;
-const expected = Object.assign({}, event_1);
+const expected = { ...event_1, host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png' };
 
 test('`getEvent` works', (t) => {
-  t.plan(2);
+  t.plan(3);
   initDb()
   .then(() => {
 
     getEvent(client, event_id)
     .then((result) => {
       t.deepEqual(result, expected, 'correct event retrieved');
+      t.ok(result.host_photo_url, 'Event includes host photo url');
     })
     .catch((err) => {
       console.error(err);
