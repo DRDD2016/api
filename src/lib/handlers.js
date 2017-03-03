@@ -31,7 +31,7 @@ import getUserByResetToken from './auth/get-user-by-reset-token';
 import resetUserPassword from './auth/reset-user-password';
 import markFeedItemAsViewed from './feed/mark-feed-item-as-viewed';
 import getCategoryOptions from './events/get-category-options';
-import getVotes from './events/get-votes';
+import getAllVotes from './events/get-all-votes';
 import getCalendar from './events/get-calendar';
 
 const domain = process.env.DOMAIN;
@@ -402,14 +402,14 @@ export function editFeedHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function getVotesHandler (req, res, next) {
+export function getAllVotesHandler (req, res, next) {
   const event_id = req.params.event_id;
 
   getCategoryOptions(client, event_id)
   .then((categoryOptions) => {
     // console.log('handlers cat opts', categoryOptions);
     if (categoryOptions) {
-      getVotes(client, event_id, categoryOptions)
+      getAllVotes(client, event_id, categoryOptions)
       .then((votes) => {
         res.send(votes);
       })
