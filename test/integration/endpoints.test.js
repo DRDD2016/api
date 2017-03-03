@@ -630,20 +630,36 @@ test('endpoint PATCH users/:user_id/feed handles internal errors', (t) => {
   });
 });
 
-test('endpoint GET votes/:event_id works', (t) => {
+test('endpoint GET votes/:event_id works for host', (t) => {
   t.plan(1);
   initDb()
   .then(() => {
 
     const event_id = 1;
     request(server)
-    .get(`/votes/${event_id}`)
+    .get(`/votes/${event_id}?all=true`)
     .set('authorization', token)
     .end((err, res) => {
       t.equal(res.statusCode, 200, 'status code is 200');
     });
   });
 });
+
+test('endpoint GET votes/:event_id works for invitee', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+
+    const event_id = 1;
+    request(server)
+    .get(`/votes/${event_id}?all=false`)
+    .set('authorization', token)
+    .end((err, res) => {
+      t.equal(res.statusCode, 200, 'status code is 200');
+    });
+  });
+});
+
 
 test('endpoint GET votes/:event_id handles unknown event id', (t) => {
   t.plan(2);

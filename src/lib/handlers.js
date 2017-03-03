@@ -32,6 +32,7 @@ import resetUserPassword from './auth/reset-user-password';
 import markFeedItemAsViewed from './feed/mark-feed-item-as-viewed';
 import getCategoryOptions from './events/get-category-options';
 import getAllVotes from './events/get-all-votes';
+import getVote from './events/get-vote';
 import getCalendar from './events/get-calendar';
 
 const domain = process.env.DOMAIN;
@@ -402,18 +403,28 @@ export function editFeedHandler (req, res, next) {
     .catch(err => next(err));
 }
 
-export function getAllVotesHandler (req, res, next) {
+export function getVotesHandler (req, res, next) {
+  const user_id = req.user.user_id;
   const event_id = req.params.event_id;
+  const shouldGetAllVotes = req.query.all === 'true';
 
   getCategoryOptions(client, event_id)
   .then((categoryOptions) => {
-    // console.log('handlers cat opts', categoryOptions);
     if (categoryOptions) {
-      getAllVotes(client, event_id, categoryOptions)
-      .then((votes) => {
-        res.send(votes);
-      })
-      .catch(err => next(err));
+      if (shouldGetAllVotes === true) {
+        getAllVotes(client, event_id, categoryOptions)
+        .then((allVotes) => {
+          return res.send(allVotes);
+        })
+        .catch(err => next(err));
+      } else {
+
+        getVote(client, user_id, event_id, categoryOptions)
+        .then((vote) => {
+          return res.send(vote);
+        })
+        .catch(err => next(err));
+      }
     } else {
       return res.status(422).send({ error: 'Unknown event; no votes found' });
     }
