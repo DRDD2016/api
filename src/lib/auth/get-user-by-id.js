@@ -21,8 +21,8 @@ export default function getUserById (client, user_id) {
       if (err) {
         reject(err);
       }
-
-      if (data.length === 0) {
+      
+      if (!data || data.length === 0) {
         return resolve(false);
       }
 
