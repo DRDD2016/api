@@ -26,15 +26,17 @@ export default function getVote (client, user_id, event_id, categoryOptions) {
     }
 
     buildGetVoteQuery(user_id, event_id, categoryOptions, (err, queryText) => {
+      const queryValues = [parseInt(user_id, 10), parseInt(event_id, 10)];
+      console.log(queryValues, queryText);
 
-      const queryValues = [user_id, event_id];
       query(client, queryText, queryValues, (err, result) => {
         if (err) {
           reject(err);
         }
+        console.log('IS THIS NULL?', result);
         return result ?
         resolve(result[0].vote) :
-        reject(null);
+        resolve(null);
       });
     });
   });

@@ -661,14 +661,14 @@ test('endpoint GET votes/:event_id works for invitee', (t) => {
 });
 
 
-test('endpoint GET votes/:event_id handles unknown event id', (t) => {
+test.only('endpoint GET votes/:event_id handles unknown event id', (t) => {
   t.plan(2);
   initDb()
   .then(() => {
 
     const event_id = 111;
     request(server)
-    .get(`/votes/${event_id}`)
+    .get(`/votes/${event_id}?all=false`)
     .set('authorization', token)
     .then((res) => {
       t.equal(res.statusCode, 422, 'Unknown event id returns 422 status code');

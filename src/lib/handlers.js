@@ -97,6 +97,7 @@ export function postRsvpsHandler (req, res, next) {
       if (!event) {
         return res.status(422).send({ error: 'No event found' });
       }
+      console.log('EVENT', event);
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
           req.event = normaliseEventKeys(event);
@@ -406,21 +407,28 @@ export function editFeedHandler (req, res, next) {
 export function getVotesHandler (req, res, next) {
   const user_id = req.user.user_id;
   const event_id = req.params.event_id;
+  if (req.query.all === null || req.query.all === undefined) {
+    return res.status(422).send({ error: 'Missing query string param.' });
+  }
   const shouldGetAllVotes = req.query.all === 'true';
 
   getCategoryOptions(client, event_id)
   .then((categoryOptions) => {
+    console.log('???????',categoryOptions);
     if (categoryOptions) {
       if (shouldGetAllVotes === true) {
+        console.log('getting all votes');
         getAllVotes(client, event_id, categoryOptions)
         .then((allVotes) => {
+          console.log(allVotes);
           return res.send(allVotes);
         })
         .catch(err => next(err));
       } else {
-
+        console.log('getting one vote');
         getVote(client, user_id, event_id, categoryOptions)
         .then((vote) => {
+          console.log(vote);
           return res.send(vote);
         })
         .catch(err => next(err));

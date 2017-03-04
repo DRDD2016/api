@@ -21,6 +21,22 @@ test('`getCategoryOptions` works', (t) => {
   });
 });
 
+test('`getCategoryOptions` works when only 2 categories have options', (t) => {
+  t.plan(1);
+  initDb()
+  .then(() => {
+    const event_id = 2;
+    const expected = {
+      _what: 2,
+      _where: 2
+    };
+    getCategoryOptions(client, event_id)
+      .then((result) => {
+        t.deepEqual(result, expected, 'Correct category options');
+      });
+  });
+});
+
 test('`getCategoryOptions` removes categories with only 1 option', (t) => {
   t.plan(1);
   initDb()
