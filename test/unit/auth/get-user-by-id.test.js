@@ -16,3 +16,7 @@ test('`getUserById` works', (t) => {
       t.ok(userExists, 'returns user data');
     });
 });
+
+test('`getUserById` handles errors', (t) => {
+  return t.shouldFail(getUserById(client, ""), 'Promise rejects');
+});
