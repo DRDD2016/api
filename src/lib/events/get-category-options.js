@@ -35,7 +35,7 @@ export default function getCategoryOptions (client, event_id) {
         }
         return acc;
       }, {});
-      // console.log('cat opts final', categoryOptions);
+      console.log('cat opts final', categoryOptions);
       return resolve(categoryOptions);
     });
   });

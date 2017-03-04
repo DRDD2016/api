@@ -85,7 +85,8 @@ export const existingUser = {
 
 export const vote = {
   what: [0, 1],
-  where: [1, 1]
+  where: [1, 1],
+  when: [1, 0]
 };
 
 export const hostEventChoices = {

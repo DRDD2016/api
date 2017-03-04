@@ -1,10 +1,10 @@
 import test from 'blue-tape';
 import client from '../../src/db/client';
-import getVotes, { buildGetVotesQuery } from '../../src/lib/events/get-votes';
+import getAllVotes, { buildGetAllVotesQuery } from '../../src/lib/events/get-all-votes';
 const initDb = require('../utils/init-db')(client);
 
 
-test('`getVotes` works', (t) => {
+test('`getAllVotes` works', (t) => {
   initDb()
   .then(() => {
     t.plan(1);
@@ -20,7 +20,7 @@ test('`getVotes` works', (t) => {
       "where": [1,1],
       "when": [2,1]
     };
-    getVotes(client, event_id, categoryOptions)
+    getAllVotes(client, event_id, categoryOptions)
     .then((result) => {
       // some stuff
       t.deepEqual(result, expected);
@@ -28,7 +28,7 @@ test('`getVotes` works', (t) => {
   });
 });
 
-test('`getVotes` handles events with no votes', (t) => {
+test('`getAllVotes` handles events with no votes', (t) => {
   initDb()
   .then(() => {
     t.plan(1);
@@ -39,7 +39,7 @@ test('`getVotes` handles events with no votes', (t) => {
       _where: 2
     };
     const expected = { what: [ 0, 0 ], where: [ 0, 0 ] };
-    getVotes(client, event_id, categoryOptions)
+    getAllVotes(client, event_id, categoryOptions)
     .then((result) => {
       // some stuff
       t.deepEqual(result, expected);
@@ -47,12 +47,12 @@ test('`getVotes` handles events with no votes', (t) => {
   });
 });
 
-test('`getVotes` handles errors', (t) => {
+test('`getAllVotes` handles errors', (t) => {
   return initDb()
-  .then(() => t.shouldFail(getVotes(client, ''), 'Promise rejects'));
+  .then(() => t.shouldFail(getAllVotes(client, ''), 'Promise rejects'));
 });
 
-test('`buildGetVotesQuery` works', (t) => {
+test('`buildGetAllVotesQuery` works', (t) => {
   t.plan(1);
   initDb()
   .then(() => {
@@ -64,7 +64,7 @@ test('`buildGetVotesQuery` works', (t) => {
       _where: 2,
       _when: 2
     };
-    buildGetVotesQuery(event_id, queryStructure, (err, result) => {
+    buildGetAllVotesQuery(event_id, queryStructure, (err, result) => {
 
       t.equal(result, expectedQueryText, 'Returns valid SQL query');
     });
