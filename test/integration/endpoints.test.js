@@ -661,7 +661,7 @@ test('endpoint GET votes/:event_id works for invitee', (t) => {
 });
 
 
-test.only('endpoint GET votes/:event_id handles unknown event id', (t) => {
+test('endpoint GET votes/:event_id handles unknown event id', (t) => {
   t.plan(2);
   initDb()
   .then(() => {
