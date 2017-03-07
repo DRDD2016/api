@@ -187,7 +187,8 @@ export const feedItem_1 = {
   is_poll: false,
   host_user_id: '2',
   subject_user_id: '2',
-  viewed: false
+  viewed: false,
+  edited: false
 };
 
 export const feedItem_3 = {
@@ -202,7 +203,8 @@ export const feedItem_3 = {
   when: ["2017-01-03T00:00:00.000Z"],
   is_poll: false,
   host_user_id: 3,
-  viewed: false
+  viewed: false,
+  edited: false
 };
 
 export const inviteesIds = [ 2, 3, 4];
@@ -245,6 +247,7 @@ export const feedItems =  [
       surname: 'Dylan',
       timestamp: '2017-02-19T21:20:26.481Z',
       viewed: true,
+      edited: false,
       what: [ 'Go to France' ],
       when: [ '2017-03-19T12:00:00.000Z' ],
       where: [ 'France' ],
@@ -263,6 +266,7 @@ export const feedItems =  [
       surname: 'Jones',
       timestamp: '2017-02-16T21:20:26.481Z',
       viewed: false,
+      edited: false,
       what: [ 'Dancing', 'Skydiving' ],
       when: [ '2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z' ],
       where: [ 'Forest', 'Camping' ],
