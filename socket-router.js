@@ -26,13 +26,6 @@ module.exports = function socketRouter (io) {
     });
   });
 
-  io.on('disconnect', () => {
-    // disconnect from pubsub
-    PubSub.unsubscribe(HYDRATE_FEED);
-    PubSub.unsubscribe(INIT_FEED);
-    console.log('DISCONNECTED');
-  });
-
   PubSub.subscribe(HYDRATE_FEED, (msg, data) => {
     console.log('NUM FEED ITEMS', data.feedItems.length);
     data.ids.forEach((id) => {
@@ -48,5 +41,12 @@ module.exports = function socketRouter (io) {
       // get feed from database
       io.emit(`feed:${id}`, data.feedItems);
     });
+  });
+
+  io.on('disconnect', () => {
+    // disconnect from pubsub
+    PubSub.unsubscribe(HYDRATE_FEED);
+    PubSub.unsubscribe(INIT_FEED);
+    console.log('DISCONNECTED');
   });
 };
