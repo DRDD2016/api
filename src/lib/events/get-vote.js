@@ -24,20 +24,35 @@ export default function getVote (client, user_id, event_id, categoryOptions) {
     if (!categoryOptions || Object.keys(categoryOptions).length === 0) {
       return reject(new TypeError('`getVote` categoryOptions is empty or undefined'));
     }
+    const queryText = 'SELECT _what AS what, _where AS where, _when AS when FROM votes WHERE user_id = $1 AND event_id = $2;';
+    const queryValues = [parseInt(user_id, 10), parseInt(event_id, 10)];
 
-    buildGetVoteQuery(user_id, event_id, categoryOptions, (err, queryText) => {
-      const queryValues = [parseInt(user_id, 10), parseInt(event_id, 10)];
-      console.log(queryValues, queryText);
+    query(client, queryText, queryValues, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      console.log('IS THIS NULL?', result);
+      if (result.length === 0) {
+        const initialState = {};
 
-      query(client, queryText, queryValues, (err, result) => {
-        if (err) {
-          reject(err);
+        categoryOptions._what && (initialState.what = new Array(categoryOptions._what).fill(0));
+        categoryOptions._where && (initialState.where = new Array(categoryOptions._where).fill(0));
+        categoryOptions._when && (initialState.when = new Array(categoryOptions._when).fill(0));
+        console.log('Result from getVote', initialState);
+        return resolve(initialState);
+      } else {
+        const vote = result[0];
+        const keysInResult = Object.keys(vote);
+        for (let i = 0; i < keysInResult.length; i++) {
+          if (!categoryOptions.hasOwnProperty(`_${keysInResult[i]}`)) {
+            delete vote[keysInResult[i]];
+          }
+          if (i === keysInResult.length - 1) {
+            console.log('Result from getVote', vote);
+            return resolve(vote);
+          }
         }
-        console.log('IS THIS NULL?', result);
-        return result ?
-        resolve(result[0].vote) :
-        resolve(null);
-      });
+      }
     });
   });
 }
