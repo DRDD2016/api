@@ -46,7 +46,7 @@ module.exports = function socketRouter (io) {
   io.on('disconnect', () => {
     // disconnect from pubsub
     PubSub.unsubscribe(HYDRATE_FEED);
-    PubSub.unsubscribe(INIT_FEED);
+    PubSub.unsubscribe(UPDATE_FEED);
     console.log('DISCONNECTED');
   });
 };
