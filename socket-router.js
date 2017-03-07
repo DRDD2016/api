@@ -32,7 +32,6 @@ module.exports = function socketRouter (io) {
   });
 
   PubSub.subscribe(HYDRATE_FEED, (msg, data) => {
-    console.log(msg, 'data', data);
     console.log('NUM FEED ITEMS', data.feedItems.length);
     data.ids.forEach((id) => {
       // get feed from database
