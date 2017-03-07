@@ -1,6 +1,6 @@
 {
   "saveEvent": "INSERT INTO events (host_user_id, name, description, note, _what, _where, _when, is_poll, code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING event_id;",
-  "getEventByCode": "SELECT row_to_json(event) FROM (SELECT name, description, code, note, _what, _where, _when, event_id, is_poll, host_user_id, photo_url AS host_photo_url FROM events JOIN users ON host_user_id = users.user_id WHERE code = $1) event",
+  "getEventByCode": "SELECT row_to_json(event) FROM (SELECT name, description, edited, code, note, _what, _where, _when, event_id, is_poll, host_user_id, photo_url AS host_photo_url FROM events JOIN users ON host_user_id = users.user_id WHERE code = $1) event",
   "deleteEvent": "DELETE FROM events WHERE event_id = $1;",
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id, photo_url;",
   "getUserByEmail": "SELECT * FROM users WHERE email = $1;",
@@ -9,7 +9,7 @@
   "finaliseEvent": "UPDATE events SET _what = ARRAY[$2], _where = ARRAY[$3], _when = ARRAY[$4], is_poll = false WHERE event_id = $1 RETURNING _what, _where, _when;",
   "getRsvps": "SELECT status, array_agg(json_build_object('user_id', users.user_id, 'firstname', firstname, 'surname', surname, 'photo_url', photo_url)) AS invitees FROM rsvps JOIN users ON users.user_id = rsvps.user_id WHERE event_id = $1 GROUP BY status;",
   "editEvent": "UPDATE events SET edited = true, name = $2, description = $3, note = $4, _what = ARRAY[$5], _where = ARRAY[$6], _when = ARRAY[$7] WHERE event_id = $1 RETURNING edited, name, description, note, _what, _where, _when, event_id;",
-  "getEvent": "SELECT row_to_json(event) FROM (SELECT name, description, code, note, _what, _where, _when, event_id, is_poll, host_user_id, photo_url AS host_photo_url FROM events JOIN users ON host_user_id = users.user_id WHERE event_id = $1) event;",
+  "getEvent": "SELECT row_to_json(event) FROM (SELECT name, description, edited, code, note, _what, _where, _when, event_id, is_poll, host_user_id, photo_url AS host_photo_url FROM events JOIN users ON host_user_id = users.user_id WHERE event_id = $1) event;",
   "saveFeedItem": "INSERT INTO feeds (user_id, event_id, data) VALUES ($1, $2, $3) RETURNING id, data AS feed_item;",
   "getInviteesIds": "SELECT array_agg(user_id) AS ids FROM rsvps WHERE event_id = $1;",
   "updateUser": "UPDATE users SET firstname = $2, surname = $3 WHERE user_id = $1 RETURNING firstname, surname, email, user_id, photo_url;",

@@ -23,7 +23,8 @@ export const event_1 = {
   host_user_id: 1,
   event_id: 1,
   code: 'FAKECODE',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const event_2 = {
@@ -37,7 +38,8 @@ export const event_2 = {
   host_user_id: 1,
   event_id: 2,
   code: 'FAKECODE2',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const event_3 = {
@@ -51,7 +53,8 @@ export const event_3 = {
   host_user_id: 3,
   event_id: 3,
   code: 'FAKECODE3',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const event_4 = {
@@ -65,7 +68,8 @@ export const event_4 = {
   host_user_id: 1,
   event_id: 4,
   code: 'FAKECODE4',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const newUser = {
