@@ -23,7 +23,8 @@ export const event_1 = {
   host_user_id: 1,
   event_id: 1,
   code: 'FAKECODE',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const event_2 = {
@@ -37,7 +38,8 @@ export const event_2 = {
   host_user_id: 1,
   event_id: 2,
   code: 'FAKECODE2',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const event_3 = {
@@ -51,7 +53,8 @@ export const event_3 = {
   host_user_id: 3,
   event_id: 3,
   code: 'FAKECODE3',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const event_4 = {
@@ -65,7 +68,8 @@ export const event_4 = {
   host_user_id: 1,
   event_id: 4,
   code: 'FAKECODE4',
-  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png'
+  host_photo_url: 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
+  edited: false
 };
 
 export const newUser = {
@@ -183,7 +187,8 @@ export const feedItem_1 = {
   is_poll: false,
   host_user_id: '2',
   subject_user_id: '2',
-  viewed: false
+  viewed: false,
+  edited: false
 };
 
 export const feedItem_3 = {
@@ -198,7 +203,8 @@ export const feedItem_3 = {
   when: ["2017-01-03T00:00:00.000Z"],
   is_poll: false,
   host_user_id: 3,
-  viewed: false
+  viewed: false,
+  edited: false
 };
 
 export const inviteesIds = [ 2, 3, 4];
@@ -241,6 +247,7 @@ export const feedItems =  [
       surname: 'Dylan',
       timestamp: '2017-02-19T21:20:26.481Z',
       viewed: true,
+      edited: false,
       what: [ 'Go to France' ],
       when: [ '2017-03-19T12:00:00.000Z' ],
       where: [ 'France' ],
@@ -259,6 +266,7 @@ export const feedItems =  [
       surname: 'Jones',
       timestamp: '2017-02-16T21:20:26.481Z',
       viewed: false,
+      edited: false,
       what: [ 'Dancing', 'Skydiving' ],
       when: [ '2017-01-03T00:00:00.000Z', '2017-02-14T00:00:00.000Z' ],
       where: [ 'Forest', 'Camping' ],

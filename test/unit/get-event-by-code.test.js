@@ -14,7 +14,6 @@ test('`getEventByCode` works', (t) => {
     const expected = event_1;
     getEventByCode(client, code)
     .then((result) => {
-      console.log(result);
       t.equal(result.event_id, expected.event_id, 'correct event retrieved');
       t.ok(result.host_photo_url, 'Event includes host photo url');
     })

@@ -182,10 +182,10 @@ INSERT INTO feeds (user_id, event_id, data)
   VALUES (
     3,
     4,
-    '{"event_id":3,"timestamp":"2017-02-19T21:20:26.481Z","firstname":"Bob","surname":"Dylan","photo_url":"https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png","what":["Go to France"],"where":["France"],"when":["2017-03-19T12:00:00.000Z"],"is_poll":false,"host_user_id":"2","subject_user_id":"2","viewed":true,"name":"Day trip to France"}'
+    '{"event_id":3,"timestamp":"2017-02-19T21:20:26.481Z","firstname":"Bob","surname":"Dylan","photo_url":"https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png","what":["Go to France"],"where":["France"],"when":["2017-03-19T12:00:00.000Z"],"is_poll":false,"host_user_id":"2","subject_user_id":"2","viewed":true,"name":"Day trip to France","edited":false}'
   ),
   (
     3,
     1,
-    '{"event_id":1,"timestamp":"2017-02-16T21:20:26.481Z","firstname":"Anita","surname":"Jones","photo_url":"https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png","what":["Dancing", "Skydiving"],"where":["Forest", "Camping"],"when":["2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"],"is_poll":true,"host_user_id":"1","subject_user_id":"3","viewed":false,"name":"Lounge party"}'
+    '{"event_id":1,"timestamp":"2017-02-16T21:20:26.481Z","firstname":"Anita","surname":"Jones","photo_url":"https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png","what":["Dancing", "Skydiving"],"where":["Forest", "Camping"],"when":["2017-01-03T00:00:00.000Z", "2017-02-14T00:00:00.000Z"],"is_poll":true,"host_user_id":"1","subject_user_id":"3","viewed":false,"name":"Lounge party","edited":false}'
   );
