@@ -170,7 +170,12 @@ export function finaliseEventHandler (req, res, next) {
   finaliseEvent(client, event_id, hostEventChoices)
     .then((data) => {
       if (data) {
-        return res.json(data);
+        req.subject_user_id = req.user.user_id;
+        req.event_id = req.params.event_id;
+        req.informAllInvitees = true;
+        req.responseStatusCode = 201;
+        req.responseData = data;
+        next(); // --> updateFeeds
       } else {
         return res.status(422).send({ error: 'Could not finalise event' });
       }
