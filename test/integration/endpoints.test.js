@@ -308,7 +308,7 @@ test('endpoint PATCH events/:event_id works', (t) => {
     .set('authorization', createToken(3))
     .send({ hostEventChoices })
     .then((res) => {
-      t.equal(res.statusCode, 200, 'status code is 200');
+      t.equal(res.statusCode, 201, 'status code is 201');
       t.deepEqual(res.body, hostEventChoices);
     })
     .catch(err => console.error(err));
