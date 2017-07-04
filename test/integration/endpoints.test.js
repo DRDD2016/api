@@ -23,7 +23,6 @@ test('endpoint POST events works', (t) => {
   t.plan(2);
   initDb()
   .then(() => {
-
     request(server)
     .post('/events')
     .set('authorization', token)

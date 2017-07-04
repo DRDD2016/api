@@ -8,7 +8,7 @@ let config = {
 if (process.env.CIRCLECI) {
   config.database = 'circle_test';
 } else if (process.env.TEST) {
-   config.database = 'spark';
+  config.database = 'spark';
 } else if (process.env.NODE_ENV === 'production' || process.env.REMOTE_DB) {
   config.user = process.env.PG_USER;
   config.password = process.env.PG_PASSWORD;
