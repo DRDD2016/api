@@ -42,7 +42,7 @@ const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, dom
 
 export function patchPushHandler (req, res, next) {
   console.log('Push req: ', req);
-  const userData = req.body.user;
+  const userData = req.body.user.push_info;
   console.log('userData: ', userData);
   const user_id = req.params.user_id;
   if (!userData) {
