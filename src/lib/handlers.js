@@ -41,8 +41,9 @@ const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, dom
 
 
 export function patchPushHandler (req, res, next) {
-  console.log('Push req',req);
+  console.log('Push req: ', req);
   const userData = req.body.user;
+  console.log('userData: ', userData);
   const user_id = req.params.user_id;
   if (!userData) {
     return res.status(422).send({ error: 'Missing user data' });
