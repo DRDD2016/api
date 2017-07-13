@@ -1,26 +1,26 @@
 import * as admin from "firebase-admin";
+import client from '../../db/client';
+import getPushTokenById from '../auth/get-pushToken-by-id';
+import initialiseFCM from './push-setup';
 
 //  * Sends Push Notifications to relevant users
 //  * @returns {object} notification
 //  * @param {object} returnedFeedItem - feed item.
 
+initialiseFCM();
+
 const sendPushNotifications = (idArray, returnedFeedItem) => {
 
-  console.log(idArray);
-  console.log(returnedFeedItem);
+  console.log('idArray: ', idArray[0]);
+  console.log('returnedFeedItem: ', returnedFeedItem);
   console.log('sending push notification to AllInvitees...');
+
   let notifications = buildNotifications(idArray, returnedFeedItem);
 
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FCM_PROJECT_ID,
-      clientEmail: process.env.FCM_CLIENT_EMAIL,
-      privateKey: process.env.FCM_PRIVATE_KEY
-    }),
-    databaseURL: process.env.FCM_DATABASE
-  });
-  console.log('finishedInitialisingApp');
-
+  console.log('about to send notifications: ', notifications);
+  if (!notifications) {
+    return;
+  }
   sendNotifications(notifications);
 
 };
@@ -58,57 +58,86 @@ const sendNotifications = (notifications) => {
 
 
 const buildNotifications = (idArray, returnedFeedItem) => {
-  // add Who will receive logic here
+
+  let notifications = new Promise((resolve, reject) => {
+    let notifs = idArray.map((id) => {
+      console.log('iterating id: ', id);
+
+      // check if user has registered a push token for notifications
+
+      getPushTokenById(client, id)
+      .then((token) => {
+        console.log('token: ', token);
+        if (token) {
+          console.log('pushToken: ', token);
+
+          let message = getMessage(id, returnedFeedItem);
+
+          let notification = {
+            receiverId: token,
+            message: message
+          };
+
+          console.log('notificationBuilt: ', notification);
+
+          return notification;
+        }
+        return;
+      })
+      .catch((err) => {
+        console.log('Unable to get PushToken: ', err);
+
+      });
+
+    });
+    if(notifs) {
+      resolve(notifs);
+    } else {
+      reject('error: unable to create notifications array');
+    }
+
+
+  });
+
+  notifications.then((notifs) => {
+    return notifs;
+  })
+  .catch((err) => {
+    console.log('Unable to get notif: ', err);
+  });
+
+};
+
+const getMessage = (id, returnedFeedItem) => {
+  let message = '';
+
+  // Host receives notification
   const { firstname, is_poll, edited, host_user_id, subject_user_id } = returnedFeedItem.feed_item;
 
   console.log('host_user_id:', host_user_id); // need to determine host/voter and exclude them from some notifications
   console.log('subject_user_id:', subject_user_id);
-  let message = '';
-  let notificationsObj = '';
 
-  let notifications = idArray.map((id) => {
-    console.log(id);
+  if (firstname && is_poll && (id === host_user_id)) {
+  message = `${firstname} has voted on your poll `;
+  }
+  if (firstname && !is_poll && (id === host_user_id)) {
+  message = `${firstname} has responded to your event `;
+  }
 
-    // logic here
+  // Non-Host Invitee receives notification
 
-    // Host receives notification
+  if (firstname && is_poll && (id !== host_user_id)) {
+  message = `${firstname} wants you to vote on their poll `;
+  }
+  if (firstname && !is_poll && !edited && (id !== host_user_id)) {
+  message = `${firstname} has invited you to their event `;
+  }
+  if (firstname && !is_poll && edited && (id !== host_user_id)) {
+  message = `${firstname} has edited an event `;
+  }
 
-    if (firstname && is_poll && (id === host_user_id)) {
-    message = `${firstname} has voted on your poll `;
-    }
-    if (firstname && !is_poll && (id === host_user_id)) {
-    message = `${firstname} has responded to your event `;
-    }
-
-    // Non-Host Invitee receives notification
-
-    if (firstname && is_poll && (id !== host_user_id)) {
-    message = `${firstname} wants you to vote on their poll `;
-    }
-    if (firstname && !is_poll && !edited && (id !== host_user_id)) {
-    message = `${firstname} has invited you to their event `;
-    }
-    if (firstname && !is_poll && edited && (id !== host_user_id)) {
-    message = `${firstname} has edited an event `;
-    }
-
-    console.log('message: ', message);
-
-    // logic above
-
-
-    let notification = {
-      receiverId: id,
-      message: message
-    };
-
-    notificationsObj.push(notification);
-
-    return notificationsObj;
-  });
-
-  return notifications;
-
+  console.log('message: ', message);
+  return message;
 };
 
 export default sendPushNotifications;
