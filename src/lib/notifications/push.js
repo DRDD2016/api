@@ -15,13 +15,17 @@ const sendPushNotifications = (idArray, returnedFeedItem) => {
   console.log('returnedFeedItem: ', returnedFeedItem);
   console.log('sending push notification to AllInvitees...');
 
-  let notifications = buildNotifications(idArray, returnedFeedItem);
+  // const notifications = async () => {
+  //   return await buildNotifications(idArray, returnedFeedItem);
+  // }
 
-  console.log('about to send notifications: ', notifications);
-  if (!notifications) {
-    return;
-  }
-  sendNotifications(notifications);
+  buildNotifications(idArray, returnedFeedItem).then((notifications) => {
+    console.log('about to send notifications: ', notifications);
+    if (!notifications) {
+      return;
+    }
+    sendNotifications(notifications);
+  });
 
 };
 
