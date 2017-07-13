@@ -5,7 +5,7 @@ import getHostId from './events/get-host-id';
 import getInviteesIds from './events/get-invitees-ids';
 import saveFeedItem from './feed/save-feed-item';
 import PubSub from 'pubsub-js';
-
+import sendPushNotifications from './notifications/push';
 
 export default function updateFeeds (req, res, next) {
 
@@ -40,6 +40,8 @@ export default function updateFeeds (req, res, next) {
           if (returnedFeedItem) {
             console.log('updating feed from updateFeeds...');
             PubSub.publish('UPDATE_FEED', { ids: idArray, feedItems: [returnedFeedItem] });
+            sendPushNotifications(idArray, returnedFeedItem);
+
           }
           res.status(req.responseStatusCode).send(req.responseData);
         })
