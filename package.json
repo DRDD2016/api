@@ -16,7 +16,7 @@
     "postmerge": "npm install"
   },
   "engines": {
-    "node": "6.9.3"
+    "node": "6.11.1"
   },
   "repository": {
     "type": "git",
