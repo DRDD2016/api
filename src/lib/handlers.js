@@ -270,7 +270,7 @@ export function patchUserHandler (req, res, next) {
 }
 
 export function postUserPhotoHandler (req, res, next) {
-  console.log('req:', req);
+  console.info('req:', req);
 
   const user_id = req.user.user_id;
   let tmpfile, filename, newfile, ext;
