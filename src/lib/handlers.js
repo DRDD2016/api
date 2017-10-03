@@ -270,9 +270,12 @@ export function patchUserHandler (req, res, next) {
 }
 
 export function postUserPhotoHandler (req, res, next) {
+  console.log('req:', req);
+
   const user_id = req.user.user_id;
   let tmpfile, filename, newfile, ext;
   const newForm = new formidable.IncomingForm();
+  console.log('newForm: ', newForm);
   newForm.keepExtension = true;
   newForm.parse(req, function (err, fields, files) {
 
@@ -280,9 +283,13 @@ export function postUserPhotoHandler (req, res, next) {
       return next(err);
     }
     tmpfile = files.photo.path;
+    console.log('tmpfile:', tmpfile);
     filename = generateFileName(files.photo.name);
+    console.log('filename:', filename);
     ext = extractFileExtension(files.photo.name);
+    console.log('ext:', ext);
     newfile = `${os.tmpdir()}/${filename}`; //access to temporary directory where all the files are stored
+    console.log('newfile:', newfile);
     fs.rename(tmpfile, newfile, function () {
       // resize
       gm(newfile).resize(300).write(newfile, function () {
