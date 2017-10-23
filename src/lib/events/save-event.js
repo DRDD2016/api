@@ -23,7 +23,8 @@ export default function saveEvent (client, data) {
       data.where,
       data.when,
       data.is_poll,
-      data.code
+      data.code,
+      false
     ];
 
     console.info('client: ', client);
