@@ -68,6 +68,10 @@ export function postEventHandler (req, res, next) {
   const data = { ...event, host_user_id: req.user.user_id };
   const code = shortid.generate();
   data.code = code;
+
+  console.info('client: ', client);
+  console.info('data: ', data);
+
   saveEvent(client, data)
     .then((event_id) => {
       addInvitee(client, req.user.user_id, event_id)

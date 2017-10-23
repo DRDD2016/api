@@ -25,6 +25,11 @@ export default function saveEvent (client, data) {
       data.is_poll,
       data.code
     ];
+
+    console.info('client: ', client);
+    console.info('data: ', data);
+
+
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
         reject(err);
