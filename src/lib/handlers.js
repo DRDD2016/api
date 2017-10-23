@@ -91,7 +91,7 @@ export function postEventHandler (req, res, next) {
 }
 
 export function deleteEventHandler (req, res, next) {
-  // updateFeeds happens before this step
+  
   console.info('deleteEvent req: ', req);
 
   const event_id = req.params.event_id;
