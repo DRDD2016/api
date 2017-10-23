@@ -32,10 +32,13 @@ export default function deleteEvent (client, event_id, data) {
       data.when[0]
     ];
 
+    console.info('queryValues:', queryValues);
+
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
         reject(err);
       }
+      console.info('result:', result);
       if (result.length === 0) {
          resolve(null);
       } else {
