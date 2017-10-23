@@ -87,11 +87,28 @@ export function postEventHandler (req, res, next) {
 
 export function deleteEventHandler (req, res, next) {
   // updateFeeds happens before this step
-  deleteEvent(client, req.params.event_id)
-  .then(() => {
-    return res.status(204).end();
-  })
-  .catch(err => next(err));
+
+  const event_id = req.params.event_id;
+  const event = req.body.event;
+
+  if (!event) {
+    return res.status(422).send({ error: 'Missing event data' });
+  }
+
+  deleteEvent(client, event_id, event)
+    .then((data) => {
+      if (data) {
+        req.subject_user_id = req.user.user_id;
+        req.event_id = event_id;
+        req.informAllInvitees = true;
+        req.responseStatusCode = 201;
+        req.responseData = data;
+        next(); // --> updateFeeds
+      } else {
+        return res.status(422).send({ error: 'Could not delete event' });
+      }
+    })
+    .catch(err => next(err));
 }
 
 export function getEventHandler (req, res, next) {
