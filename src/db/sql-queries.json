@@ -1,7 +1,7 @@
 {
   "saveEvent": "INSERT INTO events (host_user_id, name, description, note, _what, _where, _when, is_poll, code, cancelled) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING event_id;",
   "getEventByCode": "SELECT row_to_json(event) FROM (SELECT name, description, code, note, _what, _where, _when, event_id, is_poll, host_user_id, photo_url AS host_photo_url FROM events JOIN users ON host_user_id = users.user_id WHERE code = $1) event",
-  "deleteEvent": "UPDATE events SET cancelled = true WHERE event_id = $1 RETURNING name, event_id;",
+  "deleteEvent": "UPDATE events SET cancelled = true WHERE event_id = $1 RETURNING name, event_id, cancelled;",
   "saveUser": "INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING firstname, surname, email, user_id, photo_url;",
   "getUserByEmail": "SELECT * FROM users WHERE email = $1;",
   "getUserById": "SELECT firstname, surname, email, user_id, photo_url FROM users WHERE user_id = $1;",

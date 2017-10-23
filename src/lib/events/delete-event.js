@@ -23,8 +23,7 @@ export default function deleteEvent (client, event_id, data) {
     }
 
     const queryValues = [
-      event_id,
-      data.name
+      event_id
     ];
 
     console.info('queryValues:', queryValues);
