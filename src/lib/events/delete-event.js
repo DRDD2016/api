@@ -32,10 +32,14 @@ export default function deleteEvent (client, event_id, data) {
       data.when[0]
     ];
 
+    console.info('deleteEvent: ', queryValues);
+
+
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
         reject(err);
       }
+      console.info('result: ', result);
       return result.length === 0 ? resolve(null) : resolve(normaliseEventKeys(result[0]));
     });
   });
