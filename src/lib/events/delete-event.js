@@ -24,17 +24,14 @@ export default function deleteEvent (client, event_id, data) {
 
     const queryValues = [
       event_id,
-      data.name,
-      data.description,
-      data.note,
-      data.what[0],
-      data.where[0],
-      data.when[0]
+      data.name
     ];
 
     console.info('queryValues:', queryValues);
 
     query(client, queryText, queryValues, (err, result) => {
+      console.log('err: ', err);
+      console.log('result: ', result);
       if (err) {
         reject(err);
       }
