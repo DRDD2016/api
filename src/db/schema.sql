@@ -31,7 +31,8 @@ CREATE TABLE events (
   _what TEXT[],
   _where TEXT[],
   _when TEXT[],
-  edited BOOLEAN DEFAULT FALSE NOT NULL
+  edited BOOLEAN DEFAULT FALSE NOT NULL,
+  cancelled BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE feeds (
