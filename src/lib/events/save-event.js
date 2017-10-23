@@ -29,6 +29,7 @@ export default function saveEvent (client, data) {
       if (err) {
         reject(err);
       }
+      console.info('result: ', result);
       resolve(result[0].event_id);
     });
   });

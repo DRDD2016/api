@@ -61,6 +61,7 @@ export function patchPushHandler (req, res, next) {
 
 export function postEventHandler (req, res, next) {
   const event = req.body.event;
+  console.info('event: ', event);
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
   }
