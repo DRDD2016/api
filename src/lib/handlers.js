@@ -104,7 +104,7 @@ export function deleteEventHandler (req, res, next) {
         req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
-        next(); // --> updateFeeds
+        // next(); // --> updateFeeds - fix this once make it is cancelled
       } else {
         return res.status(422).send({ error: 'Could not delete event' });
       }

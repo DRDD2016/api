@@ -16,7 +16,7 @@ const requireLogin = passport.authenticate('local', { session: false });
 
 export default function registerRoutes (app) {
   app.post('/events', requireAuth, postEventHandler, updateFeeds);
-  app.delete('/events/:event_id', requireAuth, deleteEventHandler, updateFeeds);
+  app.delete('/events/:event_id', requireAuth, deleteEventHandler); // add updateFeeds once used isCancelled rather than deleteEvent
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
   app.post('/events/rsvps', requireAuth, postRsvpsHandler, addRsvps); // someone has entered code
