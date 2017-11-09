@@ -23,7 +23,7 @@ export default function registerRoutes (app) {
   app.patch('/events/:event_id/rsvps', requireAuth, patchRsvpsHandler, updateFeeds); // someone has changed rsvp
   app.post('/votes/:event_id', requireAuth, postVoteHandler, updateFeeds);
   app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
-  app.put('/events/:event_id', requireAuth, editEventHandler, updateFeeds);
+  app.put('/events/:event_id/edit', requireAuth, editEventHandler, updateFeeds);
   app.patch('/events/:event_id', requireAuth, finaliseEventHandler, updateFeeds);
   app.get('/events/:event_id', requireAuth, getEventHandler, addRsvps);
   app.get('/users/:user_id', requireAuth, getUserHandler);
