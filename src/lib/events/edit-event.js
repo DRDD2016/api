@@ -30,8 +30,10 @@ export default function editEvent (client, event_id, data) {
       data.where[0],
       data.when[0]
     ];
+
+    console.info('queryText: ', queryText);
     console.info('queryValues');
-    console.info(queryValues);
+    console.info('queryValues: ', queryValues);
 
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
