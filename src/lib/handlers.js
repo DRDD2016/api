@@ -91,7 +91,7 @@ export function postEventHandler (req, res, next) {
 }
 
 export function deleteEventHandler (req, res, next) {
-  
+
   console.info('deleteEvent req: ', req);
 
   const event_id = req.params.event_id;
@@ -242,6 +242,8 @@ export function getInviteesHandler (req, res, next) {
 export function editEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
+
+  console.info('editEvent req: ', req);
 
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
