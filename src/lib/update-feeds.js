@@ -38,7 +38,7 @@ export default function updateFeeds (req, res, next) {
         saveFeedItem(client, idArray, event_id, feedItem)
         .then((returnedFeedItem) => {
           if (returnedFeedItem) {
-            console.log('updating feed from updateFeeds...');
+            console.info('updating feed from updateFeeds...');
             PubSub.publish('UPDATE_FEED', { ids: idArray, feedItems: [returnedFeedItem] });
             sendPushNotifications(idArray, returnedFeedItem);
 

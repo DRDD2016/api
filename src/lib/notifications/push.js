@@ -11,13 +11,13 @@ initialiseFCM();
 
 const sendPushNotifications = (idArray, returnedFeedItem) => {
 
-  console.log('idArray: ', idArray[0]);
-  console.log('returnedFeedItem: ', returnedFeedItem);
-  console.log('sending push notification to AllInvitees...');
+  console.info('idArray: ', idArray[0]);
+  console.info('returnedFeedItem: ', returnedFeedItem);
+  console.info('sending push notification to AllInvitees...');
 
   let notifications = buildNotifications(idArray, returnedFeedItem);
 
-  console.log('about to send notifications: ', notifications);
+  console.info('about to send notifications: ', notifications);
   if (!notifications) {
     return;
   }
@@ -48,10 +48,10 @@ const sendNotifications = (notifications) => {
       .then(function (response) {
         // See the MessagingDevicesResponse reference documentation for
         // the contents of response.
-        console.log("Successfully sent message:", response);
+        console.info("Successfully sent message:", response);
       })
       .catch(function (error) {
-        console.log("Error sending message:", error);
+        console.info("Error sending message:", error);
       });
   });
 };
@@ -61,7 +61,7 @@ const buildNotifications = (idArray, returnedFeedItem) => {
 
   let notifications = new Promise((resolve, reject) => {
     let notifs = idArray.map((id) => {
-      console.log('iterating id: ', id);
+      console.info('iterating id: ', id);
 
       // check if user has registered a push token for notifications
 
