@@ -11,7 +11,7 @@ initialiseFCM();
 
 const sendPushNotifications = (idArray, returnedFeedItem) => {
 
-  console.info('idArray: ', idArray[0]);
+  console.info('idArray: ', idArray);
   console.info('returnedFeedItem: ', returnedFeedItem);
   console.info('sending push notification to AllInvitees...');
 
@@ -71,6 +71,8 @@ const buildNotifications = (idArray, returnedFeedItem) => {
         if (token) {
           console.log('pushToken: ', token);
 
+          let receiverIdToken = token.push_info;
+          console.log('receiverIdToken: ', receiverIdToken);
           let message = getMessage(id, returnedFeedItem);
 
           let notification = {
