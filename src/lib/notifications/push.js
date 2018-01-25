@@ -40,6 +40,9 @@ const sendNotifications = (notifications) => {
     };
     // use returnedFeedItem to construct payload
 
+    console.log('sendingToDevice payload: ', payload);
+    console.log('sendingToDevice registrationToken: ', registrationToken);
+
     const options = {
       priority: "high"
     };
@@ -93,6 +96,7 @@ const buildNotifications = (idArray, returnedFeedItem) => {
 
     });
     if(notifs) {
+      console.log('notifs: ', notifs);
       resolve(notifs);
     } else {
       reject('error: unable to create notifications array');
@@ -102,6 +106,7 @@ const buildNotifications = (idArray, returnedFeedItem) => {
   });
 
   notifications.then((notifs) => {
+    console.log('notifs: ', notifs);
     return notifs;
   })
   .catch((err) => {
