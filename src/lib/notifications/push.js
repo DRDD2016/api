@@ -76,7 +76,7 @@ const buildNotifications = (idArray, returnedFeedItem) => {
           let message = getMessage(id, returnedFeedItem);
 
           let notification = {
-            receiverId: token,
+            receiverId: receiverIdToken,
             message: message
           };
 
