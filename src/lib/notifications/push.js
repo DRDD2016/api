@@ -11,57 +11,6 @@ initialiseFCM();
 
 const sendPushNotifications = (idArray, returnedFeedItem) => {
 
-  console.info('idArray: ', idArray);
-  console.info('returnedFeedItem: ', returnedFeedItem);
-  console.info('sending push notification to AllInvitees...');
-
-  let notifications = buildNotifications(idArray, returnedFeedItem);
-
-  console.info('about to send notifications: ', notifications);
-  if (!notifications) {
-    return;
-  }
-  sendNotifications(notifications);
-
-};
-
-const sendNotifications = (notifications) => {
-  notifications.map((notification) => {
-    let registrationToken = notification.receiverId;
-    let message = notification.message;
-
-    // See the "Defining the message payload" section below for details
-    // on how to define a message payload.
-    const payload = {
-      notification: {
-        title: "New message from Spark",
-        body: message
-      }
-    };
-    // use returnedFeedItem to construct payload
-
-    console.log('sendingToDevice payload: ', payload);
-    console.log('sendingToDevice registrationToken: ', registrationToken);
-
-    const options = {
-      priority: "high"
-    };
-
-    admin.messaging().sendToDevice(registrationToken, payload, options)
-      .then(function (response) {
-        // See the MessagingDevicesResponse reference documentation for
-        // the contents of response.
-        console.info("Successfully sent message:", response);
-      })
-      .catch(function (error) {
-        console.info("Error sending message:", error);
-      });
-  });
-};
-
-
-const buildNotifications = (idArray, returnedFeedItem) => {
-
   let notifications = new Promise((resolve, reject) => {
     let notifs = idArray.map((id) => {
       console.info('iterating id: ', id);
@@ -74,16 +23,40 @@ const buildNotifications = (idArray, returnedFeedItem) => {
         if (token) {
           console.log('pushToken: ', token);
 
-          let receiverIdToken = token.push_info;
-          console.log('receiverIdToken: ', receiverIdToken);
+          let registrationToken = token.push_info;
+          console.log('registrationToken: ', registrationToken);
+
           let message = getMessage(id, returnedFeedItem);
 
-          let notification = {
-            receiverId: receiverIdToken,
-            message: message
+          // See the "Defining the message payload" section below for details
+          // on how to define a message payload.
+          const payload = {
+            notification: {
+              title: "New message from Spark",
+              body: message
+            }
+          };
+          // use returnedFeedItem to construct payload
+
+          console.log('sendingToDevice payload: ', payload);
+          console.log('sendingToDevice registrationToken: ', registrationToken);
+
+          const options = {
+            priority: "high"
           };
 
-          console.log('notificationBuilt: ', notification);
+          admin.messaging().sendToDevice(registrationToken, payload, options)
+            .then(function (response) {
+              // See the MessagingDevicesResponse reference documentation for
+              // the contents of response.
+              console.info("Successfully sent message:", response);
+            })
+            .catch(function (error) {
+              console.info("Error sending message:", error);
+            });
+
+
+
 
           return notification;
         }
@@ -102,15 +75,6 @@ const buildNotifications = (idArray, returnedFeedItem) => {
       reject('error: unable to create notifications array');
     }
 
-
-  });
-
-  notifications.then((notifs) => {
-    console.log('notifs: ', notifs);
-    return notifs;
-  })
-  .catch((err) => {
-    console.log('Unable to get notif: ', err);
   });
 
 };
