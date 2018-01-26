@@ -58,7 +58,7 @@ const sendPushNotifications = (idArray, returnedFeedItem) => {
 
 
 
-          return notification;
+          return;
         }
         return;
       })
