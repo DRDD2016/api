@@ -16,7 +16,7 @@
     "postmerge": "npm install"
   },
   "engines": {
-    "node": "6.9.3"
+    "node": "6.11.1"
   },
   "repository": {
     "type": "git",
@@ -52,12 +52,14 @@
     "dotenv": "^4.0.0",
     "ejs": "^2.5.6",
     "express": "^4.14.0",
+    "firebase-admin": "^5.0.0",
     "formidable": "^1.1.1",
     "gm": "^1.23.0",
     "handlebars": "^4.0.6",
     "jwt-simple": "^0.5.1",
     "mailgun-js": "^0.8.2",
     "morgan": "^1.7.0",
+    "node-pushnotifications": "^1.0.18",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",

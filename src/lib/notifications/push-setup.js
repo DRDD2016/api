@@ -1,18 +1,19 @@
-// 
-// const settings = {
-//     gcm: {
-//         id: null
-//     },
-//     apn: {
-//         token: {
-//             key: process.env.APN_KEY,
-//             keyId: '6F D1 FB E9 9F D6 EC 16 20 36 F2 00 88 AB CA BC DA C2 2D 76',
-//             teamId: '26TVQPX48T',
-//         }
-//     }
-// };
-// const PushNotifications = require('node-pushnotifications');
-// export const push = new PushNotifications(settings);
-//
-// console.log(push);
-// console.log(process.env.APN_KEY);
+import * as admin from "firebase-admin";
+
+//  * Initialises Firebase Admin for FCM
+
+const initialiseFCM = () => {
+
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FCM_PROJECT_ID,
+      clientEmail: process.env.FCM_CLIENT_EMAIL,
+      privateKey: process.env.FCM_PRIVATE_KEY.replace(/\\n/g, '\n')
+    }),
+    databaseURL: process.env.FCM_DATABASE
+  });
+  console.log('finishedInitialisingApp');
+
+};
+
+export default initialiseFCM;

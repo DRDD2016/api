@@ -204,7 +204,7 @@ test('endpoint POST signup rejects missing data', (t) => {
 });
 
 test('endpoint POST login works', (t) => {
-  t.plan(10);
+  t.plan(11);
   initDb()
   .then(() => {
 
@@ -214,7 +214,7 @@ test('endpoint POST login works', (t) => {
     .send({ email: user.email, password: user.password })
     .then((res) => {
 
-      const expectedKeys = ['token', 'firstname', 'surname', 'email', 'user_id', 'photo_url', 'reset_password_token', 'reset_password_expires'];
+      const expectedKeys = ['token', 'firstname', 'surname', 'email', 'user_id', 'photo_url', 'push_info', 'reset_password_token', 'reset_password_expires'];
       Object.keys(res.body).forEach((key) => {
         t.ok(expectedKeys.includes(key), `${key} exists`);
 

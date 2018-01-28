@@ -5,7 +5,7 @@ import {
   postRsvpsHandler, patchRsvpsHandler, editEventHandler,
   getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
   sendResetPasswordEmail, renderResetPasswordPageHandler, resetPassword,
-  editFeedHandler, getVotesHandler, getCalendarHandler
+  editFeedHandler, getVotesHandler, getCalendarHandler, patchPushHandler
 } from './handlers';
 import updateFeeds from './update-feeds';
 import { signup, login } from './auth';
@@ -16,14 +16,14 @@ const requireLogin = passport.authenticate('local', { session: false });
 
 export default function registerRoutes (app) {
   app.post('/events', requireAuth, postEventHandler, updateFeeds);
-  app.delete('/events/:event_id', requireAuth, deleteEventHandler);
+  app.put('/events/:event_id', requireAuth, deleteEventHandler, updateFeeds); // changed to PUT
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
   app.post('/events/rsvps', requireAuth, postRsvpsHandler, addRsvps); // someone has entered code
   app.patch('/events/:event_id/rsvps', requireAuth, patchRsvpsHandler, updateFeeds); // someone has changed rsvp
   app.post('/votes/:event_id', requireAuth, postVoteHandler, updateFeeds);
   app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
-  app.put('/events/:event_id', requireAuth, editEventHandler, updateFeeds);
+  app.put('/events/:event_id/edit', requireAuth, editEventHandler, updateFeeds);
   app.patch('/events/:event_id', requireAuth, finaliseEventHandler, updateFeeds);
   app.get('/events/:event_id', requireAuth, getEventHandler, addRsvps);
   app.get('/users/:user_id', requireAuth, getUserHandler);
@@ -35,4 +35,5 @@ export default function registerRoutes (app) {
   app.patch('/users/:user_id/feed', requireAuth, editFeedHandler);
   app.get('/votes/:event_id', requireAuth, getVotesHandler);
   app.get('/calendar', requireAuth, getCalendarHandler);
+  app.patch('/savePush/:user_id', requireAuth, patchPushHandler);
 }

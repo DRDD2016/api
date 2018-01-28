@@ -5,3 +5,4 @@ coverage/
 out/
 config.sh
 .env*
+.gitignore-d/

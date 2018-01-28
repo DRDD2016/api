@@ -12,6 +12,7 @@ import getUserById from './auth/get-user-by-id';
 import getUserByEmail from './auth/get-user-by-email';
 import updateUser from './auth/update-user';
 import updateUserPhoto from './auth/update-user-photo';
+import updateUserPushInfo from './auth/update-user-pushInfo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -39,14 +40,38 @@ const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
 
 
+export function patchPushHandler (req, res, next) {
+  console.log('Push req: ', req);
+  const userData = req.body.user.push_info;
+  console.log('userData: ', userData);
+  const user_id = req.params.user_id;
+  if (!userData) {
+    return res.status(422).send({ error: 'Missing user data' });
+  }
+  updateUserPushInfo(client, user_id, userData)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not update user' });
+      }
+    })
+    .catch(err => next(err));
+}
+
 export function postEventHandler (req, res, next) {
   const event = req.body.event;
+  console.info('event: ', event);
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
   }
   const data = { ...event, host_user_id: req.user.user_id };
   const code = shortid.generate();
   data.code = code;
+
+  console.info('client: ', client);
+  console.info('data: ', data);
+
   saveEvent(client, data)
     .then((event_id) => {
       addInvitee(client, req.user.user_id, event_id)
@@ -66,12 +91,30 @@ export function postEventHandler (req, res, next) {
 }
 
 export function deleteEventHandler (req, res, next) {
-  // updateFeeds happens before this step
-  deleteEvent(client, req.params.event_id)
-  .then(() => {
-    return res.status(204).end();
-  })
-  .catch(err => next(err));
+
+  console.info('deleteEvent req: ', req);
+
+  const event_id = req.params.event_id;
+  const event = req.body.event;
+
+  if (!event) {
+    return res.status(422).send({ error: 'Missing event data' });
+  }
+
+  deleteEvent(client, event_id, event)
+    .then((data) => {
+      if (data) {
+        req.subject_user_id = req.user.user_id;
+        req.event_id = event_id;
+        req.informAllInvitees = true;
+        req.responseStatusCode = 201;
+        req.responseData = data;
+        next(); // --> updateFeeds
+      } else {
+        return res.status(422).send({ error: 'Could not delete event' });
+      }
+    })
+    .catch(err => next(err));
 }
 
 export function getEventHandler (req, res, next) {
@@ -200,6 +243,8 @@ export function editEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
 
+  console.info('editEvent req: ', req);
+
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
   }
@@ -250,9 +295,12 @@ export function patchUserHandler (req, res, next) {
 }
 
 export function postUserPhotoHandler (req, res, next) {
+  console.info('req:', req);
+
   const user_id = req.user.user_id;
   let tmpfile, filename, newfile, ext;
   const newForm = new formidable.IncomingForm();
+  console.log('newForm: ', newForm);
   newForm.keepExtension = true;
   newForm.parse(req, function (err, fields, files) {
 
@@ -260,9 +308,13 @@ export function postUserPhotoHandler (req, res, next) {
       return next(err);
     }
     tmpfile = files.photo.path;
+    console.log('tmpfile:', tmpfile);
     filename = generateFileName(files.photo.name);
+    console.log('filename:', filename);
     ext = extractFileExtension(files.photo.name);
+    console.log('ext:', ext);
     newfile = `${os.tmpdir()}/${filename}`; //access to temporary directory where all the files are stored
+    console.log('newfile:', newfile);
     fs.rename(tmpfile, newfile, function () {
       // resize
       gm(newfile).resize(300).write(newfile, function () {

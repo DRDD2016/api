@@ -23,12 +23,19 @@ export default function saveEvent (client, data) {
       data.where,
       data.when,
       data.is_poll,
-      data.code
+      data.code,
+      false
     ];
+
+    console.info('client: ', client);
+    console.info('data: ', data);
+
+
     query(client, queryText, queryValues, (err, result) => {
       if (err) {
         reject(err);
       }
+      console.info('result: ', result);
       resolve(result[0].event_id);
     });
   });
