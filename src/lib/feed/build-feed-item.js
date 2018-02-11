@@ -27,7 +27,8 @@ export default function buildFeedItem (subject_user_id, event) {
         surname: user.surname,
         photo_url: user.photo_url,
         viewed: false,
-        edited: event.edited
+        edited: event.edited,
+        cancelled: event.cancelled
       };
     } else {
       return new Error('User does not exist');
