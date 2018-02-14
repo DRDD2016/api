@@ -141,15 +141,13 @@ export function postRsvpsHandler (req, res, next) {
         return res.status(422).send({ error: 'No event found' });
       }
       console.log('EVENT:', event);
-      const included = getRsvps(client, req.event.event_id)
+      getRsvps(client, req.event.event_id)
         .then((rsvps) => {
           req.event.rsvps = rsvps;
           console.log('req.event.rsvps:', req.event.rsvps);
-          return req.event.rsvps.includes(req.user.user_id);
+          req.included = req.event.rsvps.includes(req.user.user_id);
         })
         .catch(err => next(err));
-      console.log('RSVP already includes name = ', included);
-      req.included = included;
       console.log('req.included = ', req.included);
 
       addInvitee(client, req.user.user_id, event.event_id)
