@@ -140,11 +140,16 @@ export function postRsvpsHandler (req, res, next) {
       if (!event) {
         return res.status(422).send({ error: 'No event found' });
       }
-      console.log('EVENT', event);
+      console.log('EVENT:', event);
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
           req.event = normaliseEventKeys(event);
           next(); // --> addRsvps
+          // next(); // --> updateFeeds
+          // if(req.user.user_id === 'not in event.rsvps') {
+          // updateFeeds(); // --> updateFeeds
+          // }   look at express tutorial to understand req, res, next and how to add multiple callbacks
+
         })
         .catch(err => next(err));
     })
