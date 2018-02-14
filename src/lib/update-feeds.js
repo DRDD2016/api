@@ -9,6 +9,8 @@ import sendPushNotifications from './notifications/push';
 
 export default function updateFeeds (req, res, next) {
 
+  console.log(updatingFeeds);
+
   const subject_user_id = req.subject_user_id;
   const event_id = req.event_id;
   const informAllInvitees = req.informAllInvitees;
