@@ -147,7 +147,7 @@ export function postRsvpsHandler (req, res, next) {
           console.log('req.user.user_id:', req.user.user_id);
           console.log('rsvps.not_responded:', rsvps.not_responded);
           const notResponded = rsvps.not_responded;
-          const included = notResponded.some(user => nuser.user_id === req.user.user_id)
+          const included = notResponded.some(user => user.user_id === req.user.user_id)
           console.log('included: ', included);
 
 
