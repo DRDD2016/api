@@ -145,6 +145,8 @@ export function postRsvpsHandler (req, res, next) {
         .then(() => {
           req.event = normaliseEventKeys(event);
           next(); // --> addRsvps
+          console.log('req:', req);
+          console.log('1st next:', next);
           // next(); // --> updateFeeds
           // if(req.user.user_id === 'not in event.rsvps') {
           // updateFeeds(); // --> updateFeeds
@@ -160,6 +162,8 @@ export function addRsvps (req, res, next) {
   getRsvps(client, req.event.event_id)
   .then((rsvps) => {
     req.event.rsvps = rsvps;
+    console.log('req:', req);
+    console.log('2nd next:', next);
     return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
   })
   .catch(err => next(err));
