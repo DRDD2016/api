@@ -178,7 +178,7 @@ export function addRsvps (req, res, next) {
       req.subject_user_id = req.user.user_id;
       req.event_id = req.params.event_id;
       req.informAllInvitees = false;
-      req.responseStatusCode = 201;
+      // req.responseStatusCode = 201;
       next(); // --> updateFeeds
     }
 
