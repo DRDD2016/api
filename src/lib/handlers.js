@@ -141,11 +141,11 @@ export function postRsvpsHandler (req, res, next) {
         return res.status(422).send({ error: 'No event found' });
       }
       console.log('EVENT:', event);
-      getRsvps(client, req.event.event_id)
+      getRsvps(client, event.event_id)
         .then((rsvps) => {
-          req.event.rsvps = rsvps;
-          console.log('req.event.rsvps:', req.event.rsvps);
-          req.included = req.event.rsvps.includes(req.user.user_id);
+          console.log('rsvps:', rsvps);
+          console.log('req.user.user_id:', req.user.user_id);
+          req.included = rsvps.includes(req.user.user_id);
         })
         .catch(err => next(err));
       console.log('req.included = ', req.included);
