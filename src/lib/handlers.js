@@ -175,7 +175,11 @@ export function addRsvps (req, res, next) {
     if (!req.included) {
       console.log('req.included:', req.included);
       console.log('updateFeeds2');
-      // next(); // --> updateFeeds
+      req.subject_user_id = req.user.user_id;
+      req.event_id = req.params.event_id;
+      req.informAllInvitees = false;
+      req.responseStatusCode = 201;
+      next(); // --> updateFeeds
     }
 
     return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
