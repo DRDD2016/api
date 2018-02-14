@@ -19,7 +19,7 @@ export default function registerRoutes (app) {
   app.put('/events/:event_id', requireAuth, deleteEventHandler, updateFeeds); // changed to PUT
   app.post('/signup', signup);
   app.post('/login', requireLogin, login);
-  app.post('/events/rsvps', requireAuth, postRsvpsHandler, addRsvps); // someone has entered code
+  app.post('/events/rsvps', requireAuth, postRsvpsHandler, addRsvps, updateFeeds); // someone has entered code
   app.patch('/events/:event_id/rsvps', requireAuth, patchRsvpsHandler, updateFeeds); // someone has changed rsvp
   app.post('/votes/:event_id', requireAuth, postVoteHandler, updateFeeds);
   app.get('/events/:event_id/invitees', requireAuth, getInviteesHandler);
