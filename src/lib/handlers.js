@@ -145,10 +145,15 @@ export function postRsvpsHandler (req, res, next) {
         .then((rsvps) => {
           console.log('rsvps:', rsvps);
           console.log('req.user.user_id:', req.user.user_id);
-          req.included = rsvps.includes(req.user.user_id);
+          console.log('rsvps.not_responded:', rsvps.not_responded);
+          const notResponded = rsvps.not_responded;
+          const included = notResponded.some(user => nuser.user_id === req.user.user_id)
+          console.log('included: ', included);
+
+
+          req.included = included;
         })
         .catch(err => next(err));
-      console.log('req.included = ', req.included);
 
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
