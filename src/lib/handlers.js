@@ -150,17 +150,18 @@ export function postRsvpsHandler (req, res, next) {
           const included = notResponded.some(user => user.user_id === req.user.user_id)
           console.log('included: ', included);
 
-
           req.included = included;
+
+          addInvitee(client, req.user.user_id, event.event_id)
+            .then(() => {
+              req.event = normaliseEventKeys(event);
+              next(); // --> addRsvps
+            })
+            .catch(err => next(err));
+
         })
         .catch(err => next(err));
 
-      addInvitee(client, req.user.user_id, event.event_id)
-        .then(() => {
-          req.event = normaliseEventKeys(event);
-          next(); // --> addRsvps
-        })
-        .catch(err => next(err));
     })
     .catch(err => next(err));
 }
@@ -170,6 +171,7 @@ export function addRsvps (req, res, next) {
   .then((rsvps) => {
     req.event.rsvps = rsvps;
     console.log('req.event.rsvps:', req.event.rsvps);
+    console.log('req.included:', req.included);
     if (!req.included) {
       console.log('req.included:', req.included);
       console.log('updateFeeds2');
