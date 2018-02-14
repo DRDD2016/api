@@ -141,17 +141,21 @@ export function postRsvpsHandler (req, res, next) {
         return res.status(422).send({ error: 'No event found' });
       }
       console.log('EVENT:', event);
+      const included = getRsvps(client, req.event.event_id)
+        .then((rsvps) => {
+          req.event.rsvps = rsvps;
+          console.log('req.event.rsvps:', req.event.rsvps);
+          return req.event.rsvps.includes(req.user.user_id);
+        })
+        .catch(err => next(err));
+      console.log('RSVP already includes name = ', included);
+      req.included = included;
+      console.log('req.included = ', req.included);
+
       addInvitee(client, req.user.user_id, event.event_id)
         .then(() => {
           req.event = normaliseEventKeys(event);
           next(); // --> addRsvps
-          console.log('req:', req);
-          console.log('1st next:', next);
-          // next(); // --> updateFeeds
-          // if(req.user.user_id === 'not in event.rsvps') {
-          // updateFeeds(); // --> updateFeeds
-          // }   look at express tutorial to understand req, res, next and how to add multiple callbacks
-
         })
         .catch(err => next(err));
     })
@@ -162,8 +166,13 @@ export function addRsvps (req, res, next) {
   getRsvps(client, req.event.event_id)
   .then((rsvps) => {
     req.event.rsvps = rsvps;
-    console.log('req:', req);
-    console.log('2nd next:', next);
+    console.log('req.event.rsvps:', req.event.rsvps);
+    if (!req.included) {
+      console.log('req.included:', req.included);
+      console.log('updateFeeds2');
+      // next(); // --> updateFeeds
+    }
+
     return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
   })
   .catch(err => next(err));
