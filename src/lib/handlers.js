@@ -175,8 +175,9 @@ export function addRsvps (req, res, next) {
     if (!req.included) {
       console.log('req.included:', req.included);
       console.log('updateFeeds2');
+      console.log('req before next:', req);
       req.subject_user_id = req.user.user_id;
-      req.event_id = req.params.event_id;
+      req.event_id = req.event.event_id;
       req.informAllInvitees = false;
       // req.responseStatusCode = 201;
       console.log('about to next to update feeds:');
@@ -184,6 +185,9 @@ export function addRsvps (req, res, next) {
       next(); // --> updateFeeds
     }
     console.log('req after next:', req);
+    console.log('req.method:', req.method);
+    console.log('req.method:', req.method);
+    console.log('req.event:', req.event);
 
     return req.method === 'POST' ? res.status(201).json(req.event) : res.json(req.event);
   })
