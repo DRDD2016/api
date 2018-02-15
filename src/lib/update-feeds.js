@@ -39,15 +39,32 @@ export default function updateFeeds (req, res, next) {
         if (!idArray) {
           idArray = [];
         }
+        console.log('event.rsvps.notResponded:', event.rsvps.notResponded);
+
+        const notResponded = event.rsvps.notResponded;
+        const included = notResponded.some(user => user.user_id === subject_user_id);
+
+        console.log('included: ', included);
+
+        if (included) {  // adds invitee as receiver if they have just joined an event, but not responded
+          const idArray2 = subject_user_id;
+          const idArrayTotal = idArray.push(subject_user_id);
+        } else {
+          const idArrayTotal = idArray;
+        }
+
+
         console.log('idArray: ', idArray);
+        console.log('idArray2: ', idArray2);
+        console.log('idArrayTotal: ', idArrayTotal);
         console.log('feedItem: ', feedItem);
 
-        saveFeedItem(client, idArray, event_id, feedItem)
+        saveFeedItem(client, idArrayTotal, event_id, feedItem)
         .then((returnedFeedItem) => {
           if (returnedFeedItem) {
             console.info('updating feed from updateFeeds...');
-            PubSub.publish('UPDATE_FEED', { ids: idArray, feedItems: [returnedFeedItem] });
-            sendPushNotifications(idArray, returnedFeedItem);
+            PubSub.publish('UPDATE_FEED', { ids: idArrayTotal, feedItems: [returnedFeedItem] }); // create Feeditems for all ids
+            sendPushNotifications(idArray, returnedFeedItem); // only send push to idArray
 
           }
           res.status(req.responseStatusCode).send(req.responseData);
