@@ -39,6 +39,8 @@ export default function updateFeeds (req, res, next) {
         if (!idArray) {
           idArray = [];
         }
+        console.log('idArray: ', idArray);
+        console.log('feedItem: ', feedItem);
 
         saveFeedItem(client, idArray, event_id, feedItem)
         .then((returnedFeedItem) => {
