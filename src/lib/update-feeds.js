@@ -13,7 +13,7 @@ export default function updateFeeds (req, res, next) {
   console.log('req.subject_user_id', req.subject_user_id);
   console.log('req.event_id', req.event_id);
   console.log('req.informAllInvitees', req.informAllInvitees);
-
+  const newInvitee = req.newInvitee;
   const subject_user_id = req.subject_user_id;
   const event_id = req.event_id;
   const informAllInvitees = req.informAllInvitees;
@@ -39,15 +39,10 @@ export default function updateFeeds (req, res, next) {
         if (!idArray) {
           idArray = [];
         }
-        console.log('event.rsvps.notResponded:', event.rsvps.notResponded);
 
-        const notResponded = event.rsvps.notResponded;
-        const included = notResponded.some(user => user.user_id === subject_user_id);
+        console.log('newInvitee: ', newInvitee);
 
-        console.log('included: ', included);
-
-        if (included) {  // adds invitee as receiver if they have just joined an event, but not responded
-          const idArray2 = subject_user_id;
+        if (newInvitee) {  // adds invitee as receiver if they have just joined an event
           const idArrayTotal = idArray.push(subject_user_id);
         } else {
           const idArrayTotal = idArray;
@@ -64,7 +59,7 @@ export default function updateFeeds (req, res, next) {
           if (returnedFeedItem) {
             console.info('updating feed from updateFeeds...');
             PubSub.publish('UPDATE_FEED', { ids: idArrayTotal, feedItems: [returnedFeedItem] }); // create Feeditems for all ids
-            sendPushNotifications(idArray, returnedFeedItem); // only send push to idArray
+            sendPushNotifications(idArray, returnedFeedItem); // only send push to  (non-newInvitees)
 
           }
           res.status(req.responseStatusCode).send(req.responseData);
