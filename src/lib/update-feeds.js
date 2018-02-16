@@ -46,8 +46,10 @@ export default function updateFeeds (req, res, next) {
         }
         if (newInvitee) {  // adds invitee as receiver if they have just joined an event
           idArrayTotal = idArray.push(subject_user_id);
+          console.log('idArrayTotal 2: ', idArrayTotal);
         } else {
           idArrayTotal = idArray;
+          console.log('idArrayTotal 3: ', idArrayTotal);
         }
 
 
