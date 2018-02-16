@@ -50,7 +50,6 @@ export default function updateFeeds (req, res, next) {
 
 
         console.log('idArray: ', idArray);
-        console.log('idArray2: ', idArray2);
         console.log('idArrayTotal: ', idArrayTotal);
         console.log('feedItem: ', feedItem);
 
