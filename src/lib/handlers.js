@@ -81,6 +81,7 @@ export function postEventHandler (req, res, next) {
           req.informAllInvitees = false;
           req.responseStatusCode = 201;
           req.responseData = { code };
+          req.feedAction = 'create';
           next(); // --> updateFeeds
         })
         .catch(err => next(err));
@@ -109,6 +110,7 @@ export function deleteEventHandler (req, res, next) {
         req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
+        req.feedAction = 'delete';
         next(); // --> updateFeeds
       } else {
         return res.status(422).send({ error: 'Could not delete event' });
@@ -185,6 +187,7 @@ export function addRsvps (req, res, next) {
       req.event_id = req.event.event_id;
       req.informAllInvitees = false;
       // req.responseStatusCode = 201;
+      req.feedAction = 'notResponded';
       console.log('about to next to update feeds:');
 
       next(); // --> updateFeeds if newInvitee
@@ -208,12 +211,13 @@ export function patchRsvpsHandler (req, res, next) {
     .then(() => {
       getRsvps(client, req.params.event_id)
       .then((rsvps) => {
+        console.log('rsvps: ', rsvps);
         req.subject_user_id = req.user.user_id;
         req.event_id = req.params.event_id;
         req.informAllInvitees = false;
         req.responseStatusCode = 201;
         req.responseData = { rsvps };
-        req.isResponded = true;
+        req.feedAction = 'rsvp';
         next(); // --> updateFeeds
       })
       .catch(err => next(err));
@@ -238,6 +242,7 @@ export function postVoteHandler (req, res, next) {
         req.event_id = req.params.event_id;
         req.informAllInvitees = false;
         req.responseStatusCode = 201;
+        req.feedAction = 'vote';
         next(); // --> updateFeeds
       }
     })
@@ -258,6 +263,7 @@ export function finaliseEventHandler (req, res, next) {
         req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
+        req.feedAction = 'finalised';
         next(); // --> updateFeeds
       } else {
         return res.status(422).send({ error: 'Could not finalise event' });
@@ -297,6 +303,7 @@ export function editEventHandler (req, res, next) {
         req.informAllInvitees = true;
         req.responseStatusCode = 201;
         req.responseData = data;
+        req.feedAction = 'edited';
         next(); // --> updateFeeds
       } else {
         return res.status(422).send({ error: 'Could not edit event' });
