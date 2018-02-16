@@ -147,10 +147,13 @@ export function postRsvpsHandler (req, res, next) {
           console.log('req.user.user_id:', req.user.user_id);
           console.log('rsvps.not_responded:', rsvps.not_responded);
           const notResponded = rsvps.not_responded;
-          const included = notResponded.some(user => user.user_id === req.user.user_id)
-          console.log('included: ', included);
-
-          req.included = included;
+          const existingInvitee = notResponded.some(user => user.user_id === req.user.user_id)
+          console.log('existingInvitee: ', existingInvitee);
+          // need to include check to see if in Going, Not Going, Maybe, etc
+          if (!existingInvitee) {
+            req.newInvitee = true;
+          }
+          req.newInvitee = false;
 
           addInvitee(client, req.user.user_id, event.event_id)
             .then(() => {
@@ -171,8 +174,8 @@ export function addRsvps (req, res, next) {
   .then((rsvps) => {
     req.event.rsvps = rsvps;
     console.log('req.event.rsvps:', req.event.rsvps);
-    console.log('req.included:', req.included);
-    if (!req.included) {
+    console.log('req.newInvitee:', req.newInvitee);
+    if (req.newInvitee) {
       console.log('req.included:', req.included);
       console.log('updateFeeds2');
       console.log('req before next:', req);
@@ -182,7 +185,7 @@ export function addRsvps (req, res, next) {
       // req.responseStatusCode = 201;
       console.log('about to next to update feeds:');
 
-      next(); // --> updateFeeds
+      next(); // --> updateFeeds if newInvitee
     }
     console.log('req after next:', req);
     console.log('req.method:', req.method);
