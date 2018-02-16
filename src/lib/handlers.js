@@ -152,8 +152,10 @@ export function postRsvpsHandler (req, res, next) {
           // need to include check to see if in Going, Not Going, Maybe, etc
           if (!existingInvitee) {
             req.newInvitee = true;
+          } else {
+            req.newInvitee = false;
           }
-          req.newInvitee = false;
+
 
           addInvitee(client, req.user.user_id, event.event_id)
             .then(() => {
