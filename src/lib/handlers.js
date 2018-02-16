@@ -213,6 +213,7 @@ export function patchRsvpsHandler (req, res, next) {
         req.informAllInvitees = false;
         req.responseStatusCode = 201;
         req.responseData = { rsvps };
+        req.isResponded = true;
         next(); // --> updateFeeds
       })
       .catch(err => next(err));
