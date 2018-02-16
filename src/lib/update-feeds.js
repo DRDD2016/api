@@ -18,7 +18,7 @@ export default function updateFeeds (req, res, next) {
   const subject_user_id = req.subject_user_id;
   const event_id = req.event_id;
   const informAllInvitees = req.informAllInvitees;
-  const isResponded = req.isResponded;
+  const isResponded = req.isResponded ? true : false;
 
   if (!subject_user_id || !event_id || informAllInvitees === undefined) {
     return res.status(422).json({ error: 'Could not update feeds' });
@@ -46,7 +46,7 @@ export default function updateFeeds (req, res, next) {
         if (newInvitee === undefined) {
           idArrayTotal = idArray;
         }
-        if (newInvitee) {  // adds invitee as receiver if they have just joined an event
+        if (newInvitee || isResponded) {  // adds invitee as receiver if they have just joined an event
           idArrayTotal = idArray.push(subject_user_id);
           console.log('idArrayTotal 2: ', idArrayTotal);
         } else {
