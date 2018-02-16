@@ -39,13 +39,15 @@ export default function updateFeeds (req, res, next) {
         if (!idArray) {
           idArray = [];
         }
-
+        let idArrayTotal = [];
         console.log('newInvitee: ', newInvitee);
-
+        if (newInvitee === undefined) {
+          idArrayTotal = idArray;
+        }
         if (newInvitee) {  // adds invitee as receiver if they have just joined an event
-          const idArrayTotal = idArray.push(subject_user_id);
+          idArrayTotal = idArray.push(subject_user_id);
         } else {
-          const idArrayTotal = idArray;
+          idArrayTotal = idArray;
         }
 
 
