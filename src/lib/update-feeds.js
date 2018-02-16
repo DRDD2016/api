@@ -43,10 +43,16 @@ export default function updateFeeds (req, res, next) {
         }
         let idArrayTotal = [];
         console.log('newInvitee: ', newInvitee);
+        console.log('isResponded: ', isResponded);
         if (newInvitee === undefined) {
           idArrayTotal = idArray;
         }
-        if (newInvitee || isResponded) {  // adds invitee as receiver if they have just joined an event
+        if (isResponded) {  // adds invitee as receiver if they have just joined an event
+          console.log('idArray4a: ', idArray);
+          idArrayTotal = idArray.push(subject_user_id);
+          console.log('idArrayTotal 4b: ', idArrayTotal);
+        }
+        if (newInvitee) {  // adds invitee as receiver if they have just joined an event
           idArrayTotal = idArray.push(subject_user_id);
           console.log('idArrayTotal 2: ', idArrayTotal);
         } else {
@@ -55,9 +61,9 @@ export default function updateFeeds (req, res, next) {
         }
 
 
-        console.log('idArray: ', idArray);
-        console.log('idArrayTotal: ', idArrayTotal);
-        console.log('feedItem: ', feedItem);
+        console.log('idArrayS: ', idArray);
+        console.log('idArrayTotalS: ', idArrayTotal);
+        console.log('feedItemS: ', feedItem);
 
         saveFeedItem(client, idArrayTotal, event_id, feedItem)
         .then((returnedFeedItem) => {
