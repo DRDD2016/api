@@ -13,10 +13,12 @@ export default function updateFeeds (req, res, next) {
   console.log('req.subject_user_id', req.subject_user_id);
   console.log('req.event_id', req.event_id);
   console.log('req.informAllInvitees', req.informAllInvitees);
+  console.log('req.isResponded', req.isResponded);
   const newInvitee = req.newInvitee;
   const subject_user_id = req.subject_user_id;
   const event_id = req.event_id;
   const informAllInvitees = req.informAllInvitees;
+  const isResponded = req.isResponded;
 
   if (!subject_user_id || !event_id || informAllInvitees === undefined) {
     return res.status(422).json({ error: 'Could not update feeds' });
@@ -32,7 +34,7 @@ export default function updateFeeds (req, res, next) {
   .then((event) => {
     if (event) {
       Promise.all([
-        buildFeedItem(subject_user_id, event),
+        buildFeedItem(subject_user_id, event, isResponded),
         getIds(client, event_id, informAllInvitees)
       ])
       .then(([feedItem, idArray]) => {

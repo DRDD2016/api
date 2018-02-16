@@ -7,7 +7,7 @@ import getUserById from '../auth/get-user-by-id';
  * @param {object} event - event object
  */
 
-export default function buildFeedItem (subject_user_id, event) {
+export default function buildFeedItem (subject_user_id, event, isResponded) {
 
   return getUserById(client, subject_user_id)
   .then((user) => {
@@ -28,7 +28,8 @@ export default function buildFeedItem (subject_user_id, event) {
         photo_url: user.photo_url,
         viewed: false,
         edited: event.edited,
-        cancelled: event.cancelled
+        cancelled: event.cancelled,
+        isResponded
       };
     } else {
       return new Error('User does not exist');
