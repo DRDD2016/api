@@ -33,7 +33,8 @@ const sendPushNotifications = (idArray, returnedFeedItem) => {
           const payload = {
             notification: {
               title: "New message from Spark",
-              body: message
+              body: message,
+              icon: "ic_notif"
             }
           };
           // use returnedFeedItem to construct payload
