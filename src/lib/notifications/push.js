@@ -28,13 +28,19 @@ const sendPushNotifications = (idArray, returnedFeedItem) => {
 
           let message = getMessage(id, returnedFeedItem);
 
+          // use tag to only keep latest notification relating to each event and subject user
+          let tagName = `${returnedFeedItem.event_id}_${returnedFeedItem.subject_user_id}`;
+
           // See the "Defining the message payload" section below for details
           // on how to define a message payload.
           const payload = {
             notification: {
               title: "New message from Spark",
               body: message,
-              icon: "ic_notif"
+              icon: "ic_notif",
+              color: '#7D3E98',
+              tag: tagName,
+              sound: 'default'
             }
           };
           // use returnedFeedItem to construct payload
