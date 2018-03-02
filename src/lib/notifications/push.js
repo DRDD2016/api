@@ -89,6 +89,8 @@ const sendPushNotifications = (idArray, returnedFeedItem) => {
 const getMessage = (id, returnedFeedItem) => {
   let message = '';
 
+  console.log('returnedFeedItem:', returnedFeedItem);
+
   // Host receives notification
   const { firstname, is_poll, edited, host_user_id, subject_user_id } = returnedFeedItem.feed_item;
 
