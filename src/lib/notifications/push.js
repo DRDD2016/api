@@ -144,7 +144,9 @@ const getMessage = (id, returnedFeedItem) => {
   if (!userIsSubject && userIsHost && !is_poll && (action === 'rsvp')) {
     message = `${firstname} has responded to your event `;
   }
-
+  if (!userIsSubject && !userIsHost && !isCancelled && (action === 'finalised')) {
+    message = `${firstname} has confirmed an event `;
+  }
   if (!userIsSubject && !userIsHost && !is_poll && edited && !isCancelled && (action === 'edited')) {
     message = `${firstname} has edited an event `;
   }
