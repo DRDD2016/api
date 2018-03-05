@@ -98,7 +98,7 @@ const getMessage = (id, returnedFeedItem) => {
   console.log('returnedFeedItem:', returnedFeedItem);
 
   // Host receives notification
-  const { firstname, is_poll, edited, host_user_id, subject_user_id, action } = returnedFeedItem.feed_item;
+  const { firstname, is_poll, edited, host_user_id, subject_user_id, action, cancelled } = returnedFeedItem.feed_item;
 
   console.log('host_user_id:', host_user_id); // need to determine host/voter and exclude them from some notifications
   console.log('subject_user_id:', subject_user_id);
@@ -107,6 +107,7 @@ const getMessage = (id, returnedFeedItem) => {
 
   const userIsSubject = subject_user_id === id;
   const userIsHost = host_user_id === id;
+  const isCancelled = cancelled;
 
 
 // new
