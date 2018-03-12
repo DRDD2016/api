@@ -29,7 +29,8 @@ export default function buildFeedItem (subject_user_id, event, action) {
         viewed: false,
         edited: event.edited,
         cancelled: event.cancelled,
-        action
+        action,
+        feed_tag: `${event.event_id}_${subject_user_id}`
       };
     } else {
       return new Error('User does not exist');
