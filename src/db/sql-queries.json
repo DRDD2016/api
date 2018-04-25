@@ -25,6 +25,5 @@
   "getCalendar": "SELECT status, name, events.event_id, is_poll, cancelled, events.host_user_id, _where AS where, _when AS when, users.firstname AS host_firstname, users.surname AS host_surname, users.photo_url AS host_photo_url, subrsvps.rsvps FROM (((rsvps JOIN events ON events.event_id = rsvps.event_id) JOIN users ON events.host_user_id = users.user_id) JOIN (SELECT event_id, json_agg(json_build_object(sub1.rsvp_status, sub1.invitees)) AS rsvps FROM (SELECT event_id, status AS rsvp_status, json_agg(json_build_object('user_id', users.user_id, 'firstname', firstname, 'surname', surname, 'photo_url', photo_url)) AS invitees FROM (rsvps JOIN users ON users.user_id = rsvps.user_id) GROUP BY event_id, status ORDER BY status) AS sub1 GROUP BY event_id ORDER BY event_id) AS subrsvps ON subrsvps.event_id = rsvps.event_id) WHERE rsvps.user_id = $1 ORDER BY _when;",
   "updateUserPushInfo": "UPDATE users SET push_info = $2 WHERE user_id = $1 RETURNING push_info;",
   "getPushTokenById": "SELECT push_info FROM users WHERE user_id = $1;",
-  "updateUserUpdateNo": "UPDATE users SET update_no = $2 WHERE user_id = $1 RETURNING update_no;",
-
+  "updateUserUpdateNo": "UPDATE users SET update_no = $2 WHERE user_id = $1 RETURNING update_no;"
 }
