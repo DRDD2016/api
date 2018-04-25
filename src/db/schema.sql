@@ -16,6 +16,7 @@ CREATE TABLE users (
   email TEXT NOT NULL UNIQUE,
   photo_url TEXT NOT NULL DEFAULT 'https://s3.eu-west-2.amazonaws.com/spark-native/avatar.png',
   push_info TEXT,
+  update_no INTEGER,
   reset_password_token TEXT,
   reset_password_expires TEXT
 );

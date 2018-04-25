@@ -13,6 +13,7 @@ import getUserByEmail from './auth/get-user-by-email';
 import updateUser from './auth/update-user';
 import updateUserPhoto from './auth/update-user-photo';
 import updateUserPushInfo from './auth/update-user-pushInfo';
+import updateUserUpdateNo from './auth/update-user-updateNo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -39,6 +40,25 @@ import getCalendar from './events/get-calendar';
 const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
 
+
+export function patchUpdateNoHandler (req, res, next) {
+  console.log('UpdateNo req: ', req);
+  const updateNo = req.body.user.update_no;
+  console.log('updateNo: ', updateNo);
+  const user_id = req.params.user_id;
+  if (!updateNo) {
+    return res.status(422).send({ error: 'Missing user updateNo' });
+  }
+  updateUserUpdateNo(client, user_id, updateNo)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not update user updateNo' });
+      }
+    })
+    .catch(err => next(err));
+}
 
 export function patchPushHandler (req, res, next) {
   console.log('Push req: ', req);
