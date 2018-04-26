@@ -26,5 +26,6 @@
   "updateUserPushInfo": "UPDATE users SET push_info = $2 WHERE user_id = $1 RETURNING push_info;",
   "getPushTokenById": "SELECT push_info FROM users WHERE user_id = $1;",
   "updateUserUpdateNo": "UPDATE users SET update_no = $2 WHERE user_id = $1 RETURNING update_no;",
-  "updateUserOpenNo": "UPDATE users SET open_no = $2 WHERE user_id = $1 RETURNING open_no;"
+  "updateUserOpenNo": "UPDATE users SET open_no = $2 WHERE user_id = $1 RETURNING open_no;",
+  "getUserNoById": "SELECT update_no, open_no FROM users WHERE user_id = $1;"
 }

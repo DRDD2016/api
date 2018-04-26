@@ -8,6 +8,7 @@ import crypto from 'crypto';
 
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
+import getUserNoById from './auth/get-userNo-by-id';
 import getUserById from './auth/get-user-by-id';
 import getUserByEmail from './auth/get-user-by-email';
 import updateUser from './auth/update-user';
@@ -354,6 +355,18 @@ export function editEventHandler (req, res, next) {
 
 export function getUserHandler (req, res, next) {
   getUserById(client, req.params.user_id)
+  .then((user) => {
+    if (user) {
+      return res.json(user);
+    } else {
+      return res.status(422).send({ error: 'Could not get user' });
+    }
+  })
+  .catch(err => next(err));
+}
+
+export function getUserNoHandler (req, res, next) {
+  getUserNoById(client, req.params.user_id)
   .then((user) => {
     if (user) {
       return res.json(user);

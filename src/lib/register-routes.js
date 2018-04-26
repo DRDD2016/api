@@ -3,7 +3,7 @@ import {
   postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, editEventHandler,
-  getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
+  getUserHandler, getUserNoHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
   sendResetPasswordEmail, renderResetPasswordPageHandler, resetPassword,
   editFeedHandler, getVotesHandler, getCalendarHandler, patchPushHandler,
   patchUpdateNoHandler, patchOpenNoHandler
@@ -39,4 +39,5 @@ export default function registerRoutes (app) {
   app.patch('/savePush/:user_id', requireAuth, patchPushHandler);
   app.patch('/saveUpdateNo/:user_id', requireAuth, patchUpdateNoHandler);
   app.patch('/saveOpenNo/:user_id', requireAuth, patchOpenNoHandler);
+  app.get('/userNos/:user_id', requireAuth, getUserNoHandler);
 }
