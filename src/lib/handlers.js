@@ -14,6 +14,7 @@ import updateUser from './auth/update-user';
 import updateUserPhoto from './auth/update-user-photo';
 import updateUserPushInfo from './auth/update-user-pushInfo';
 import updateUserUpdateNo from './auth/update-user-updateNo';
+import updateUserOpenNo from './auth/update-user-openNo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -55,6 +56,25 @@ export function patchUpdateNoHandler (req, res, next) {
         return res.json(data);
       } else {
         return res.status(422).send({ error: 'Could not update user updateNo' });
+      }
+    })
+    .catch(err => next(err));
+}
+
+export function patchOpenNoHandler (req, res, next) {
+  console.log('OpenNo req: ', req);
+  const openNo = req.body.user.open_no;
+  console.log('OpenNo: ', updateNo);
+  const user_id = req.params.user_id;
+  if (!openNo) {
+    return res.status(422).send({ error: 'Missing user openNo' });
+  }
+  updateUserOpenNo(client, user_id, openNo)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not update user openNo' });
       }
     })
     .catch(err => next(err));
