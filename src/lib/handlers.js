@@ -8,11 +8,14 @@ import crypto from 'crypto';
 
 import saveEvent from './events/save-event';
 import getEvent from './events/get-event';
+import getUserNoById from './auth/get-userNo-by-id';
 import getUserById from './auth/get-user-by-id';
 import getUserByEmail from './auth/get-user-by-email';
 import updateUser from './auth/update-user';
 import updateUserPhoto from './auth/update-user-photo';
 import updateUserPushInfo from './auth/update-user-pushInfo';
+import updateUserUpdateNo from './auth/update-user-updateNo';
+import updateUserOpenNo from './auth/update-user-openNo';
 import deleteEvent from './events/delete-event';
 import addInvitee from './events/add-invitee';
 import getEventByCode from './events/get-event-by-code';
@@ -39,6 +42,44 @@ import getCalendar from './events/get-calendar';
 const domain = process.env.DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain });
 
+
+export function patchUpdateNoHandler (req, res, next) {
+  console.log('UpdateNo req: ', req);
+  const updateNo = req.body.user.update_no;
+  console.log('updateNo: ', updateNo);
+  const user_id = req.params.user_id;
+  if (!updateNo) {
+    return res.status(422).send({ error: 'Missing user updateNo' });
+  }
+  updateUserUpdateNo(client, user_id, updateNo)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not update user updateNo' });
+      }
+    })
+    .catch(err => next(err));
+}
+
+export function patchOpenNoHandler (req, res, next) {
+  console.log('OpenNo req: ', req);
+  const openNo = req.body.user.open_no;
+  console.log('OpenNo: ', updateNo);
+  const user_id = req.params.user_id;
+  if (!openNo) {
+    return res.status(422).send({ error: 'Missing user openNo' });
+  }
+  updateUserOpenNo(client, user_id, openNo)
+    .then((data) => {
+      if (data) {
+        return res.json(data);
+      } else {
+        return res.status(422).send({ error: 'Could not update user openNo' });
+      }
+    })
+    .catch(err => next(err));
+}
 
 export function patchPushHandler (req, res, next) {
   console.log('Push req: ', req);
@@ -314,6 +355,18 @@ export function editEventHandler (req, res, next) {
 
 export function getUserHandler (req, res, next) {
   getUserById(client, req.params.user_id)
+  .then((user) => {
+    if (user) {
+      return res.json(user);
+    } else {
+      return res.status(422).send({ error: 'Could not get user' });
+    }
+  })
+  .catch(err => next(err));
+}
+
+export function getUserNoHandler (req, res, next) {
+  getUserNoById(client, req.params.user_id)
   .then((user) => {
     if (user) {
       return res.json(user);

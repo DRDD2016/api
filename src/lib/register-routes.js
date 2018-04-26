@@ -3,9 +3,10 @@ import {
   postEventHandler, deleteEventHandler, getEventHandler,
   postVoteHandler, finaliseEventHandler, getInviteesHandler,
   postRsvpsHandler, patchRsvpsHandler, editEventHandler,
-  getUserHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
+  getUserHandler, getUserNoHandler, patchUserHandler, postUserPhotoHandler, addRsvps,
   sendResetPasswordEmail, renderResetPasswordPageHandler, resetPassword,
-  editFeedHandler, getVotesHandler, getCalendarHandler, patchPushHandler
+  editFeedHandler, getVotesHandler, getCalendarHandler, patchPushHandler,
+  patchUpdateNoHandler, patchOpenNoHandler
 } from './handlers';
 import updateFeeds from './update-feeds';
 import { signup, login } from './auth';
@@ -36,4 +37,7 @@ export default function registerRoutes (app) {
   app.get('/votes/:event_id', requireAuth, getVotesHandler);
   app.get('/calendar', requireAuth, getCalendarHandler);
   app.patch('/savePush/:user_id', requireAuth, patchPushHandler);
+  app.patch('/saveUpdateNo/:user_id', requireAuth, patchUpdateNoHandler);
+  app.patch('/saveOpenNo/:user_id', requireAuth, patchOpenNoHandler);
+  app.get('/userNos/:user_id', requireAuth, getUserNoHandler);
 }
