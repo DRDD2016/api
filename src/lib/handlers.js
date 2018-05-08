@@ -67,6 +67,7 @@ export function patchOpenNoHandler (req, res, next) {
   const openNo = req.body.user.open_no;
   console.log('OpenNo: ', openNo);
   const user_id = req.params.user_id;
+  console.log('handlers userID: ', user_id);
   if (!openNo) {
     return res.status(422).send({ error: 'Missing user openNo' });
   }
