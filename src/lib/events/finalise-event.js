@@ -13,6 +13,7 @@ import normaliseEventKeys from '../normalise-event-keys';
  */
 
  export default function finaliseEvent (client, event_id, hostEventChoices) {
+   console.log('finaliseEvent hostEventChoices: ', hostEventChoices);
 
    return new Promise ((resolve, reject) => {
 

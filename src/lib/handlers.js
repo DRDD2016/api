@@ -294,6 +294,7 @@ export function postVoteHandler (req, res, next) {
 export function finaliseEventHandler (req, res, next) {
   const hostEventChoices = req.body.hostEventChoices;
   const event_id = req.params.event_id;
+  console.log('finalise EventHandler req: ', req);
   if (!hostEventChoices) {
     return res.status(422).send({ error: 'Missing host event choices' });
   }
