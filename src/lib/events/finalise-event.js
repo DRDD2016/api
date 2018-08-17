@@ -13,7 +13,7 @@ import normaliseEventKeys from '../normalise-event-keys';
  */
 
  export default function finaliseEvent (client, event_id, hostEventChoices) {
-   console.log('finaliseEvent hostEventChoices: ', hostEventChoices);
+   
 
    return new Promise ((resolve, reject) => {
 
@@ -28,14 +28,14 @@ import normaliseEventKeys from '../normalise-event-keys';
 
      query(client, queryText, queryValues, (err, result) => {
        if (err) {
-         console.log('finalise event error:', err);
+
          reject(err);
        }
        if (result.length === 0) {
-          console.log('finalise event resolve null result:', result);
+
           resolve(null);
        } else {
-          console.log('finalise event resolve else result:', result);
+
           resolve(normaliseEventKeys(result[0]));
        }
      });

@@ -294,7 +294,7 @@ export function postVoteHandler (req, res, next) {
 export function finaliseEventHandler (req, res, next) {
   const hostEventChoices = req.body.hostEventChoices;
   const event_id = req.params.event_id;
-  console.log('finalise EventHandler req: ', req);
+
   if (!hostEventChoices) {
     return res.status(422).send({ error: 'Missing host event choices' });
   }
@@ -331,8 +331,6 @@ export function getInviteesHandler (req, res, next) {
 export function editEventHandler (req, res, next) {
   const event_id = req.params.event_id;
   const event = req.body.event;
-
-  console.info('editEvent req: ', req);
 
   if (!event) {
     return res.status(422).send({ error: 'Missing event data' });
@@ -579,7 +577,7 @@ export function getVotesHandler (req, res, next) {
         console.log('getting all votes');
         getAllVotes(client, event_id, categoryOptions)
         .then((allVotes) => {
-          console.log(allVotes);
+          console.log('allVotes: ', allVotes);
           return res.send(allVotes);
         })
         .catch(err => next(err));
