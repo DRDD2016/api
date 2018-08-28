@@ -50,7 +50,8 @@ export default function getAllVotes (client, event_id, categoryOptions) {
           if (acc.what) {
 
             acc.what = votes[0].what.map(item) => {
-              return item;
+              console.log('what item', item);
+              return acc.what += item;
             });
 
             console.log('new acc.what', acc.what);
