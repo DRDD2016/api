@@ -48,16 +48,23 @@ export default function getAllVotes (client, event_id, categoryOptions) {
             return resolve(acc);
           }
           if (acc.what) {
-            console.log('acc.what', acc.what);
-            acc.what[0] += votes[0].what[0];
-            console.log('acc.what 0', acc.what);
-            acc.what[1] += votes[0].what[1];
-            console.log('acc.what 1', acc.what);
-            if (acc.what.length == 3) {
-              acc.what[2] += votes[0].what[2];
-            }
-            console.log('acc.what 2', acc.what);
-            console.log('acc.what', acc.what);
+
+            acc.what = votes[0].what.map(item) => {
+              return item;
+            });
+
+            console.log('new acc.what', acc.what);
+
+            // console.log('acc.what', acc.what);
+            // acc.what[0] += votes[0].what[0];
+            // console.log('acc.what 0', acc.what);
+            // acc.what[1] += votes[0].what[1];
+            // console.log('acc.what 1', acc.what);
+            // if (acc.what.length == 3) {
+            //   acc.what[2] += votes[0].what[2];
+            // }
+            // console.log('acc.what 2', acc.what);
+            // console.log('acc.what', acc.what);
           }
           if (acc.where) {
             acc.where[0] += votes[0].where[0];
