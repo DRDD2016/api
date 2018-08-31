@@ -40,60 +40,80 @@ export default function getAllVotes (client, event_id, categoryOptions) {
       categoryOptions._when && (initialState.when = new Array(categoryOptions._when).fill(0));
       console.log('initialState', initialState);
 
-      // let votes = result;
-      // console.log('votes:', votes);
-      //
+      let votes = result[0];
+      console.log('votes:', votes);
+
+      // use reduce to eliminate null values
+
+      const removeFalsy = (obj) => {
+        let newObj = {};
+        Object.keys(obj).forEach((prop) => {
+          if (obj[prop]) { newObj[prop] = obj[prop]; }
+        });
+        return newObj;
+      };
+
+      const cleanedVotes = removeFalsy(votes);
+      console.log('cleanedVotes:', cleanedVotes);
+
+
       // const allVotes = votes[0];
-      // console.log('allVotes:', allVotes);
       //
-      // return resolve(allVotes);
+      //
+      //
+      //
+      //
+      // console.log('allVotes:', allVotes);
 
-      (
-        function fakeReduce (acc, votes) {
-          console.log('fakeReduce votes:', votes);
-          if (votes.length === 0) {
-            console.log('FINAL', acc);
-            return resolve(acc);
-          }
-          if (acc.what) {
 
-            // acc.what = votes[0].what.map(item) => {
-            //   console.log('what item', item);
-            //   return acc.what += item;
-            // });
-            //
-            // console.log('new acc.what', acc.what);
+      return resolve(cleanedVotes);
 
-            console.log('acc.what', acc.what);
-            acc.what[0] += votes[0].what[0];
-            console.log('acc.what 0', acc.what);
-            acc.what[1] += votes[0].what[1];
-            console.log('acc.what 1', acc.what);
-            if (acc.what.length == 3) {
-              acc.what[2] += votes[0].what[2];
-            }
-            console.log('acc.what 2', acc.what);
-            console.log('acc.what', acc.what);
-          }
-          if (acc.where) {
-            acc.where[0] += votes[0].where[0];
-            acc.where[1] += votes[0].where[1];
-            if (acc.where.length == 3) {
-              acc.where[2] += votes[0].where[2];
-            }
-          }
-          if (acc.when) {
-            acc.when[0] += votes[0].when[0];
-            acc.when[1] += votes[0].when[1];
-            if (acc.when.length == 3) {
-              acc.when[2] += votes[0].when[2];
-            }
-          }
-          console.log('acc: ', acc);
-          console.log('votes: ', votes);
-          fakeReduce(acc, votes.slice(1));
-        }(initialState, result)
-      );
+      // (
+      //   function fakeReduce (acc, votes) {
+      //     console.log('fakeReduce votes:', votes);
+      //     if (votes.length === 0) {
+      //       console.log('FINAL', acc);
+      //       return resolve(acc);
+      //     }
+      //     if (acc.what) {
+      //
+      //       // acc.what = votes[0].what.map(item) => {
+      //       //   console.log('what item', item);
+      //       //   return acc.what += item;
+      //       // });
+      //       //
+      //       // console.log('new acc.what', acc.what);
+      //
+      //       console.log('acc.what', acc.what);
+      //       acc.what[0] += votes[0].what[0];
+      //       console.log('acc.what 0', acc.what);
+      //       acc.what[1] += votes[0].what[1];
+      //       console.log('acc.what 1', acc.what);
+      //       if (acc.what.length == 3) {
+      //         acc.what[2] += votes[0].what[2];
+      //       }
+      //       console.log('acc.what 2', acc.what);
+      //       console.log('acc.what', acc.what);
+      //     }
+      //     if (acc.where) {
+      //       acc.where[0] += votes[0].where[0];
+      //       acc.where[1] += votes[0].where[1];
+      //       if (acc.where.length == 3) {
+      //         acc.where[2] += votes[0].where[2];
+      //       }
+      //     }
+      //     if (acc.when) {
+      //       acc.when[0] += votes[0].when[0];
+      //       acc.when[1] += votes[0].when[1];
+      //       if (acc.when.length == 3) {
+      //         acc.when[2] += votes[0].when[2];
+      //       }
+      //     }
+      //     console.log('acc: ', acc);
+      //     console.log('votes: ', votes);
+      //     fakeReduce(acc, votes.slice(1));
+      //   }(initialState, result)
+      // );
     });
   });
 }
