@@ -43,7 +43,7 @@ export default function getAllVotes (client, event_id, categoryOptions) {
       let votes = result[0];
       console.log('votes:', votes);
 
-      // use reduce to eliminate null values
+      // remove null values with code below
 
       const removeFalsy = (obj) => {
         let newObj = {};
@@ -54,16 +54,6 @@ export default function getAllVotes (client, event_id, categoryOptions) {
       };
 
       const cleanedVotes = removeFalsy(votes);
-      console.log('cleanedVotes:', cleanedVotes);
-
-
-      // const allVotes = votes[0];
-      //
-      //
-      //
-      //
-      //
-      // console.log('allVotes:', allVotes);
 
 
       return resolve(cleanedVotes);
