@@ -46,14 +46,17 @@ const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, dom
 export function patchUpdateNoHandler (req, res, next) {
   console.log('UpdateNo req: ', req);
   const updateNo = req.body.user.update_no;
+  console.log('updateNoCheck');
   console.log('updateNo: ', updateNo);
   const user_id = req.params.user_id;
   if (!updateNo) {
     return res.status(422).send({ error: 'Missing user updateNo' });
   }
+  console.log('do it');
   updateUserUpdateNo(client, user_id, updateNo)
     .then((data) => {
       if (data) {
+        console.log('do it data:', data);
         return res.json(data);
       } else {
         return res.status(422).send({ error: 'Could not update user updateNo' });
