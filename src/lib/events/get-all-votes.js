@@ -46,7 +46,14 @@ export default function getAllVotes (client, event_id, categoryOptions) {
       // remove null values with code below
 
       const removeFalsy = (obj) => {
+
         let newObj = {};
+
+        if (obj === null || undefined) {
+          let newObj = null;
+          return newObj;
+        }
+
         Object.keys(obj).forEach((prop) => {
           if (obj[prop]) { newObj[prop] = obj[prop]; }
         });
