@@ -49,15 +49,16 @@ export default function getAllVotes (client, event_id, categoryOptions) {
 
         let newObj = {};
 
-        if (obj === null || undefined) {
+        if (obj === undefined) {
           let newObj = null;
+          return newObj;
+        } else {
+          Object.keys(obj).forEach((prop) => {
+            if (obj[prop]) { newObj[prop] = obj[prop]; }
+          });
           return newObj;
         }
 
-        Object.keys(obj).forEach((prop) => {
-          if (obj[prop]) { newObj[prop] = obj[prop]; }
-        });
-        return newObj;
       };
 
       const cleanedVotes = removeFalsy(votes);
